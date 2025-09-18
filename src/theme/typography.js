@@ -34,10 +34,9 @@ export const typography = {
   fontWeightSemiBold: 600,
   fontWeightBold: 700,
   h1: {
-    fontWeight: 800,
-    lineHeight: 80 / 64,
-    fontSize: pxToRem(40),
-    ...responsiveFontSizes({ sm: 52, md: 58, lg: 64 }),
+    fontWeight: 700,
+    fontSize: pxToRem(38),
+    ...responsiveFontSizes({ sm: 38, md: 42, lg: 48 }),
   },
   h2: {
     fontWeight: 400,

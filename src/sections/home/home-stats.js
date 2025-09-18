@@ -102,7 +102,7 @@ export default function HomeStats() {
                 variant="h6"
                 sx={{
                   fontWeight: 500,
-                  pt: 2,
+                  pt: 1,
                 }}
               >
                 {stat.label}

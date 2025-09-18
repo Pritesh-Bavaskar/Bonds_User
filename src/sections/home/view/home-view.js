@@ -7,6 +7,12 @@ import ScrollProgress from 'src/components/scroll-progress';
 //
 import HomeHero from '../home-hero';
 import HomeStats from '../home-stats';
+import HomeWhatBonds from '../home-what-bonds';
+import HomeWhyBonds from '../home-why-bonds';
+import HomeExplore from '../home-explore';
+import HomeSignupRequest from '../home-signup-request';
+import HomeFeaturedBlogs from '../home-fearured-blogs';
+import HomeGetStartedKYC from '../home-getstarted-kyc';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
@@ -18,6 +24,12 @@ export default function HomeView() {
 
       <HomeHero />
       <HomeStats />
+      <HomeWhatBonds />
+      <HomeWhyBonds />
+      <HomeGetStartedKYC />
+      <HomeFeaturedBlogs />
+      <HomeExplore />
+      <HomeSignupRequest />
 
     </>
   );
