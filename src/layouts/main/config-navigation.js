@@ -14,6 +14,11 @@ export const navConfig = [
     path: '/',
   },
   {
+    title: 'Calculator',
+    icon: <Iconify icon="solar:home-2-bold-duotone" />,
+    path: '/calculator',
+  },
+  {
     title: 'Components',
     icon: <Iconify icon="solar:atom-bold-duotone" />,
     path: paths.components,

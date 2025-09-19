@@ -9,7 +9,7 @@ import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Unstable_Grid2';  
 // routes
 import { paths } from 'src/routes/paths';
 // hooks
@@ -148,14 +148,14 @@ export default function HomeHero() {
     repeatType: 'loop',
     ease: 'linear',
     duration: 60 * 4,
-    repeat: Infinity,
+    repeat: Infinity, 
   };
 
   const opacity = 1 - percent / 100;
 
   const hide = percent > 120;
 
-  const renderDescription = (
+  const renderDescription = ( 
     <Stack
       alignItems="center"
       justifyContent="center"
