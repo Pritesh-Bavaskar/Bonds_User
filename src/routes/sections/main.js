@@ -29,7 +29,8 @@ const ProductCheckoutPage = lazy(() => import('src/pages/product/checkout'));
 const PostListPage = lazy(() => import('src/pages/post/list'));
 const PostDetailsPage = lazy(() => import('src/pages/post/details'));
 //Calci
-const Calculatorpage =lazy(()=> import ('src/pages/Calculator/calculator'));
+const Calculatorpage = lazy(()=> import ('src/pages/Calculator/calculator'));
+const Calculatesection =lazy(()=> import ('src/pages/CalculatorSection/CalculatorSection'))
 
 
 // ----------------------------------------------------------------------
@@ -45,6 +46,7 @@ export const mainRoutes = [
     ),
     children: [
       {path: 'calculator', element:<Calculatorpage/>},
+      {path:'calculate',  element :<Calculatesection/>},
       { path: 'about-us', element: <AboutPage /> },
       { path: 'contact-us', element: <ContactPage /> },
       { path: 'faqs', element: <FaqsPage /> },

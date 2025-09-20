@@ -9,19 +9,19 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
+import {useNavigate } from "react-router-dom";
 // import { Calculate } from "@mui/icons";
-
 
 export default function BondsCalculatorHero() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+const navigate = useNavigate();
   return (
     <Box
       sx={{
         width: "100%",
         height: { xs: 320, md: 444 },
-        backgroundImage: "url('/assets/images/calci/herobackimage.png')",
+        backgroundImage: "url('/assets/calci/herobackimage.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",
@@ -48,7 +48,7 @@ export default function BondsCalculatorHero() {
               label="📊 Advanced Bond Analytics"
             //   color="default"   
               sx={{
-                color:'brown',
+                color:'brown',  
                 bgcolor: "warning.main",
                 fontWeight: 500,
                 fontSize: { xs: "0.75rem", md: "0.85rem" },
@@ -85,7 +85,7 @@ export default function BondsCalculatorHero() {
           <Grid item>
             <Button
               variant="contained"
-           
+           onClick={()=>navigate("/calculate")}
               size={isMobile ? "medium" : "large"}
               sx={{
                 bgcolor:'primary.main',
@@ -98,8 +98,7 @@ export default function BondsCalculatorHero() {
                "&:hover":{
                 bgcolor:'primary.main',
                 bordershadow:'none',
-               }
-              
+               }    
               }}
             >
                 <img src='/assets/Svg/vector.svg' alt='calci' style={{width:20, height:20, }}/>
