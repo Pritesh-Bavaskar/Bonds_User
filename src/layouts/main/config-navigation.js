@@ -40,7 +40,7 @@ export const navConfig = [
     children: [
       {
         items: [
-          { title: 'Blogs', path: paths.about },
+          { title: 'Blogs', path: paths.post.root },
           { title: 'FAQ', path: paths.contact },
           { title: 'FAQs', path: paths.faqs },
           { title: 'News/Insight', path: paths.pricing },
