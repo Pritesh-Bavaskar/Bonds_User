@@ -39,6 +39,148 @@ export default function PostDetailsHomeView() {
 
   const { latestPosts, latestPostsLoading } = useGetLatestPosts(`${title}`);
 
+  // ----------------------------------------------------------------------
+  // Mock data (used as a fallback for testing when API is unavailable)
+  const MOCK_POST = {
+    id: 'mock-post-1',
+    title: 'The Rise of Alternative Investments: Why They Matter for You',
+    coverUrl: '/assets/background/overlay_3.jpg',
+    author: { name: 'xyz co.' },
+    createdAt: new Date().toISOString(),
+    description:
+      'India’s alternative investment market is growing faster than ever, attracting both beginners and seasoned investors. From corporate bonds and asset leasing to invoice discounting, these options offer unique advantages beyond traditional avenues.',
+    content: `
+      <p>India’s alternative investment market is undergoing rapid transformation. Once limited to institutional investors, opportunities like corporate bonds, asset leasing, and invoice discounting are now becoming more accessible to retail investors. This shift is creating new ways to diversify portfolios, manage risk, and generate attractive returns beyond traditional assets such as equities and fixed deposits.</p>
+
+      <p>In 2023, commitments to Alternative Investment Funds (AIFs) reached record highs, with the AIF-to-GDP ratio at ~3%. Experts project this figure could double in the coming years, reflecting growing confidence in the sector. Let’s explore how alternative investments are reshaping India’s financial landscape and why you should consider them.</p>
+
+      <h3>The Growing Popularity of Alternative Investments</h3>
+      <p>The appeal of alternative investments lies in their ability to deliver higher returns, portfolio diversification, and resilience during volatile markets. Investors are increasingly drawn to:</p>
+      <ul>
+        <li><strong>Corporate Bonds</strong> — Offering predictable fixed income and lower risk compared to equities.</li>
+        <li><strong>Asset Leasing</strong> — Generating steady rental income from high-value assets.</li>
+        <li><strong>Invoice Discounting</strong> — Helping businesses with liquidity while providing investors short-term yields.</li>
+      </ul>
+      <p>These instruments were once dominated by large institutions but are now opening doors for retail investors through digital platforms.</p>
+
+      <h4>Key Drivers of Growth</h4>
+      <p>Several factors are fueling the rise of alternative investments in India:</p>
+      <ol>
+        <li><strong>Digital Platforms:</strong> Technology-driven platforms are simplifying access to assets like bonds or invoice discounting, with seamless onboarding and transparent tracking.</li>
+        <li><strong>Government Initiatives:</strong> Regulatory support and frameworks are boosting investor trust.</li>
+        <li><strong>Changing Investor Behaviour:</strong> With rising financial literacy, investors are seeking beyond-traditional options to safeguard and grow their wealth.</li>
+      </ol>
+
+      <h3>Expanding Opportunities for Retail Investors</h3>
+      <p>Alternative investment platforms are enabling individuals to tap into opportunities that were once exclusive to institutional players:</p>
+      <ul>
+        <li><strong>Private Equity &amp; Unlisted Bonds</strong> — Long-term wealth-building avenues.</li>
+        <li><strong>Peer-to-Peer Lending</strong> — Directly connecting lenders with borrowers.</li>
+        <li><strong>Crowdfunding &amp; New-Age Fixed Income Products</strong> — Offering attractive yields with manageable risks.</li>
+      </ul>
+      <p>This democratization of access is creating a level playing field for retail investors, empowering them with greater control over their financial strategies.</p>
+
+      <h3>Why You Should Care</h3>
+      <p>By including alternative assets in your portfolio, you can:</p>
+      <ul>
+        <li>Diversify beyond traditional equities and FDs</li>
+        <li>Earn potentially higher, more stable returns</li>
+        <li>Access unique investment opportunities previously unavailable to retail investors</li>
+        <li>Hedge against volatility in stock markets</li>
+      </ul>
+      <p>In short, alternative investments can strengthen your portfolio’s resilience while opening new pathways for growth.</p>
+
+      <h3>Looking Ahead</h3>
+      <p>India’s alternative investment market is poised for remarkable expansion. As more investors turn to digital-first platforms and financial innovations, the sector will play a critical role in shaping the future of personal finance. With the right approach, these opportunities can help you build a portfolio that balances growth, stability, and long-term wealth creation.</p>
+
+      <h3>Closing Thoughts</h3>
+      <p>The shift toward alternative investments is not just a trend — it’s a financial evolution. By exploring corporate bonds, asset leasing, invoice discounting, and other alternatives, retail investors can access once-exclusive markets and craft strategies that match their goals and risk appetite.</p>
+
+      <p style="font-size:12px; opacity:0.8; margin-top:24px;">Grow your wealth with exclusive access to high-yield alternative fixed-income opportunities from altGrail. Join us today to explore new-age investment products and build a diversified portfolio tailored to your financial goals.</p>
+    `,
+    tags: ['Alternative Investments', 'Personal Finance'],
+    totalFavorites: 128,
+    favoritePerson: [
+      { name: 'Alice', avatarUrl: '/assets/images/avatars/avatar_1.jpg' },
+      { name: 'Bob', avatarUrl: '/assets/images/avatars/avatar_2.jpg' },
+      { name: 'Cara', avatarUrl: '/assets/images/avatars/avatar_3.jpg' },
+    ],
+    comments: [
+      {
+        id: 'c1',
+        name: 'Neeraj',
+        message: 'Great introduction. Looking forward to more insights!',
+        postedAt: new Date().toISOString(),
+        avatarUrl: '/assets/images/avatars/avatar_4.jpg',
+        replyComment: [
+          {
+            id: 'r1',
+            userId: 'u2',
+            message: 'Totally agree!',
+            postedAt: new Date().toISOString(),
+            tagUser: 'Neeraj',
+          },
+        ],
+        users: [{ id: 'u2', name: 'Anita', avatarUrl: '/assets/images/avatars/avatar_5.jpg' }],
+      },
+    ],
+  };
+
+  const MOCK_LATEST = [
+    {
+      id: 'ml1',
+      title: 'Understanding Corporate Bonds: A Beginner’s Guide',
+      coverUrl: '/assets/background/overlay_3.jpg',
+      description:
+        'Learn the basics of corporate bonds, how they work, and how to evaluate risk and returns before investing.',
+      author: { name: 'Bonds Team' },
+      createdAt: new Date().toISOString(),
+      categories: ['Education'],
+      totalViews: 1200,
+      readingTime: '6 min read',
+    },
+    {
+      id: 'ml2',
+      title: 'How To Evaluate Bond Ratings And Yield',
+      coverUrl: '/assets/background/overlay_4.jpg',
+      description:
+        'A practical framework to read bond ratings, interpret yields, and balance risk with expected returns.',
+      author: { name: 'Research Desk' },
+      createdAt: new Date(Date.now() - 86400000).toISOString(),
+      categories: ['Education'],
+      totalViews: 980,
+      readingTime: '7 min read',
+    },
+    {
+      id: 'ml3',
+      title: 'Taxation Of Interest Income In India: What To Know',
+      coverUrl: '/assets/background/overlay_2.jpg',
+      description:
+        'From TDS to ITR reporting—understand how interest from bonds and FDs is taxed and how to optimize.',
+      author: { name: 'Finance Coach' },
+      createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
+      categories: ['Taxes'],
+      totalViews: 1520,
+      readingTime: '5 min read',
+    },
+    {
+      id: 'ml4',
+      title: 'Fixed-Income Vs Equity: Building A Balanced Portfolio',
+      coverUrl: '/assets/background/overlay_2.jpg',
+      description:
+        'We compare risk, liquidity, and returns to help you decide the right mix for your risk profile.',
+      author: { name: 'Bonds Team' },
+      createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
+      categories: ['Strategy'],
+      totalViews: 640,
+      readingTime: '8 min read',
+    },
+  ];
+
+  // Prefer API data, but fall back to mock for local testing
+  const postData = post || MOCK_POST;
+  const latestPostsData = latestPosts && latestPosts.length ? latestPosts : MOCK_LATEST;
+
   const renderSkeleton = <PostDetailsSkeleton />;
 
   const renderError = (
@@ -61,16 +203,19 @@ export default function PostDetailsHomeView() {
     </Container>
   );
 
-  const renderPost = post && (
+  const renderPost = postData && (
     <>
       <PostDetailsHero
-        title={post.title}
-        author={post.author}
-        coverUrl={post.coverUrl}
-        createdAt={post.createdAt}
+        title={postData.title}
+        author={postData.author}
+        coverUrl={postData.coverUrl}
+        createdAt={postData.createdAt}
       />
 
-      <Container
+      <Container>
+        <div dangerouslySetInnerHTML={{ __html: postData.content }} />
+      </Container>
+      {/* <Container
         maxWidth={false}
         sx={{
           py: 3,
@@ -89,20 +234,20 @@ export default function PostDetailsHomeView() {
               href: paths.post.root,
             },
             {
-              name: post?.title,
+              name: postData?.title,
             },
           ]}
           sx={{ maxWidth: 720, mx: 'auto' }}
         />
-      </Container>
+      </Container> */}
 
-      <Container maxWidth={false}>
+      {/* <Container maxWidth={false}>
         <Stack sx={{ maxWidth: 720, mx: 'auto' }}>
           <Typography variant="subtitle1" sx={{ mb: 5 }}>
-            {post.description}
+            {postData.description}
           </Typography>
 
-          <Markdown children={post.content} />
+          <Markdown children={postData.content} />
 
           <Stack
             spacing={3}
@@ -113,7 +258,7 @@ export default function PostDetailsHomeView() {
             }}
           >
             <Stack direction="row" flexWrap="wrap" spacing={1}>
-              {post.tags.map((tag) => (
+              {postData.tags.map((tag) => (
                 <Chip key={tag} label={tag} variant="soft" />
               ))}
             </Stack>
@@ -129,12 +274,12 @@ export default function PostDetailsHomeView() {
                     checkedIcon={<Iconify icon="solar:heart-bold" />}
                   />
                 }
-                label={fShortenNumber(post.totalFavorites)}
+                label={fShortenNumber(postData.totalFavorites)}
                 sx={{ mr: 1 }}
               />
 
               <AvatarGroup>
-                {post.favoritePerson.map((person) => (
+                {postData.favoritePerson.map((person) => (
                   <Avatar key={person.name} alt={person.name} src={person.avatarUrl} />
                 ))}
               </AvatarGroup>
@@ -145,7 +290,7 @@ export default function PostDetailsHomeView() {
             <Typography variant="h4">Comments</Typography>
 
             <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
-              ({post.comments.length})
+              ({postData.comments.length})
             </Typography>
           </Stack>
 
@@ -153,9 +298,9 @@ export default function PostDetailsHomeView() {
 
           <Divider sx={{ mt: 5, mb: 2 }} />
 
-          <PostCommentList comments={post.comments} />
+          <PostCommentList comments={postData.comments} />
         </Stack>
-      </Container>
+      </Container> */}
     </>
   );
 
@@ -166,8 +311,8 @@ export default function PostDetailsHomeView() {
       </Typography>
 
       <PostList
-        posts={latestPosts.slice(latestPosts.length - 4)}
-        loading={latestPostsLoading}
+        posts={latestPostsData.slice(latestPostsData.length - 3)}
+        // loading={latestPostsLoading}
         disabledIndex
       />
     </>
@@ -175,13 +320,13 @@ export default function PostDetailsHomeView() {
 
   return (
     <>
-      {postLoading && renderSkeleton}
+      {/* {postLoading && !post && renderSkeleton} */}
 
-      {postError && renderError}
+      {/* {postError && !post && renderError} */}
 
-      {post && renderPost}
+      {renderPost}
 
-      <Container sx={{ pb: 15 }}>{!!latestPosts.length && renderLatestPosts}</Container>
+      <Container sx={{ pb: 15, pt: 15 }}>{!!latestPostsData.length && renderLatestPosts}</Container>
     </>
   );
 }
