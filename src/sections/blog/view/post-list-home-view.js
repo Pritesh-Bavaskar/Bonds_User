@@ -12,6 +12,8 @@ import { useSettingsContext } from 'src/components/settings';
 //
 import PostList from '../post-list';
 import PostHero from '../post-hero';
+import PostCategories from '../post-categories';
+import PostFeature from '../post-feature';
 
 // ----------------------------------------------------------------------
 
@@ -191,11 +193,20 @@ export default function PostListHomeView() {
         containerMaxWidth={settings.themeStretch ? false : 'lg'}
       />
 
+      {/* Categories pills under the hero */}
+      <Container maxWidth={settings.themeStretch ? false : 'lg'} sx={{ py: 4 }}>
+        <PostCategories />
+      </Container>
+
+      {/* Featured Insights heading */}
+      <Container maxWidth={settings.themeStretch ? false : 'lg'} sx={{ py: 4 }}>
+        <PostFeature posts={dataFiltered} />
+      </Container>
+
       {/* Post list container */}
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         {/* <PostList posts={dataFiltered} loading={postsLoading} /> */}
         <PostList posts={dataFiltered} />
-
       </Container>
     </>
   );
