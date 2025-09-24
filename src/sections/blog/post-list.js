@@ -11,7 +11,7 @@ import { PostItemSkeleton } from './post-skeleton';
 
 // ----------------------------------------------------------------------
 
-export default function PostList({ posts, loading, disabledIndex }) {
+export default function PostList({ posts, loading, disabledIndex, isFeatured }) {
   const renderSkeleton = (
     <>
       {[...Array(16)].map((_, index) => (
@@ -25,7 +25,7 @@ export default function PostList({ posts, loading, disabledIndex }) {
   const renderList = (
     <>
       {posts.map((post, index) => (
-        <Grid key={post.id} xs={12} sm={6} md={!disabledIndex && index === 0 ? 6 : 3}>
+        <Grid key={post.id} xs={12} sm={6} md={isFeatured ? 6 : 4}>
           <PostItem post={post} index={!disabledIndex ? index : undefined} />
         </Grid>
       ))}
@@ -46,13 +46,13 @@ export default function PostList({ posts, loading, disabledIndex }) {
             mb: { xs: 10, md: 15 },
           }}
         >
-          <Button
+          {/* <Button
             size="large"
             variant="outlined"
             startIcon={<Iconify icon="svg-spinners:12-dots-scale-rotate" width={24} />}
           >
             Load More
-          </Button>
+          </Button> */}
         </Stack>
       )}
     </>
@@ -63,4 +63,5 @@ PostList.propTypes = {
   disabledIndex: PropTypes.bool,
   loading: PropTypes.bool,
   posts: PropTypes.array,
+  isFeatured: PropTypes.bool,
 };

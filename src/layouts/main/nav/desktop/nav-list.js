@@ -83,7 +83,7 @@ NavList.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function NavSubList({ items, isDashboard, subheader, onClose }) {
+function NavSubList({ items, isDashboard, onClose }) {
   const pathname = usePathname();
 
   return (
@@ -97,7 +97,7 @@ function NavSubList({ items, isDashboard, subheader, onClose }) {
         }),
       }}
     >
-      <StyledSubheader disableSticky>{subheader}</StyledSubheader>
+      {/* <StyledSubheader disableSticky>{subheader}</StyledSubheader> */}
 
       {items.map((item) =>
         isDashboard ? (

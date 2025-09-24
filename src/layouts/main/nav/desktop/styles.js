@@ -40,7 +40,7 @@ export const ListItem = styled(ListItemButton, {
     // Sub item
     ...(subItem && {
       ...theme.typography.body2,
-      color: theme.palette.text.secondary,
+      color: theme.palette.text.primary,
     }),
     // offsetTop
     ...(offsetTop && {
@@ -77,11 +77,11 @@ export const StyledMenu = styled(Paper)(({ theme }) => ({
   margin: 'auto',
   position: 'fixed',
   zIndex: theme.zIndex.modal,
-  padding: theme.spacing(5, 1, 1, 3),
-  maxWidth: theme.breakpoints.values.lg,
+  padding: theme.spacing(1.5, 1.2, 1.2, 1.5),
+  maxWidth: 'fit-content',
   top: HEADER.H_DESKTOP_OFFSET,
   boxShadow: theme.customShadows.dropdown,
-  borderRadius: theme.shape.borderRadius * 2,
+  borderRadius: theme.shape.borderRadius * 0.5,
 }));
 
 // ----------------------------------------------------------------------

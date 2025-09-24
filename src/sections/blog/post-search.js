@@ -15,7 +15,7 @@ import SearchNotFound from 'src/components/search-not-found';
 
 // ----------------------------------------------------------------------
 
-export default function PostSearch({ query, results, onSearch, hrefItem, loading }) {
+export default function PostSearch({ query, results, onSearch, hrefItem, loading, sx }) {
   const router = useRouter();
 
   const handleClick = (title) => {
@@ -32,7 +32,7 @@ export default function PostSearch({ query, results, onSearch, hrefItem, loading
 
   return (
     <Autocomplete
-      sx={{ width: { xs: 1, sm: 260 } }}
+      sx={{ width: { xs: 1, sm: 260 }, ...sx }}
       loading={loading}
       autoHighlight
       popupIcon={null}
@@ -61,6 +61,13 @@ export default function PostSearch({ query, results, onSearch, hrefItem, loading
           {...params}
           placeholder="Search..."
           onKeyUp={handleKeyUp}
+          sx={{
+            [`& .MuiOutlinedInput-root`]: {
+              bgcolor: 'common.white',
+              borderRadius: 999,
+              boxShadow: (theme) => theme.shadows[2],
+            },
+          }}
           InputProps={{
             ...params.InputProps,
             startAdornment: (
@@ -119,4 +126,5 @@ PostSearch.propTypes = {
   onSearch: PropTypes.func,
   query: PropTypes.string,
   results: PropTypes.array,
+  sx: PropTypes.object,
 };
