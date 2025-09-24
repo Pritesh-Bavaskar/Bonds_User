@@ -18,5 +18,36 @@
   font-style: normal;
   src: local('CircularStd'), url('CircularStd-Bold.otf') format('opentype');
 }
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lato Regular'), url('/fonts/Lato-Regular.ttf') format('truetype');
+}
+/* Lato Regular */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lato Regular'), url('/fonts/Lato-Regular.ttf') format('truetype');
+}
 
- 
+/* Lato SemiBold */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lato SemiBold'), url('/fonts/Lato-SemiBold.ttf') format('truetype');
+}
+
+/* Lato Bold */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lato Bold'), url('/fonts/Lato-Bold.ttf') format('truetype');
+}
