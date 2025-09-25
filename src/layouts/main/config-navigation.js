@@ -25,9 +25,9 @@ export const navConfig = [
     children: [
       {
         items: [
-          { title: 'Corporate Bond', path: paths.about },
-          { title: 'Government Bond', path: paths.contact },
-          { title: 'Listed Bond', path: paths.faqs },
+          { title: 'Corporate Bond', path: paths.products.corporate_bonds},
+          { title: 'Government Bond', path: paths.products.government_bonds },
+          { title: 'Listed Bond', path: paths.products.listed_bonds },
           { title: 'Unlisted Bond', path: paths.pricing },
         ],
       },
@@ -44,7 +44,7 @@ export const navConfig = [
           { title: 'FAQ', path: paths.contact },
           { title: 'FAQs', path: paths.faqs },
           { title: 'News/Insight', path: paths.pricing },
-          { title: 'Calculator', path: paths.payment },
+          { title: 'Calculator', path: paths.calculator },
           { title: 'Refer and Earn', path: paths.maintenance },
           { title: 'Issuers', path: paths.comingSoon },
         ],

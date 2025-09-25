@@ -9,13 +9,13 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { Calculate } from "@mui/icons";
 
 export default function BondsCalculatorHero() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -25,18 +25,19 @@ const navigate = useNavigate();
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",
-        alignItems: "center",   
+        alignItems: "center",
         justifyContent: "center",
         px: 2,
-        py:6,
+        py: 6,
       }}
     >
       <Paper
-        elevation={3}
+        elevation={2}
         sx={{
-          p: { xs: 3, md: 5 },
-          borderRadius: 3,
-          maxWidth: 600,
+          p: { xs: 3, md: 2}, 
+          width:'763px',
+          height:'288px',
+          maxWidth: 780,
           textAlign: "center",
           backdropFilter: "blur(4px)",
         }}
@@ -46,14 +47,14 @@ const navigate = useNavigate();
           <Grid item>
             <Chip
               label="📊 Advanced Bond Analytics"
-            //   color="default"   
+              //   color="default"   
               sx={{
-                color:'brown',  
+                color: 'brown',
                 bgcolor: "warning.main",
                 fontWeight: 500,
                 fontSize: { xs: "0.75rem", md: "0.85rem" },
-                "&: hover":{
-                    bgcolor:'warning.light',
+                "&: hover": {
+                  bgcolor: 'warning.light',
                 }
               }}
             />
@@ -62,9 +63,13 @@ const navigate = useNavigate();
           {/* Title */}
           <Grid item>
             <Typography
-              variant={isMobile ? "h5" : "h4"}
               fontWeight={700}
               gutterBottom
+              sx={{
+                fontSize: '48px',
+                fontWeight: '700',
+                fontFamily: 'lato',
+              }}
             >
               Bonds Calculator
             </Typography>
@@ -73,9 +78,13 @@ const navigate = useNavigate();
           {/* Subtitle */}
           <Grid item>
             <Typography
-              variant="body1"
-              color="text.secondary"
-              sx={{ maxWidth: 480 }}
+              sx={{
+                maxWidth: 751,           
+                fontSize: '20px',
+                fontWeight: '500',
+                fontFamily: 'lato',
+                color: "#000000",
+              }}
             >
               Plan smarter, invest better with instant bond return projections.
             </Typography>
@@ -85,23 +94,28 @@ const navigate = useNavigate();
           <Grid item>
             <Button
               variant="contained"
-           onClick={()=>navigate("/calculate")}
+              onClick={() => navigate("/calculate")}
               size={isMobile ? "medium" : "large"}
               sx={{
-                bgcolor:'primary.main',
+                width:'252px',
+                height:'57px',
+                borderRadius:'5px',
+                bgcolor: 'primary.main',
                 mt: 1,
                 px: 4,
                 py: 1.2,
-                fontWeight: 600,
-                fontSize: { xs: "0.85rem", md: "1rem" },               
-                gap:1,
-               "&:hover":{
-                bgcolor:'primary.main',
-                bordershadow:'none',
-               }    
+                fontWeight: "800",
+                fontSize: '20px',
+                fontFamily: 'lato',
+                lineHeight:'82%',
+                gap: 1,
+                "&:hover": {
+                  bgcolor: 'primary.main',
+                  bordershadow: 'none',
+                }
               }}
             >
-                <img src='/assets/Svg/vector.svg' alt='calci' style={{width:20, height:20, }}/>
+              <img src='/assets/Svg/vector.svg' alt='calci' style={{ width: "26px", height: '35px', }} />
               Start Calculating
             </Button>
           </Grid>

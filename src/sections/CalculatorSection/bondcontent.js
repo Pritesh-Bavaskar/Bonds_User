@@ -17,14 +17,13 @@ export default function BondsCalculatorContent() {
           color: 'primary.main',
           fontSize: '24px',
           fontFamily: 'Lato',
-          fontStyle: 'normal',
           fontWeight: 700,
         }}>
         Bonds Calculator – Your Toolkit for Smarter Fixed-Income Investing
       </Typography>
       <Typography paragraph sx={{
-        fontWeight: '400',
-        fontFamily: 'lato',
+          fontWeight: '400',
+          fontFamily: 'lato',
         fontSize: '20px',
         lineHeight: '128%',
       }}>
@@ -109,8 +108,6 @@ export default function BondsCalculatorContent() {
             </Typography>
           ))}
         </Box>
-
-
       </Box>
 
 
@@ -231,9 +228,6 @@ export default function BondsCalculatorContent() {
         lineHeight: '128%',
       }}>
         
-        
-       
-       
   
       </Typography>
         <List sx={{ pl: 3 }}>

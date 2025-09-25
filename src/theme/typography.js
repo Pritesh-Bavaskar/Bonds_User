@@ -33,7 +33,7 @@ export const typography = {
   fontWeightMedium: 500,
   fontWeightSemiBold: 600,
   fontWeightBold: 700,
-  h1: {
+  h1: { 
     fontWeight: 700,
     fontSize: pxToRem(38),
     ...responsiveFontSizes({ sm: 38, md: 42, lg: 48 }),

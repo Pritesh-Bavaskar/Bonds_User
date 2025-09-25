@@ -89,13 +89,26 @@ export default function BondsCalculatorHero1() {
                                     {item.icon}
                                 </Avatar>
                                 <Box>
-                                    <Typography variant="subtitle1" fontWeight={600}>
+                                    <Typography variant="subtitle1" fontWeight={600}
+                                        sx={{
+                                        color:'primary.main',
+                                       
+                                        fontWeight:'700',
+                                        fontSize:'14px',
+                                        fontFamily:'lato'
+                                    }}>
                                         {item.title}
                                     </Typography>
                                     <Typography
-                                        variant="body2"
-                                        color="text.secondary"
-                                        sx={{ mt: 0.3 }}
+                                     sx={{
+                                        color:'primary.main',
+                                        mt: 0.3,
+                                        fontWeight:'700',
+                                        fontSize:'14px',
+                                        fontFamily:'lato'
+                                    }}
+                                      
+                                       
                                     >
                                         {item.desc}
                                     </Typography>

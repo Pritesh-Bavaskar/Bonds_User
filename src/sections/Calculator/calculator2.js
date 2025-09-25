@@ -10,7 +10,7 @@ import {
     useMediaQuery,
 } from "@mui/material";
 // import { Calculate } from "@mui/icons";
-import {useNavigate}from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function BondsCalculatorHero2() {
@@ -47,7 +47,7 @@ export default function BondsCalculatorHero2() {
                     {/* Title */}
                     <Grid item>
                         <Typography
-                            variant={isMobile ? "h5" : "h4"}
+                        fontFamily='public Sans, sans-serif'
                             fontWeight={700}
                             gutterBottom
                             fontSize='36px'
@@ -60,13 +60,15 @@ export default function BondsCalculatorHero2() {
                     {/* Subtitle */}
                     <Grid item>
                         <Typography
-                            variant="body1"
                             sx={{
-                                fontSize: { md: '20px' },
+                                fontFamily: 'Public Sans, sans-serif',
+                                fontWeight: 400,
+                                fontSize: { md: '20px', xs: '18px' }, // optional: smaller on mobile
+                                lineHeight: '140%',
+                                letterSpacing: '0',
+                                textAlign: 'center',
                                 color: 'text.primary',
-
                             }}
-
                         >
                             Join thousands of investors who trust our calculator for accurate bond analysis and planning.
                         </Typography>
@@ -76,7 +78,7 @@ export default function BondsCalculatorHero2() {
                     <Grid item>
                         <Button
                             variant="contained"
-                            onClick={()=> navigate('/calculate')}
+                            onClick={() => navigate('/calculate')}
                             size={isMobile ? "medium" : "large"}
                             sx={{
                                 bgcolor: 'primary.main',
@@ -88,7 +90,8 @@ export default function BondsCalculatorHero2() {
                                 gap: 1,
                                 "&:hover": {
                                     bgcolor: 'primary.main',
-                                    bordershadow: 'none', }
+                                    bordershadow: 'none',
+                                }
                             }}
                         >
                             <img src='/assets/Svg/vector.svg' alt='calci' style={{ width: 20, height: 20, }} />
@@ -98,6 +101,14 @@ export default function BondsCalculatorHero2() {
 
                         <Grid
                             sx={{
+                              
+                                fontFamily: 'Public Sans, sans-serif',
+                                fontWeight: 400,
+                                fontSize: { md: '20px', xs: '14px' }, // optional: smaller on mobile
+                                lineHeight: '140%',
+                                letterSpacing: '0',
+                                textAlign: 'center',
+                                color: 'text.primary',
                                 display: 'flex',
                                 flexdirection: 'row',
                                 alignItems: 'center',
@@ -105,18 +116,18 @@ export default function BondsCalculatorHero2() {
                                 m: 4,
                             }}>
                             {["Free to use", "No registration required", "Professional accuracy"].map
-                            (    (item) => (
-                                 <Typography>
+                                ((item) => (
+                                    <Typography>
 
-                                    <Box
-                                    component="img"
-                                    src="/assets/Svg/tick.svg"
-                                    sx={{ width:20, height:20, mb:0.4, mr:0.5 }}
-                                    />
-                                    {item}
-                                 </Typography>
+                                        <Box
+                                            component="img"
+                                            src="/assets/Svg/tick.svg"
+                                            sx={{ width: 20, height: 20, mb: 0.4, mr: 0.5 }}
+                                        />
+                                        {item}
+                                    </Typography>
 
-                            ))}
+                                ))}
                         </Grid>
                     </Grid>
                 </Grid>
