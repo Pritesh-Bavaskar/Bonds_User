@@ -10,7 +10,7 @@ export default function ListedCorporateBonds() {
       transition: {
         staggerChildren: 0.3, // delay between children animations
       },
-    },
+    },  
   };
 
   const itemVariants = {

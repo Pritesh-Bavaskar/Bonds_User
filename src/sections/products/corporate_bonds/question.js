@@ -60,8 +60,6 @@ export default function QuestionAnswer() {
                         width: '15px', height: '15px',
                     }} />
             </Button>
-
-
         </Box>
 
 

@@ -7,8 +7,9 @@ import {
     AccordionDetails
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTheme } from '@mui/material/styles';
 
-const accordionItems = [
+const FAQS  = [
     {
         title: 'Corporate Governance',
         content: 'Assessment of leadership practices, ethical standards, board structure, and regulatory compliance.'
@@ -28,6 +29,7 @@ const accordionItems = [
 ];
 
 const CreditAssessmentProcess = () => {
+      const theme = useTheme();
     return (
         <Box
             sx={{
@@ -75,18 +77,37 @@ const CreditAssessmentProcess = () => {
                 </Typography>
             </Box>
             <Box sx={{ maxWidth: "1200px" }}>
-                {accordionItems.map((item, index) => (
-                    <Accordion key={index} disableGutters sx={{ mb: 2, borderRadius: 2 }}>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ px: 2 }}>
-                            <Typography fontWeight={500}>{item.title}</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails sx={{ px: 2 }}>
-                            <Typography variant="body2" color="text.secondary">
-                                {item.content}
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-                ))}
+                {FAQS.map((faq, idx) => (
+        <Accordion
+          key={faq.question}
+          sx={{
+            mb: 2,
+            boxShadow: 'none',
+            border: '1px solid #eee',
+            borderRadius: 1,
+            '&:before': { display: 'none' },
+            width: '100%' // let it take full width of container
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls={`faq-content-${idx}`}
+            id={`faq-header-${idx}`}
+            sx={{
+              '& .MuiAccordionSummary-content': { my: 0.5 }
+            }}
+          >
+            <Typography sx={{ fontWeight: 500, fontSize: '1rem' }}>
+              {faq.title}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ bgcolor: '#fafbfc' }}>
+            <Typography sx={{ color: theme.palette.text.secondary, fontSize: '0.98rem' }}>
+              {faq.content}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      ))}
             </Box>
         </Box>
     );
