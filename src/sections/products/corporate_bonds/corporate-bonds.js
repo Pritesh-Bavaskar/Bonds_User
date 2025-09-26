@@ -9,14 +9,11 @@ import arrow from 'src/images/svg/arrow.svg';
 // components
 import { MotionContainer, varFade } from 'src/components/animate';
 
-// ----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
 export default function AboutHero() {
   return (
-    <Box
-
-
-    
+    <Box   
     sx={{
         maxWidth:'1600px',
         mx:'auto',
@@ -27,26 +24,29 @@ export default function AboutHero() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundImage:
-          'url(/assets/images/about/Herosection.jpeg)',
+          'url(/assets/images/products/Herosection.jpeg)',
       }}
     >
       <Container component={MotionContainer}>
         <Box
+       
           sx={{
             left: { md: 200 },
             top: { md: 40 },
             position: { md: 'absolute' },
-            textAlign: { xs: 'center', md: 'unset' },
+            textAlign: { xs: 'left', md: 'unset' },
           }}
         >
           {/* Headline */}
           <TextAnimate
+          
             text="Corporate"
             variants={varFade().inRight}
+             variant="h1"
             sx={{
               fontFamily: 'Public Sans, sans-serif',
               fontWeight: 700,
-              fontSize: { xs: '32px', md: '64px',lg:'64px' },
+
               lineHeight: 1.2,
               color: 'warning.main',
               display: 'inline-block',
@@ -54,12 +54,13 @@ export default function AboutHero() {
             }}
           />
           <TextAnimate
+          
             text="Bonds"
             variants={varFade().inRight}
             sx={{
               fontFamily: 'Public Sans, sans-serif',
               fontWeight: 700,
-              fontSize: { xs: '32px', md: '64px', lg:'64px' },
+              // fontSize: { xs: '32px', md: '64px', lg:'64px' },
               lineHeight: 1.2,
               color: 'primary.main',
               display: 'inline-block',
@@ -70,17 +71,16 @@ export default function AboutHero() {
 
           <m.div variants={varFade().inUp}>
             <Typography
+            variant='subtitle1'
               sx={{
                 mt:1,
-                width:'489px',
+                width:{xs:'355px', md: '489px'},
                 height:'70px',
                 color: "primary.main",
                 fontFamily: "Public Sans, sans-serif",
-                fontWeight: 600,
-                fontSize: "20px",
                 lineHeight: "24px",
                 letterSpacing: "0px",
-                textAlign: "center",
+                textAlign:{xs:'left', md:'center'},
                 display: "flex",
                 alignItems: "center",   
                 justifyContent: "center", 
@@ -138,7 +138,7 @@ function TextAnimate({ text, variants, sx, ...other }) {
       component={m.div}
       sx={{
         color: 'primary.main',
-        typography: 'h4',
+        typography: 'h1',
         overflow: 'hidden',
         display: 'inline-flex',
         ...sx,

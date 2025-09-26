@@ -7,7 +7,7 @@ const StatCard = ({ icon, title, subtitle }) => (
   <Card
     sx={{
       p: 3,
-      width: 261,
+      width: {xs:155, md:261},
       height: 168,
       boxShadow: 4,
       textAlign: 'center',    
@@ -19,9 +19,9 @@ const StatCard = ({ icon, title, subtitle }) => (
     }}
   >
     <Box sx={{ mb: 1 }}>{icon}</Box>
-    <Typography variant="subtitle2"  color='black' mb={2}>
+    <Typography variant="subtitle1"  color='black' mb={2}>
       {title}
-    </Typography>
+    </Typography> 
     <Typography variant="subtitle1" fontSize='20px' color='#656565' fontWeight={400}>
       {subtitle}
     </Typography>
@@ -30,7 +30,7 @@ const StatCard = ({ icon, title, subtitle }) => (
 
 const InvestmentStats = () => {
   return (
-    <Box sx={{ display: 'flex', gap: 20, justifyContent: 'center', mt: 4 }}>
+    <Box sx={{ display: 'flex', gap: {xs:4, md:20}, justifyContent: 'center', mt: 4 }}>
       <StatCard
         icon={<BarChartIcon color="#000000" />}
         title="Tenure"

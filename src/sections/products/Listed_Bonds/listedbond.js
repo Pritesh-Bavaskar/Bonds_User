@@ -15,7 +15,7 @@ export default function Listedbond() {
   return (
     <Box
     sx={{
-          maxWidth:'1600px',
+        maxWidth:{xs:'600px', md:'1300px'},
           mx:'auto',
         height: { md: 560 },
         py: { xs: 10, md: 0 },
@@ -24,16 +24,16 @@ export default function Listedbond() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundImage:
-          'url(/assets/images/about/listedbond.jpg)',
+          'url(/assets/images/products/listedbond.jpg)',
       }}
     >
       <Container component={MotionContainer}>
         <Box
           sx={{
-            left: { md: 200 },
-            top: { md: 40 },
+            left: {  md: 100 },
+            top: { md: 60 },
             position: { md: 'absolute' },
-            textAlign: { xs: 'center', md: 'unset' },
+            textAlign: { xs: 'left', md: 'unset' },
           }}
         >
           {/* Headline */}
@@ -41,6 +41,7 @@ export default function Listedbond() {
             text="Listed"
             variants={varFade().inRight}
             sx={{
+              
               fontFamily: 'Public Sans, sans-serif',
               fontWeight: 700,
               fontSize: { xs: '32px', md: '64px',lg:'64px' },
@@ -69,7 +70,7 @@ export default function Listedbond() {
             <Typography
               sx={{
                 mt:1,
-                width:'489px',
+                width:{ xs:'355px',md:'489px'},
                 height:'70px',
                 color: "primary.main",
                 fontFamily: "Public Sans, sans-serif",

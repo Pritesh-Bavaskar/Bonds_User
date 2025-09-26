@@ -114,7 +114,7 @@ export default function Gov_securities_type() {
             '&:hover': {
               backgroundColor: theme.palette.action.hover,
             },
-            height: 210,
+            height: 170,
           }}
         >
           {/* Badge */}

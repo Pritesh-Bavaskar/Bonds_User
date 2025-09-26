@@ -20,7 +20,7 @@ export default function QuestionAnswer() {
         }}>
 
             <Typography sx={{
-                fontSize: '48px',
+                fontSize: {xs:'35px', md:'48px'},
                 fontWeight: '700',
                 fontFamily: 'public sans',
                 color: 'primary.main',

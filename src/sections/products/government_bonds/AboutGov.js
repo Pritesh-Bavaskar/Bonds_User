@@ -14,6 +14,8 @@ export default function AboutGov() {
   return (
     <Box
       sx={{
+        mx:'auto',
+        maxWidth:{md:'1300px'},
         height: { md: 560 },
         py: { xs: 10, md: 0 },
         overflow: 'hidden',

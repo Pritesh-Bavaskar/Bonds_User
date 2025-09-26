@@ -28,10 +28,10 @@ export default function ListedCorporateBonds() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <Typography
-            component="h2"
+            variant="h1"
+            
             sx={{
               fontFamily: "Public Sans, sans-serif",
-              fontSize: "48px",
               lineHeight: "64px",
               fontWeight: 700,
               color: "primary.main",
