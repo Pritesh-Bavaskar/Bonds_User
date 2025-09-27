@@ -75,9 +75,15 @@ export default function AboutWhat() {
 
         <Grid xs={12} md={6} lg={5}>
           <m.div variants={varFade().inRight}>
-            <Typography variant="h2" sx={{ mb: 3 }}>
-              What is Minimal?
-            </Typography>
+            <Box sx={{display:'flex', flexDirection:'row'}}>
+              <Typography variant="h1" sx={{ mb: 3, fontWeight:800 }}>
+                Our
+              </Typography>
+              <Typography variant="h1" sx={{ mb: 3, fontWeight:800, color:'hsla(214, 89%, 52%, 1)' }}>
+                Vision
+              </Typography>
+
+            </Box>
           </m.div>
 
           <m.div variants={varFade().inRight}>
@@ -86,10 +92,8 @@ export default function AboutWhat() {
                 color: theme.palette.mode === 'light' ? 'text.secondary' : 'common.white',
               }}
             >
-              Our theme is the most advanced and user-friendly theme you will find on the market, we
-              have documentation and video to help set your site really easily, pre-installed demos
-              you can import in one click and everything from the theme options to page content can
-              be edited from the front-end. This is the theme you are looking for.
+            We envision a world where financial knowledge is universal and every individual can access the same level of market insights as professionals. By combining technology with simplicity, 
+            we aim to make investing smarter, safer, and more inclusive for everyone.
             </Typography>
           </m.div>
 
