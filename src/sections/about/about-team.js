@@ -38,6 +38,7 @@ export default function AboutTeam() {
       },
     ],
   });
+  
 
   return (
     <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 10, md: 15 } }}>
@@ -48,7 +49,7 @@ export default function AboutTeam() {
       </m.div>
 
       <m.div variants={varFade().inUp}>
-        <Typography variant="h2" sx={{ my: 3 }}>
+        <Typography variant="h2" sx={{ my: 3, fontWeight:800, }}>
           Great team is the key
         </Typography>
       </m.div>
@@ -61,8 +62,7 @@ export default function AboutTeam() {
             color: 'text.secondary',
           }}
         >
-          Minimal will provide you support if you have any problems, our support team will reply
-          within a day and we also have detailed documentation.
+         Experienced leaders from top-tier financial institutions and technology companies
         </Typography>
       </m.div>
 

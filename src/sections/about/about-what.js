@@ -46,9 +46,13 @@ export default function AboutWhat() {
         textAlign: { xs: 'center', md: 'unset' },
       }}
     >
-      <Grid container columnSpacing={{ md: 3 }} alignItems="flex-start">
+      <Grid container columnSpacing={{ md: 3 }} sx={{
+        display:'flex', 
+        flexDirection:'row',
+        justifyContent:'center'
+      }} alignItems="center">
         {mdUp && (
-          <Grid container xs={12} md={6} lg={7} alignItems="center" sx={{ pr: { md: 7 } }}>
+          <Grid container xs={12} md={6} lg={6} alignItems="center" sx={{ pr: { md: 7 } }}>
             <Grid xs={6}>
               <m.div variants={varFade().inUp}>
                 <Image
@@ -71,24 +75,28 @@ export default function AboutWhat() {
               </m.div>
             </Grid>
           </Grid>
-        )}
+        )}  
 
         <Grid xs={12} md={6} lg={5}>
           <m.div variants={varFade().inRight}>
-            <Box sx={{display:'flex', flexDirection:'row'}}>
-              <Typography variant="h1" sx={{ mb: 3, fontWeight:800 }}>
+            <Box sx={{display:'flex',justifyContent:{xs:'center', md:'left'},flexDirection:'row', gap:1}}>
+              <Typography variant="h3" sx={{ mb: 3, fontWeight:800 }}>
                 Our
               </Typography>
-              <Typography variant="h1" sx={{ mb: 3, fontWeight:800, color:'hsla(214, 89%, 52%, 1)' }}>
+              <Typography variant="h3" sx={{ mb: 3, fontWeight:800, color:'hsla(214, 89%, 52%, 1)' }}>
                 Vision
               </Typography>
 
             </Box>
           </m.div>
 
-          <m.div variants={varFade().inRight}>
-            <Typography
+          <m.div variants={varFade().inRight}>  
+            <Typography variant='h5'
               sx={{
+              lineHeight: 1.3, // ⬅️ spacing between lines (16px * 1.6 = 25.6px)
+                maxWidth:'350px',
+                fontWeight:'300',
+                // fontSize:'30px',
                 color: theme.palette.mode === 'light' ? 'text.secondary' : 'common.white',
               }}
             >
@@ -97,7 +105,7 @@ export default function AboutWhat() {
             </Typography>
           </m.div>
 
-          <Stack spacing={3} sx={{ my: 5 }}>
+          {/* <Stack spacing={3} sx={{ my: 5 }}>
             {SKILLS.map((progress, index) => (
               <Box component={m.div} key={progress.label} variants={varFade().inRight}>
                 <Stack direction="row" alignItems="center" sx={{ mb: 1 }}>
@@ -117,9 +125,9 @@ export default function AboutWhat() {
                 />
               </Box>
             ))}
-          </Stack>
+          </Stack> */}
 
-          <m.div variants={varFade().inRight}>
+          {/* <m.div variants={varFade().inRight}>
             <Button
               variant="outlined"
               color="inherit"
@@ -128,7 +136,7 @@ export default function AboutWhat() {
             >
               Our Work
             </Button>
-          </m.div>
+          </m.div> */}
         </Grid>
       </Grid>
     </Container>

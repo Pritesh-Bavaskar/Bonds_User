@@ -94,9 +94,14 @@ export default function AboutVision() {
         </Box>
 
         <m.div variants={varFade().inUp}>
-          <Typography variant="h3" sx={{ textAlign: 'center', maxWidth: 800, mx: 'auto' }}>
-            Our vision offering the best product nulla vehicula tortor scelerisque ultrices
-            malesuada.
+          <Typography variant="h5" sx={{
+            px:20,
+            maxwidth:'850px',
+            fontWeight:700, 
+            fontFamily:'public sans',
+             textAlign: 'center' }}>
+            Finance doesn’t have to be complicated. With our platform, you get the clarity and
+            tools you need to explore opportunities, minimize risks, and grow your investments with confidence.
           </Typography>
         </m.div>
       </Container>

@@ -1,148 +1,142 @@
 import PropTypes from 'prop-types';
 import { m } from 'framer-motion';
 // @mui
-import Masonry from '@mui/lab/Masonry';
-import { alpha, useTheme } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Rating from '@mui/material/Rating';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
-import ListItemText from '@mui/material/ListItemText';
+import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-// hooks
-import { useResponsive } from 'src/hooks/use-responsive';
-// utils
-import { fDate } from 'src/utils/format-time';
-// _mock
-import { _testimonials } from 'src/_mock';
-// theme
-import { bgBlur, bgGradient, hideScroll } from 'src/theme/css';
+import Rating from '@mui/material/Rating';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 // components
 import Iconify from 'src/components/iconify';
 import { MotionViewport, varFade } from 'src/components/animate';
+import Carousel, { CarouselArrows, useCarousel } from 'src/components/carousel';
+import Image from 'src/components/image';
 
 // ----------------------------------------------------------------------
 
-export default function AboutTestimonials() {
-  const theme = useTheme();
+const testimonials = [
+  {
+    id: 1,
+    quote:
+      '“We issued our first green bonds through BondIssuer Pro and the experience exceeded all expectations. The ESG-focused investor network and detailed analytics gave us confidence throughout the process.”',
+    bondAmount: '500M',
+    pricingNote: '✓ 30 bps better pricing vs. traditional methods',
+    rating: 5,
+    name: 'Lucian Obrien',
+    date: '12 Jan 2022',
+    avatarUrl: '/assets/Svg/avatar.svg',
+  },
+  {
+    id: 2,
+    quote:
+      '“We issued our first green bonds through BondIssuer Pro and the experience exceeded all expectations. The ESG-focused investor network and detailed analytics gave us confidence throughout the process.”',
+    bondAmount: '750M',
+    pricingNote: '✓ 30 bps better pricing vs. traditional methods',
+    rating: 5,
+    name: 'Sarah Linton',
+    date: '23 Feb 2022',
+   avatarUrl: '/assets/Svg/avatar.svg',
+  },
+  {
+    id: 3,
+    quote:
+      '“We issued our first green bonds through BondIssuer Pro and the experience exceeded all expectations. The ESG-focused investor network and detailed analytics gave us confidence throughout the process.”',
+    bondAmount: '300M',
+    pricingNote: '✓ 30 bps better pricing vs. traditional methods',
+    rating: 4,
+    name: 'Marcus Chen',
+    date: '10 Mar 2022',
+    avatarUrl: '/assets/Svg/avatar.svg',
+  },
+  {
+    id: 4,
+    quote:
+      '“We issued our first green bonds through BondIssuer Pro and the experience exceeded all expectations. The ESG-focused investor network and detailed analytics gave us confidence throughout the process.”',
+     
+    bondAmount: '1B+',
+    pricingNote: ' ✓ 30 bps better pricing vs. traditional methods',
+    rating: 5,
+    name: 'Emily Walker',
+    date: '05 Apr 2022',
+    avatarUrl: '/assets/Svg/avatar.svg',
+  },
+];
 
-  const mdUp = useResponsive('up', 'md');
+// ----------------------------------------------------------------------
 
-  const renderLink = (
-    <Button color="primary" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>
-      Read more testimonials
-    </Button>
-  );
-
-  const renderDescription = (
-    <Box
-      sx={{
-        maxWidth: { md: 360 },
-        textAlign: { xs: 'center', md: 'unset' },
-      }}
-    >
-      <m.div variants={varFade().inUp}>
-        <Typography variant="overline" sx={{ color: 'common.white', opacity: 0.48 }}>
-          Testimonials
-        </Typography>
-      </m.div>
-
-      <m.div variants={varFade().inUp}>
-        <Typography variant="h2" sx={{ my: 3, color: 'common.white' }}>
-          Who love <br />
-          my work
-        </Typography>
-      </m.div>
-
-      <m.div variants={varFade().inUp}>
-        <Typography sx={{ color: 'common.white' }}>
-          Our goal is to create a product and service that you’re satisfied with and use it every
-          day. This is why we’re constantly working on our services to make it better every day and
-          really listen to what our users has to say.
-        </Typography>
-      </m.div>
-
-      {!mdUp && (
-        <Box
-          component={m.div}
-          variants={varFade().inUp}
-          sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}
-        >
-          {renderLink}
-        </Box>
-      )}
-    </Box>
-  );
-
-  const renderContent = (
-    <Box
-      sx={{
-        py: { md: 10 },
-        height: { md: 1 },
-        ...(mdUp && {
-          ...hideScroll.y,
-        }),
-      }}
-    >
-      <Masonry spacing={3} columns={{ xs: 1, md: 2 }} sx={{ ml: 0 }}>
-        {_testimonials.map((testimonial) => (
-          <m.div key={testimonial.name} variants={varFade().inUp}>
-            <TestimonialCard testimonial={testimonial} />
-          </m.div>
-        ))}
-      </Masonry>
-    </Box>
-  );
+export default function TestimonialsSection() {
+  const carousel = useCarousel({
+    infinite: false,
+    slidesToShow: 4,
+    responsive: [
+      { breakpoint: 1279, settings: { slidesToShow: 3 } },
+      { breakpoint: 959, settings: { slidesToShow: 2 } },
+      { breakpoint: 600, settings: { slidesToShow: 1 } },
+    ],
+  });
 
   return (
     <Box
       sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.grey[900], 0.9),
-          imgUrl: '/assets/images/about/testimonials.jpg',
-        }),
-        overflow: 'hidden',
-        height: { md: 840 },
-        py: { xs: 10, md: 0 },
+        backgroundColor: '#0c2444', // Deep blue
+        
+        color: 'common.white',
+        py: { xs: 10, md: 15 },
       }}
     >
-      <Container component={MotionViewport} sx={{ position: 'relative', height: 1 }}>
-        <Grid
-          container
-          spacing={3}
-          alignItems="center"
-          justifyContent={{ xs: 'center', md: 'space-between' }}
-          sx={{ height: 1 }}
-        >
-          <Grid xs={10} md={4}>
-            {renderDescription}
-          </Grid>
+      <Container component={MotionViewport} sx={{ textAlign: 'center' }}>
+        <m.div variants={varFade().inDown}>
+          <Typography variant="h3" sx={{ fontWeight: 700 }}>
+            Join Our Success Stories
+          </Typography>
+        </m.div>
 
-          <Grid
-            xs={12}
-            md={7}
-            lg={6}
-            alignItems="center"
+        <m.div variants={varFade().inUp}>
+          <Typography
             sx={{
-              height: 1,
+              mt: 2,
+              mx: 'auto',
+              maxWidth: 680,
+              color: 'grey.400',
+              fontSize: { xs: 16, md: 18 },
             }}
           >
-            {renderContent}
-          </Grid>
-        </Grid>
+            Ready to experience the same success as our clients? Join thousands of companies and
+            investors who trust BondsIssuer Pro for their fixed income needs.
+          </Typography>
+        </m.div>
 
-        {mdUp && (
-          <Box
-            component={m.div}
-            variants={varFade().inUp}
-            sx={{ bottom: 60, position: 'absolute' }}
+        {/* Carousel */}
+        <Box sx={{ position: 'relative', mt: 6 }}>
+          <CarouselArrows
+            filled
+            shape="rounded"
+            onNext={carousel.onNext}
+            onPrev={carousel.onPrev}
+            leftButtonProps={{
+              sx: {
+                left: 24,
+                ...(testimonials.length < 5 && { display: 'none' }),
+              },
+            }}
+            rightButtonProps={{
+              sx: {
+                right: 24,
+                ...(testimonials.length < 5 && { display: 'none' }),
+              },
+            }}
           >
-            {renderLink}
-          </Box>
-        )}
+            <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
+              {testimonials.map((item) => (
+                <Box key={item.id} component={m.div} variants={varFade().in} sx={{ px: 1.5 }}>
+                  <TestimonialCard testimonial={item} />
+                </Box>
+              ))}
+            </Carousel>
+          </CarouselArrows>
+        </Box>
       </Container>
     </Box>
   );
@@ -150,54 +144,72 @@ export default function AboutTestimonials() {
 
 // ----------------------------------------------------------------------
 
-function TestimonialCard({ testimonial, sx, ...other }) {
-  const theme = useTheme();
-
-  const { name, ratingNumber, postedDate, content, avatarUrl } = testimonial;
+function TestimonialCard({ testimonial }) {
+  const { quote, bondAmount, pricingNote, rating, name, date, avatarUrl } = testimonial;
 
   return (
-    <Stack
-      spacing={3}
+    <Card
       sx={{
-        ...bgBlur({
-          color: theme.palette.common.white,
-          opacity: 0.08,
-        }),
-        p: 3,
-        borderRadius: 2,
+        bgcolor: 'rgba(255, 255, 255, 0.06)',
+        backdropFilter: 'blur(10px)',
         color: 'common.white',
-        ...sx,
+        borderRadius: 2,
+        p: 3,
+        height: '100%',
+        minHeight: 400, // Ensures uniform height
+        display: 'flex',
+        flexDirection: 'column',  
+        justifyContent: 'left',
       }}
-      {...other}
     >
-      <Iconify icon="mingcute:quote-left-fill" width={40} sx={{ opacity: 0.48 }} />
+      <Typography
+        variant="h6"
+        sx={{display:'flex',textAlign:'left', fontSize: { xs: 12, md: 14 }, fontWeight:400, fontStyle: 'regular', mb: 3 }}
+      >
+        {quote}
+      </Typography>
 
-      <Typography variant="body2">{content}</Typography>
+      <Typography variant="subtitle2" sx={{ fontWeight: 500, mb: 0.5 }}>
+        Bond Amount: {bondAmount}
+      </Typography>
 
-      <Rating value={ratingNumber} readOnly size="small" />
+      <Typography
+        variant="caption"
+        sx={{
+          fontSize: 13,
+          color: 'grey.400',
+          display: 'block',
+          mb: 2,
+        }}
+      >
+         {pricingNote}
+      </Typography>
 
-      <Stack direction="row">
-        <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
+      <Rating value={rating} readOnly sx={{ mb: 2 }} />
 
-        <ListItemText
-          primary={name}
-          secondary={fDate(postedDate)}
-          primaryTypographyProps={{
-            typography: 'subtitle2',
-            mb: 0.5,
-          }}
-          secondaryTypographyProps={{
-            typography: 'caption',
-            color: 'inherit',
-            sx: { opacity: 0.64 },
+      <Stack direction="row" spacing={2} alignItems="center" mt="auto">
+        <Image
+          alt={name}
+          src={avatarUrl}
+          sx={{
+            width: 40,
+            height: 40,
+            borderRadius: '50%',
           }}
         />
+        <Box>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+            {name}
+          </Typography>
+          <Typography variant="caption" sx={{ color: 'grey.400' }}>
+            {date}
+          </Typography>
+        </Box>
       </Stack>
-    </Stack>
+    </Card>
   );
 }
 
 TestimonialCard.propTypes = {
-  sx: PropTypes.object,
   testimonial: PropTypes.object,
 };

@@ -8,6 +8,7 @@ const StatCard = ({ icon, title, subtitle }) => (
     sx={{
       p: 3,
       width: {xs:155, md:261},
+      mb:10,
       height: 168,
       boxShadow: 4,
       textAlign: 'center',    
@@ -30,7 +31,7 @@ const StatCard = ({ icon, title, subtitle }) => (
 
 const InvestmentStats = () => {
   return (
-    <Box sx={{ display: 'flex', gap: {xs:4, md:20}, justifyContent: 'center', mt: 4 }}>
+    <Box sx={{ display: 'flex', gap: {xs:4, md:20}, justifyContent: 'center' }}>
       <StatCard
         icon={<BarChartIcon color="#000000" />}
         title="Tenure"

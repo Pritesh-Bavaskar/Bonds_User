@@ -28,7 +28,7 @@ export default function ListedCorporateBonds() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <Typography
-            variant="h1"
+            variant="h3"
             
             sx={{
               fontFamily: "Public Sans, sans-serif",
@@ -36,6 +36,7 @@ export default function ListedCorporateBonds() {
               fontWeight: 700,
               color: "primary.main",
               mb: 3,
+              
             }}
           >
             <Box component="span" sx={{ color: "primary.main" }}>

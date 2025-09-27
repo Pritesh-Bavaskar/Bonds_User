@@ -55,10 +55,11 @@ const CreditAssessmentProcess = () => {
 
                 }}
             >
-                <Typography sx={{
+                <Typography variant='h3'
+                sx={{
 
                     fontFamily: "Public Sans, sans-serif",
-                    fontSize: '48px',
+                
                     lineHeight: '64px',
                     fontWeight: 700,
                     color: 'primary.main',
