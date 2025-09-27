@@ -71,12 +71,12 @@ export default function Investment() {
                     variant='h6'
                     sx={{
                         maxWidth: 656,
+                        fontWeight:300,
+                        color:'black',
                         height: 24,
                         mx: 'auto',
                         mb: 8,
                         mt: 2,
-                        color: theme.palette.text.secondary,
-
                     }}
                 >
                     Simple steps to start your listed bond investment journey.
@@ -154,14 +154,22 @@ export default function Investment() {
                     bgcolor: 'hsla(218, 100%, 22%, 1)',
                     color:'#fff',
                     p:4,
-                    my:9
+                    mt:6,
+                    pt:3,
                     
 
                 }} >
-                <Typography
-                    sx={{ textAlign: 'left' }}>
+                    <Box sx={{display:'flex', flexDirection:'row', gap:1, pt:3}}>
+                    <Box
+                    component='Img'
+                    src='/assets/Svg/rocket.svg'
+                    sx={{ width:'20px', height:'20px',display:'flex', flexDirection:'row'}}/> 
+                   <Typography
+                    sx={{ textAlign: 'left', }}>
                     Ready to Start?
                 </Typography>
+            
+                </Box>
                 <Typography sx={{ textAlign: 'left' }}>
                     Access listed bonds through any SEBI-registered broker or investment platform.
                 </Typography>

@@ -15,7 +15,8 @@ export default function QuestionAnswer() {
             mx: 'auto',
             alignItems: 'center',
             maxWidth: '888px',
-            height: '70vh',
+            minheight: '70vh',
+            py:8,
 
         }}>
 

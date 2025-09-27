@@ -132,7 +132,7 @@ export default function Header() {
               }}
             /> */}
 
-            {!mdUp && <NavMobile offsetTop={offsetTop} data={navConfig} />}
+            {mdUp && <NavMobile offsetTop={offsetTop} data={navConfig} />}
           </Stack>
         </Container>
       </Toolbar>

@@ -10,42 +10,41 @@ import Iconify from 'src/components/iconify';
 import { MotionViewport, varFade } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
-
 const FEATURES = [
   {
-    title: 'High Liquidity',
-    description: 'Trade bonds easily during market hours with immediate settlement and transparent pricing.',
+    title: 'Higher Returns',
+    description: 'Access yields typically higher than listed bonds due to illiquidity premium and private placement nature.',
     icon: 'carbon:growth',
   },
   {
-    title: 'Transparent Pricing',
-    description: 'Real-time price discovery through exchange mechanisms ensures fair market value.',
+    title: 'Flexible Structuring',
+    description: 'Customized terms, tenures, and payment structures tailored to meet specific investor requirements.  ',
     icon: 'weui:setting-outlined',
   },
   {
-    title: 'Regulatory Oversight',
-    description: 'SEBI regulation provides investor protection and standardized market practices.',
+    title: 'Secured / Collateral-Backed',
+    description: 'Many unlisted bonds offer asset backing or collateral security, reducing default risk.',
     icon: 'line-md:security',
   },
   {
-    title: 'Lower Credit Risk',
-    description: 'Listed issuers undergo stringent disclosure requirements and credit assessments.',
+    title: 'Portfolio Diversification',
+    description: 'Access to unique investment opportunities not available in public markets for better portfolio balance.',
     icon: 'bytesize:portfolio',
   },
   {
-    title: 'Retail Accessibility',
-    description: 'Lower minimum investment amounts make bonds accessible to individual investors.',
+    title: 'Private Placement Access',
+    description: 'Exclusive access to institutional-grade investments typically reserved for qualified investors.',
     icon: 'ph:hand-heart-light', 
   },
   {
-    title: 'Exchange Discovery',
-    description: 'Efficient price discovery through organized exchange trading mechanisms.',
+    title: 'Negotiated Terms',
+    description: 'Ability to negotiate specific terms, covenants, and conditions directly with the issuer.',
     icon: 'heroicons:document-check',
   },
 ];
 // ----------------------------------------------------------------------
 
-export default function Benefits() {
+export default function Benefit() {
   const theme = useTheme();
 
   return (
@@ -60,7 +59,7 @@ export default function Benefits() {
       <m.div variants={varFade().inRight}>
         <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
-           Advantages of Listed Bonds
+            Benefits of Investing in Unlisted Bonds
           </Box>
         </Typography>
       </m.div>
@@ -68,19 +67,15 @@ export default function Benefits() {
       {/* Subtitle */}
       <m.div variants={varFade().inUp}>
         <Typography
-        variant='subtitle1'
           sx={{
-            maxWidth: 656,
-            height:48,
+            maxWidth: 730,
             mx: 'auto',
             mb: 8,
             mt: 2,
-            fontWeight: 300,
-            color: 'black',
-
+            fontWeight:500,        
           }}
         >
-        Discover why listed bonds offer superior benefits for modern investors seeking transparency and liquidity.
+          Discover the unique advantages of private placement bonds for sophisticated investors seeking enhanced returns.
         </Typography>
       </m.div>
 
@@ -99,16 +94,16 @@ export default function Benefits() {
                   '&:hover': {
                     backgroundColor: theme.palette.action.hover,
                   },
-                  height: 210,
+                  maxHeight: 450,
                 }}
               >
                 {/* Icon with circle */}
                 <Box
                   sx={{
-                    width: 56,
-                    height: 56,
+                    width: 50,
+                    height: 50,
                     borderRadius: '50%',
-                    backgroundColor: '#E9F4FF',
+                    backgroundColor: "#E9F4FF",
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -117,15 +112,15 @@ export default function Benefits() {
                 >
                   <Iconify
                     icon={item.icon}
-                    width={28}
-                    height={28}
-                    color="black"
+                    width={25}
+                    height={25}
+                    color={"#000000"}
                   />
                 </Box>
 
                 {/* Title */}
                 <Typography
-                  variant="h6"
+                  variant="h5"
                   gutterBottom
                   sx={{ fontWeight: 600, mb: 2 }}
                 >
@@ -133,7 +128,7 @@ export default function Benefits() {
                 </Typography>
 
                 {/* Description */}
-                <Typography variant="body2" color="text.secondary" sx={{ height: 50 }}>
+                <Typography variant="subtitle2" color="text.secondary" sx={{ height: 50 }}>
                   {item.description}
                 </Typography>
               </Box>

@@ -58,10 +58,12 @@ export default function ListedInfo() {
             mx: 'auto',
             mt: 6,
             fontFamily: 'Public Sans',
-            color: theme.palette.text.primary,
+           
           }}
         >
-       Listed bonds are debt securities issued by governments or corporations and traded on stock exchanges such as NSE or BSE. These bonds offer investors a regulated, transparent way to invest in debt instruments with enhanced liquidity and market oversight
+       Listed bonds are debt securities issued by governments or corporations and traded on stock 
+       exchanges such as NSE or BSE. These bonds offer investors a regulated, transparent way to 
+       invest in debt instruments with enhanced liquidity and market oversight
         </Typography>
       </m.div>
 
@@ -71,8 +73,9 @@ export default function ListedInfo() {
         spacing={4}
         sx={{
           mt: 6,
+          display:'flex',
           justifyContent: 'center',
-          textAlign: { xs: 'left', md: 'center' },
+          textAlign: { xs: 'center', md: 'center' },
         }}
       >
         {features.map((feature) => (
@@ -83,7 +86,7 @@ export default function ListedInfo() {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: { xs: 'flex-start', md: 'center' },
+              alignItems: { xs: 'center', md: 'center' },
             }}
           >
             {/* Top row: tick + title */}
@@ -110,7 +113,7 @@ export default function ListedInfo() {
               variant="body2"
               sx={{
                 color: 'text.secondary',
-                fontSize: { xs: 13, md: 14 },
+                fontSize: { xs: 12, md: 14 },
               }}
             >
               {feature.subtitle}

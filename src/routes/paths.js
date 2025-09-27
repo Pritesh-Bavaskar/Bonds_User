@@ -17,7 +17,6 @@ const ROOTS = {
 // ----------------------------------------------------------------------
 
 export const paths = {
-
   calculator:'/calculator',
   calculate:'/calculate',
   comingSoon: '/coming-soon',
@@ -57,7 +56,7 @@ export const paths = {
     corporate_bonds:'/products/corporate_bond',
     government_bonds:'/products/government-bond',
      listed_bonds:'/products/listed-bond',
-    // unlisted_bonds:'/products/unlisted-bond',
+     unlisted_bonds:'/products/unlisted-bond',
   },
   // AUTH
   auth: {

@@ -28,10 +28,11 @@ export const navConfig = [
           { title: 'Corporate Bond', path: paths.products.corporate_bonds},
           { title: 'Government Bond', path: paths.products.government_bonds },
           { title: 'Listed Bond', path: paths.products.listed_bonds },
-          { title: 'Unlisted Bond', path: paths.pricing },
+          { title: 'Unlisted Bond', path: paths.products.unlisted_bonds },
         ],
       },
-    ],
+    ],    
+
   },
   {
     title: 'Resources',

@@ -58,7 +58,7 @@ export default function Advantage() {
         <Container
             component={MotionViewport}
             sx={{
-                py: { xs: 10, md: 15 },
+                py: { xs: 10, md: 0 },
                 textAlign: 'center',
             }}
         >
@@ -91,10 +91,10 @@ export default function Advantage() {
             {/* Table */}
             <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
                 <Table>
-                    <TableHead>
+                    <TableHead sx={{bgcolor:'blue'}}>
                         <TableRow
                             sx={{
-                                background: "linear-gradient(90deg, #00059A 0%, #3C6ADE 50%, #00059A 100%)",
+                                bgcolor: "linear-gradient(90deg, #00059A 0%, #3C6ADE 50%, #00059A 100%)",
                             }}
                         >
                             <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Feature</TableCell>
