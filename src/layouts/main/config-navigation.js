@@ -41,7 +41,6 @@ export const navConfig = [
       {
         items: [
           { title: 'Blogs', path: paths.post.root },
-          { title: 'FAQ', path: paths.contact },
           { title: 'FAQs', path: paths.faqs },
           { title: 'News/Insight', path: paths.pricing },
           { title: 'Calculator', path: paths.payment },
