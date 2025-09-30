@@ -59,6 +59,7 @@ export const paths = {
      unlisted_bonds:'/products/unlisted-bond',
   },
   // AUTH
+  
   auth: {
     amplify: {
       login: `${ROOTS.AUTH}/amplify/login`,

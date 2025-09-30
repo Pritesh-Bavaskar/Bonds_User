@@ -1,1 +1,1 @@
-export { default as AboutView } from './unLiBond-view';
+export { default as AboutView } from './unliBond-view';

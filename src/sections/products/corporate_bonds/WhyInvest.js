@@ -70,12 +70,12 @@ const FeatureCard = ({ icon, title, description, color, index }) => (
       p: 2, 
       textAlign: "center",
       borderRadius: 2,
-      height: "100%",
+      height: "192px",
     }}>
       <Box
         sx={{
-          px: { xs: 2, md: 4 },
-          py: { xs: 2, md: 4 },
+          px: { xs: 2, md: 3 },
+          py: { xs: 2, md: 3 },
           width: 40,
           height: 40,
           mx: 'auto',
@@ -85,14 +85,16 @@ const FeatureCard = ({ icon, title, description, color, index }) => (
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          
+          
         }}
       >
         {icon}
       </Box>
-      <Typography variant="subtitle1" fontWeight={600}>
+      <Typography variant="h5" fontWeight={600}>
         {title}
       </Typography>
-      <Typography variant="body2" color="text.secondary" mt={0.5}>
+      <Typography variant="subtitle2" color="text.secondary" mt={1}>
         {description}
       </Typography>
     </Card>
@@ -121,17 +123,21 @@ const WhyInvest = () => {
           }}
         >
           <Typography 
-           variant="h1"sx={{
+           variant="h3"sx={{
+            
             fontFamily: "Public Sans, sans-serif",
-            lineHeight: '64px',            
+            lineHeight: '50px',            
             color: 'primary.main',
+            fontWeight:700,
           }}>
             Why Invest in Listed Corporate Bonds?
           </Typography>
           <Typography
-           variant="subtitle1"
+           variant="h5"
             sx={{
               p:4,
+              fontWeight:400,
+              lineHeight:1.5,
               height: '56px',
               mb:2,
               fontFamily: "Public Sans, sans-serif",

@@ -64,10 +64,9 @@ const RiskMitigation = () => {
           maxwidth: '888px',
           maxheight: '153px',
         }}>
-          <Typography
+          <Typography variant='h3'
             sx={{
               fontFamily: 'public sans',
-              fontSize: '48px',
               fontWeight: 700,
               color: "primary.main",
             }}
@@ -79,7 +78,7 @@ const RiskMitigation = () => {
               fontFamily: 'public sans',
               fontSize: '20px',
               fontWeight: 400,
-              pb: 10
+              py: 3
             }}
           >
             Multiple layers of protection and oversight ensure your investment security and peace of mind.
@@ -109,6 +108,7 @@ const RiskMitigation = () => {
                     ml: { xs: 0, lg: 0 },
                     p: { xs: 2, md: 2 },
                     borderRadius: 2,
+                    gap:2,
                     boxShadow: 4,
                     textAlign: "left",
                     display: "flex",

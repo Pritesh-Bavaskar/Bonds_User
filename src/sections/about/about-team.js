@@ -19,7 +19,49 @@ import Carousel, { CarouselArrows, useCarousel } from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
 
+const images = [
+  {
+    "id": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1",
+    "name": "Jayvion Simon",
+    "role": "HR Manager",
+    "avatarUrl": "/assets/images/about/img1.jpg"
+  },
+  {
+    "id": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b2",
+    "name": "Lucian Obrien",
+    "role": "Data Analyst",
+    "avatarUrl": "/assets/images/about/img2.jpg"
+  },
+  {
+    "id": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b3",
+    "name": "Deja Brady",
+    "role": "Legal Counsel",
+    "avatarUrl": "/assets/images/about/img3.jpg"
+  },
+  {
+    "id": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b4",
+    "name": "Harrison Stein",
+    "role": "UX/UI Designer",
+    "avatarUrl": "/assets/images/about/img4.jpg"
+  },
+  {
+    "id": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b5",
+    "name": "Reece Chung",
+    "role": "Project Manager",
+    "avatarUrl": "/assets/images/about/img1.jpg"
+  },
+  { 
+    "id": "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b6",
+    "name": "Lainey Davidson",
+    "role": "Account Manager",
+    "avatarUrl": "/assets/images/about/img2.jpg"
+  }
+]
+{console.log("abcdf", )}
+
 export default function AboutTeam() {
+  console.log("abc", _carouselsMembers)
+
   const carousel = useCarousel({
     infinite: false,
     slidesToShow: 4,
@@ -39,6 +81,7 @@ export default function AboutTeam() {
     ],
   });
 
+
   return (
     <Container component={MotionViewport} sx={{ textAlign: 'center', py: { xs: 10, md: 15 } }}>
       <m.div variants={varFade().inDown}>
@@ -48,7 +91,7 @@ export default function AboutTeam() {
       </m.div>
 
       <m.div variants={varFade().inUp}>
-        <Typography variant="h2" sx={{ my: 3 }}>
+        <Typography variant="h2" sx={{ my: 3, fontWeight: 800, }}>
           Great team is the key
         </Typography>
       </m.div>
@@ -61,8 +104,7 @@ export default function AboutTeam() {
             color: 'text.secondary',
           }}
         >
-          Minimal will provide you support if you have any problems, our support team will reply
-          within a day and we also have detailed documentation.
+          Experienced leaders from top-tier financial institutions and technology companies
         </Typography>
       </m.div>
 
@@ -75,7 +117,7 @@ export default function AboutTeam() {
       
         >
           <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-            {_carouselsMembers.map((member) => (
+            {images.map((member) => (
               <Box
                 key={member.id}
                 component={m.div}
@@ -87,6 +129,8 @@ export default function AboutTeam() {
               >
                 <MemberCard member={member} />
               </Box>
+
+
             ))}
           </Carousel>
         </CarouselArrows>
