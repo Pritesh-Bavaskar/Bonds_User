@@ -63,6 +63,7 @@ export const mainRoutes = [
           { path: 'checkout', element: <ProductCheckoutPage /> },
         ],
       },
+      
       { 
         path: 'products',
         children: [
