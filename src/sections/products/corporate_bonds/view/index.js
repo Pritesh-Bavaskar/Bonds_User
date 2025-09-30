@@ -1,1 +1,1 @@
-export { default as AboutView } from './CopBond-view';
+export { default as CorpoBondView } from './corporateBond-view';

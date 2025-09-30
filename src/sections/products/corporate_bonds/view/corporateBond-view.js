@@ -6,10 +6,10 @@ import CreditAssessmentProcess from '../creditprocess'
 import RiskMitigation from '../riskmigration'
 import Question from'../question'
 
-export default function AboutView() {
+export default function CorpoBondView() {
   return (
     <>
-        <AboutHero />
+      <AboutHero />
 
       <ListedCorporateBonds/>
 
