@@ -1,1 +1,1 @@
-export { default as AboutView } from './LisBonds-view';
+export { default as AboutView } from './lisBonds-view';
