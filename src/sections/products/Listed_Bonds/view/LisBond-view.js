@@ -19,7 +19,7 @@ export default function AboutView() {
     <Investment/>
     <RisksConsiderations/>
     <FAQSection/>
-     <ListedJourney/>
+    <ListedJourney/>
 
 
     </>
