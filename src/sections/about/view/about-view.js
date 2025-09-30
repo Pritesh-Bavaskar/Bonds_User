@@ -4,7 +4,7 @@ import AboutWhat from '../about-what';
 import AboutTeam from '../about-team';
 import AboutVision from '../about-vision';
 import AboutTestimonials from '../about-testimonials';
-
+import WhatWeDo from '../what-we-do';
 // ----------------------------------------------------------------------
 
 export default function AboutView() {
@@ -13,6 +13,8 @@ export default function AboutView() {
       <AboutHero />
 
       <AboutWhat />
+
+      <WhatWeDo/>
 
       <AboutVision />
 
