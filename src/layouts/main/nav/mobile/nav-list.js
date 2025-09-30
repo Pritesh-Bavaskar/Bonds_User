@@ -4,6 +4,7 @@ import Collapse from '@mui/material/Collapse';
 import { listClasses } from '@mui/material/List';
 import { listItemTextClasses } from '@mui/material/ListItemText';
 import { listItemButtonClasses } from '@mui/material/ListItemButton';
+import { listItemIconClasses } from '@mui/material/ListItemIcon';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -38,19 +39,16 @@ export default function NavList({ item }) {
           <NavSectionVertical
             data={children}
             sx={{
-              [`& .${listClasses.root}`]: {
-                '&:last-of-type': {
-                  [`& .${listItemButtonClasses.root}`]: {
-                    height: 160,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    bgcolor: 'background.neutral',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundImage: 'url(/assets/illustrations/illustration_dashboard.png)',
-                    [`& .${listItemTextClasses.root}`]: {
-                      display: 'none',
-                    },
-                  },
+              // Ensure children use text-only appearance: hide icons, show labels
+              [`& .${listClasses.root} .${listItemButtonClasses.root}`]: {
+                height: 48,
+                bgcolor: 'transparent',
+                backgroundImage: 'none',
+                [`& .${listItemIconClasses.root}`]: {
+                  display: 'none',
+                },
+                [`& .${listItemTextClasses.root}`]: {
+                  display: 'block',
                 },
               },
             }}

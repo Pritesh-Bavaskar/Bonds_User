@@ -21,6 +21,7 @@ const PricingPage = lazy(() => import('src/pages/pricing'));
 const PaymentPage = lazy(() => import('src/pages/payment'));
 const ComingSoonPage = lazy(() => import('src/pages/coming-soon'));
 const MaintenancePage = lazy(() => import('src/pages/maintenance'));
+const BondLibraryPage = lazy(() => import('src/pages/bond-library'));
 // PRODUCT
 const ProductListPage = lazy(() => import('src/pages/product/list'));
 const ProductDetailsPage = lazy(() => import('src/pages/product/details'));
@@ -50,6 +51,7 @@ export const mainRoutes = [
       {path: 'calculator', element:<Calculatorpage/>},
       {path:'calculate',  element :<Calculatesection/>},
       { path: 'about-us', element: <AboutPage /> },
+      { path: 'bond-library', element: <BondLibraryPage /> },
       { path: 'contact-us', element: <ContactPage /> },
       { path: 'faqs', element: <FaqsPage /> },
       {
