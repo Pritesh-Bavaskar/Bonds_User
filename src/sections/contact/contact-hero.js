@@ -1,129 +1,63 @@
-import PropTypes from 'prop-types';
-import { m } from 'framer-motion';
 // @mui
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { alpha, useTheme } from '@mui/material/styles';
-// theme
-import { bgGradient } from 'src/theme/css';
-//
-import { MotionContainer, varFade } from 'src/components/animate';
-
-// ----------------------------------------------------------------------
-
-const CONTACTS = [
-  {
-    country: 'Bali',
-    address: '508 Bridle Avenue Newnan, GA 30263',
-    phoneNumber: '(239) 555-0108',
-  },
-  {
-    country: 'London',
-    address: '508 Bridle Avenue Newnan, GA 30263',
-    phoneNumber: '(319) 555-0115',
-  },
-  {
-    country: 'Prague',
-    address: '508 Bridle Avenue Newnan, GA 30263',
-    phoneNumber: '(252) 555-0126',
-  },
-  {
-    country: 'Moscow',
-    address: '508 Bridle',
-    phoneNumber: '(307) 555-0133',
-  },
-];
 
 // ----------------------------------------------------------------------
 
 export default function ContactHero() {
-  const theme = useTheme();
 
   return (
     <Box
       sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.grey[900], 0.8),
-          imgUrl: '/assets/images/contact/hero.jpg',
-        }),
-        height: { md: 560 },
-        py: { xs: 10, md: 0 },
-        overflow: 'hidden',
-        position: 'relative',
+        // Exact gradient as requested
+        background: 'linear-gradient(89.91deg, #0062F5 -82.81%, #1A0000 97.82%)',
+        py: { xs: 6, md: 8 },
       }}
     >
-      <Container component={MotionContainer}>
-        <Box
-          sx={{
-            bottom: { md: 80 },
-            position: { md: 'absolute' },
-            textAlign: { xs: 'center', md: 'unset' },
-          }}
+      <Container>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          alignItems={{ xs: 'flex-start', md: 'center' }}
+          justifyContent="space-between"
+          spacing={{ xs: 3, md: 5 }}
         >
-          <TextAnimate text="Where" sx={{ color: 'primary.main' }} variants={varFade().inRight} />
-          <br />
+          <Box sx={{ color: 'common.white', maxWidth: 640 }}>
+            <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
+              We’d Love to Connect with You
+            </Typography>
 
-          <Stack spacing={2} display="inline-flex" direction="row" sx={{ color: 'common.white' }}>
-            <TextAnimate text="to" />
-            <TextAnimate text="find" />
-            <TextAnimate text="us?" />
-          </Stack>
+            <Typography variant="body1" sx={{ opacity: 0.9 }}>
+              Have questions or feedback? Our team is here to guide you. Write to us or call, and we’ll be
+              happy to assist.
+            </Typography>
+          </Box>
 
-          <Stack
-            spacing={5}
-            alignItems={{ xs: 'center', md: 'unset' }}
-            direction={{ xs: 'column', md: 'row' }}
-            sx={{ mt: 5, color: 'common.white' }}
+          <Box
+            sx={{
+              bgcolor: 'common.white',
+              borderRadius: 2,
+              boxShadow: 4,
+              p: 1.5,
+              width: { xs: '100%', md: 240 },
+            }}
           >
-            {CONTACTS.map((contact) => (
-              <Stack key={contact.country} sx={{ maxWidth: 180 }}>
-                <m.div variants={varFade().in}>
-                  <Typography variant="h6" gutterBottom>
-                    {contact.country}
-                  </Typography>
-                </m.div>
-
-                <m.div variants={varFade().inRight}>
-                  <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                    {contact.address}
-                  </Typography>
-                </m.div>
-              </Stack>
-            ))}
-          </Stack>
-        </Box>
+            <Box
+              component="img"
+              alt="Contact Illustration"
+              src="/assets/images/contact/hero.svg"
+              sx={{
+                width: '100%',
+                height: { xs: 180, md: 200 },
+                objectFit: 'contain',
+                borderRadius: 1,
+                display: 'block',
+              }}
+            />
+          </Box>
+        </Stack>
       </Container>
     </Box>
   );
 }
-
-// ----------------------------------------------------------------------
-
-function TextAnimate({ text, variants, sx, ...other }) {
-  return (
-    <Box
-      component={m.div}
-      sx={{
-        typography: 'h1',
-        overflow: 'hidden',
-        display: 'inline-flex',
-        ...sx,
-      }}
-      {...other}
-    >
-      {text.split('').map((letter, index) => (
-        <m.span key={index} variants={variants || varFade().inUp}>
-          {letter}
-        </m.span>
-      ))}
-    </Box>
-  );
-}
-
-TextAnimate.propTypes = {
-  sx: PropTypes.object,
-  text: PropTypes.string,
-  variants: PropTypes.object,
-};

@@ -16,18 +16,7 @@ export default function ContactView() {
       <ContactHero />
 
       <Container sx={{ py: 10 }}>
-        <Box
-          gap={10}
-          display="grid"
-          gridTemplateColumns={{
-            xs: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-          }}
-        >
-          <ContactForm />
-
-          <ContactMap contacts={_mapContact} />
-        </Box>
+        <ContactForm />
       </Container>
     </>
   );
