@@ -8,6 +8,8 @@ import Investment from '../investment'
 import RisksConsiderations from'../risksconsiderations'
 import ListedJourney from '../listedjourney'
 
+
+
 export default function AboutView() {
   return (
     <>
