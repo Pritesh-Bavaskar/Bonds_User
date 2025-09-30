@@ -23,6 +23,7 @@ export const paths = {
   maintenance: '/maintenance',
   pricing: '/pricing',
   payment: '/payment',
+  bondLibrary: '/bond-library',
   about: '/about-us',
   contact: '/contact-us',
   faqs: '/faqs',
@@ -59,6 +60,7 @@ export const paths = {
      unlisted_bonds:'/products/unlisted-bond',
   },
   // AUTH
+  
   auth: {
     amplify: {
       login: `${ROOTS.AUTH}/amplify/login`,

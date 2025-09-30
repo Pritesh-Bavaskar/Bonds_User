@@ -17,18 +17,16 @@ export default function QuestionAnswer() {
             maxWidth: '888px',
             minheight: '70vh',
             py:8,
-
         }}>
 
-            <Typography sx={{
-                fontSize: {xs:'35px', md:'48px'},
-                fontWeight: '700',
-                fontFamily: 'public sans',
-                color: 'primary.main',
-                mb: 3
-
-            }}
-            >
+            <Typography variant='h3'
+                sx={{
+                    fontFamily: 'public sans',
+                    fontWeight: 700,
+                    color: "primary.main",
+                    mb:3
+                }}
+                >
                 Have Questions?
             </Typography>
 
@@ -37,7 +35,7 @@ export default function QuestionAnswer() {
                 fontWeight: '400',
                 fontFamily: 'public sans',
                 textAlign: 'center',
-                mb: 8
+                mb: 5
 
             }}
             >

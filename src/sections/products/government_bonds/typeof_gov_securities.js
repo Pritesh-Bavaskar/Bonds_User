@@ -67,7 +67,7 @@ export default function Gov_securities_type() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 10, md: 15 },
+        py: { xs: 4, md: 4 },
         textAlign: 'center',
       }}
     >
@@ -86,8 +86,8 @@ export default function Gov_securities_type() {
           sx={{
             maxWidth: 800,
             mx: 'auto',
-            mb: 8,
-            mt: 2,
+            mb: 5,
+            mt: 3,
             color: theme.palette.text.secondary,
           }}
         >

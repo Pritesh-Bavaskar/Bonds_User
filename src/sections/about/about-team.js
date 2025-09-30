@@ -114,18 +114,7 @@ export default function AboutTeam() {
           shape="rounded"
           onNext={carousel.onNext}
           onPrev={carousel.onPrev}
-          leftButtonProps={{
-            sx: {
-              left: 24,
-              ...(_carouselsMembers.length < 5 && { display: 'none' }),
-            },
-          }}
-          rightButtonProps={{
-            sx: {
-              right: 24,
-              ...(_carouselsMembers.length < 5 && { display: 'none' }),
-            },
-          }}
+      
         >
           <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
             {images.map((member) => (

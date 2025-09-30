@@ -16,7 +16,7 @@ export const navConfig = [
   {
     title: 'Bonds Library',
     icon: <Iconify icon="solar:atom-bold-duotone" />,
-    path: paths.components,
+    path: paths.bondLibrary,
   },
   {
     title: 'Products',

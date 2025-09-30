@@ -21,6 +21,7 @@ const PricingPage = lazy(() => import('src/pages/pricing'));
 const PaymentPage = lazy(() => import('src/pages/payment'));
 const ComingSoonPage = lazy(() => import('src/pages/coming-soon'));
 const MaintenancePage = lazy(() => import('src/pages/maintenance'));
+const BondLibraryPage = lazy(() => import('src/pages/bond-library'));
 // PRODUCT
 const ProductListPage = lazy(() => import('src/pages/product/list'));
 const ProductDetailsPage = lazy(() => import('src/pages/product/details'));
@@ -32,17 +33,21 @@ const PostDetailsPage = lazy(() => import('src/pages/post/details'));
 const Calculatorpage = lazy(() => import('src/pages/Calculator/calculator'));
 const Calculatesection = lazy(() => import('src/pages/CalculatorSection/CalculatorSection'));
 
-const ProductGoBond = lazy(() =>
-  import('src/sections/products/government_bonds/view/govBond-view')
-);
-const ProductCoBond = lazy(() => import('src/sections/products/corporate_bonds/view/CopBond-view'));
-const ProductLiBond = lazy(() => import('src/sections/products/Listed_Bonds/view/LisBond-view'));
-const ProductUnLiBond = lazy(() =>
-  import('src/sections/products/UnListed_Bonds/view/unLiBond-view')
-);
+// const ProductGoBond = lazy(() =>
+//   import('src/sections/products/government_bonds/view/govBond-view')
+// );
+// const ProductCoBond = lazy(() => import('src/sections/products/corporate_bonds/view/CopBond-view'));
+// const ProductLiBond = lazy(() => import('src/sections/products/Listed_Bonds/view/LisBond-view'));
+// const ProductUnLiBond = lazy(() =>
+//   import('src/sections/products/UnListed_Bonds/view/unLiBond-view')
+// );
 
 // ----------------------------------------------------------------------
 
+const ProductGoBond = lazy(() =>import('src/sections/products/government_bonds/view/govBond-view'));
+const ProductCoBond = lazy(() =>import('src/sections/products/corporate_bonds/view/corporateBond-view'));
+const ProductLiBond = lazy(() =>import('src/sections/products/listed_bonds/view/listbond-view'));
+const ProductUnLiBond = lazy(() =>import('src/sections/products/unlisted_bonds/view/unlistbond-view'));
 export const mainRoutes = [
   {
     element: (
@@ -56,6 +61,7 @@ export const mainRoutes = [
       { path: 'calculator', element: <Calculatorpage /> },
       { path: 'calculate', element: <Calculatesection /> },
       { path: 'about-us', element: <AboutPage /> },
+      { path: 'bond-library', element: <BondLibraryPage /> },
       { path: 'contact-us', element: <ContactPage /> },
       { path: 'faqs', element: <FaqsPage /> },
       {
@@ -67,7 +73,7 @@ export const mainRoutes = [
           { path: 'checkout', element: <ProductCheckoutPage /> },
         ],
       },
-      {
+      { 
         path: 'products',
         children: [
           { path: 'corporate_bond', element: <ProductCoBond /> },
