@@ -36,8 +36,7 @@ const Calculatesection =lazy(()=> import ('src/pages/CalculatorSection/Calculato
 const ProductGoBond = lazy(() =>import('src/sections/products/government_bonds/view/govBond-view'));
 const ProductCoBond = lazy(() =>import('src/sections/products/corporate_bonds/view/corporateBond-view'));
 const ProductLiBond = lazy(() =>import('src/sections/products/listed_bonds/view/listbond-view'));
-const ProductUnLiBond = lazy(() =>import('src/sections/products/unlisted_bonds/view/unLiBond-view'));
-
+const ProductUnLiBond = lazy(() =>import('src/sections/products/unlisted_bonds/view/unlistbond-view'));
 export const mainRoutes = [
   {
     element: (
