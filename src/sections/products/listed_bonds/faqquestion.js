@@ -39,7 +39,7 @@ export default function FAQSection() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 8, md: 12 },
+        py: { xs: 8, md: 10 },
         maxWidth: { xs: '100% !important', md: '1000px !important' }, // increased size
       }}
     >

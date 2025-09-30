@@ -65,10 +65,10 @@ export default function BondsCalculatorSection() {
 
   return (
     <Container maxWidth="lg" sx={{
-      py: 6,
-      maxWidth: '1133px',
-      width: '1400px',mx:"auto",
-      height: '850px',
+      py: 0,
+      maxWidth: '1600px',
+      width: '1600px',mx:"auto",
+      height: '800px',
     }}>
 
       <Box sx={{ position: "relative", width: "100%", overflow: "hidden" ,mx:"auto"}}>
@@ -78,8 +78,9 @@ export default function BondsCalculatorSection() {
             fontWeight: 600,
             color: "primary.main",
             textAlign: "left",
-            pl: "10%",
+            pl: "91px",
             mb: 1,
+            ml: { xs: 0, md: 3  }
           }}
         >
           Bonds Calculator
@@ -92,7 +93,7 @@ export default function BondsCalculatorSection() {
           alt="Calculator"
           sx={{
             width: "70%",
-            height: { xs: 300, md: 820 },
+            height: { xs: 300, md: 600 },
             objectFit: "cover",
             py: { xs: 3, md: 4 },
             bgcolor: "#fff",
@@ -104,7 +105,6 @@ export default function BondsCalculatorSection() {
           sx={{
             position: "absolute",
             top: "15%",
-            left: "8%",
             width: { xs: "40%", md: "25%" },
             height: 50,
             bgcolor: "#fff",
@@ -115,6 +115,7 @@ export default function BondsCalculatorSection() {
             justifyContent: "left",
             zIndex: 2,
             px: 4,
+            marginLeft: { xs: "5%", md: "120px" }
           }}
         >
           <SearchIcon sx={{ color: "black" }} />

@@ -68,7 +68,7 @@ export default function ListUnlistBond() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 10, md: 15 },
+        py: { xs: 3, md: 3 },
         textAlign: 'center',
       }}
     >
@@ -88,7 +88,7 @@ export default function ListUnlistBond() {
           sx={{
             maxWidth: 700,
             mx: 'auto',
-            mb: 8,
+            mb: 6,
             mt: 2,
             fontWeight:500,       
           }}
@@ -109,7 +109,7 @@ export default function ListUnlistBond() {
               bgcolor: "#EFF6FF",
               textAlign: 'left',
               position: 'relative',
-              maxHeight: 320,
+              maxHeight: 360 ,
             }}
           >
             <Chip
@@ -165,7 +165,7 @@ export default function ListUnlistBond() {
               bgcolor: "#ECFDF5",
               textAlign: 'left',
               position: 'relative',
-              maxHeight: 320,
+              maxHeight: 360 ,
             }}
           >
             <Chip

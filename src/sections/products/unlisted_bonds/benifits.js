@@ -51,7 +51,7 @@ export default function Benefit() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 10, md: 15 },
+        py: { xs: 10, md: 10 },
         textAlign: 'center',
       }}
     >
@@ -70,8 +70,8 @@ export default function Benefit() {
           sx={{
             maxWidth: 730,
             mx: 'auto',
-            mb: 8,
-            mt: 2,
+            mb: 6,
+            mt: 3,
             fontWeight:500,        
           }}
         >

@@ -35,7 +35,7 @@ export default function FAQSection() {
     <Container 
       component={MotionViewport}
       sx={{
-        py: { xs: 8, md: 12 },
+        py: { xs: 7, md: 7 },
         maxWidth: { xs: '100% !important', md: '1000px !important' }, // increased size
       }} 
     >
@@ -45,7 +45,7 @@ export default function FAQSection() {
           sx={{
             fontWeight: 'bold',
             color: theme.palette.primary.main,
-            mb: 1,
+            mb: 3,
             fontSize: { xs: '1.5rem', md: '2rem' }
           }}
         >
@@ -55,7 +55,7 @@ export default function FAQSection() {
           sx={{
             color: theme.palette.text.secondary,
             fontSize: '1rem',
-            mb: 2
+            mb: 4
           }}
         >
           Get answers to common questions about government bond investments.

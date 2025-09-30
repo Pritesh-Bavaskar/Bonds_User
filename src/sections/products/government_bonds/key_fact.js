@@ -45,7 +45,7 @@ export default function KeyFact() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 10, md: 15 },
+        py: { xs: 3, md: 3 },
         textAlign: 'center',
       }}
     >
@@ -68,7 +68,7 @@ export default function KeyFact() {
                   height: '100%',
                   borderRadius: 1,
                   textAlign: 'center',
-                  mt: 7,
+                  mt: 6,
                   width: 350,                 // size of circle
                   height: 170,
                 }}

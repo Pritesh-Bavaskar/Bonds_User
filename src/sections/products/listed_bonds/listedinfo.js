@@ -52,9 +52,9 @@ export default function ListedInfo() {
         <Typography
           variant="subtitle1"
           sx={{
-            maxWidth: "1016px",
+            maxWidth: { xs: "600px", md: "1016px" },
             fontWeight:500,
-           px:9,
+           px:3,
             mx: 'auto',
             mt: 6,
             fontFamily: 'Public Sans',

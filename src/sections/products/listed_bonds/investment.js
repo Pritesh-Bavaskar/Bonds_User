@@ -75,8 +75,8 @@ export default function Investment() {
                         color:'black',
                         height: 24,
                         mx: 'auto',
-                        mb: 8,
-                        mt: 2,
+                        mt: 3,
+                        mb:4
                     }}
                 >
                     Simple steps to start your listed bond investment journey.
@@ -144,31 +144,30 @@ export default function Investment() {
                     </Grid>
                 ))}
 
-                   <Box
-                sx={{
-                    width:527,
-                    height:171, 
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    bgcolor: 'hsla(218, 100%, 22%, 1)',
-                    color:'#fff',
-                    p:4,
-                    mt:6,
-                    pt:3,
-                    
+            <Box sx={{
+                width:527,
+                height:171, 
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                bgcolor: 'hsla(218, 100%, 22%, 1)',
+                color:'#fff',
+                p:4,
+                mt:6,
+                pt:3,
+                
 
-                }} >
-                    <Box sx={{display:'flex', flexDirection:'row', gap:1, pt:3}}>
-                    <Box
-                    component='Img'
-                    src='/assets/Svg/rocket.svg'
-                    sx={{ width:'20px', height:'20px',display:'flex', flexDirection:'row'}}/> 
-                   <Typography
-                    sx={{ textAlign: 'left', }}>
-                    Ready to Start?
-                </Typography>
-            
+            }} >
+                <Box sx={{display:'flex', flexDirection:'row', gap:1, pt:3}}>
+                        <Box
+                        component='Img'
+                        src='/assets/Svg/rocket.svg'
+                        sx={{ width:'20px', height:'20px',display:'flex', flexDirection:'row'}}/> 
+                    <Typography
+                        sx={{ textAlign: 'left', }}>
+                        Ready to Start?
+                    </Typography>
+                
                 </Box>
                 <Typography sx={{ textAlign: 'left' }}>
                     Access listed bonds through any SEBI-registered broker or investment platform.

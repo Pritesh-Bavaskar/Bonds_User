@@ -91,33 +91,44 @@ export default function Advantage() {
             {/* Table */}
             <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
                 <Table>
-                    <TableHead sx={{bgcolor:'blue'}}>
-                        <TableRow
-                            sx={{
-                                bgcolor: "linear-gradient(90deg, #00059A 0%, #3C6ADE 50%, #00059A 100%)",
-                            }}
-                        >
-                            <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Feature</TableCell>
-                            <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Listed Bonds</TableCell>
-                            <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Unlisted Bonds</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody sx={{ bgcolor: 'white' }}>
-                        <TableRow>
-                            <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>Feature</TableCell>
-                            <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>Listed Bonds</TableCell>
-                            <TableCell sx={{ color: 'black', fontWeight: 'bold' }}>Unlisted Bonds</TableCell>
-                        </TableRow>
+                <TableHead>
+                    <TableRow>
+                    <TableCell
+                        colSpan={3} // spans across all 3 columns
+                        align="center"
+                        sx={{
+                        background: "linear-gradient(90deg, #00059A 0%, #3C6ADE 50%, #00059A 100%)",
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "1.2rem",
+                        }}
+                    >
+                        Listed vs Unlisted Bonds Comparison
+                    </TableCell>
+                    </TableRow>
+                </TableHead>
 
-                        {rows.map((row, index) => (
-                            <TableRow key={index}>
-                                <TableCell sx={{ fontWeight: 'bold' }}>{row.feature}</TableCell>
-                                <TableCell>{row.listed}</TableCell>
-                                <TableCell>{row.unlisted}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
+                <TableBody sx={{ bgcolor: "white" }}>
+                    <TableRow>
+                    <TableCell sx={{ color: "black", fontWeight: "bold" }}>Feature</TableCell>
+                    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
+                        Listed Bonds
+                    </TableCell>
+                    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
+                        Unlisted Bonds
+                    </TableCell>
+                    </TableRow>
+
+                    {rows.map((row, index) => (
+                    <TableRow key={index}>
+                        <TableCell sx={{ fontWeight: "bold" }}>{row.feature}</TableCell>
+                        <TableCell>{row.listed}</TableCell>
+                        <TableCell>{row.unlisted}</TableCell>
+                    </TableRow>
+                    ))}
+                </TableBody>
                 </Table>
+
             </TableContainer>
 
 
