@@ -22,6 +22,7 @@ export const paths = {
   maintenance: '/maintenance',
   pricing: '/pricing',
   payment: '/payment',
+  bondLibrary: '/bond-library',
   about: '/about-us',
   contact: '/contact-us',
   faqs: '/faqs',
