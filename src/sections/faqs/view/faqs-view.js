@@ -26,24 +26,36 @@ export default function FaqsView() {
 
         <Typography
           variant="h3"
+          display="flex"
+          justifyContent="center"
           sx={{
+            fontFamily: 'Public Sans',
+            fontWeight: 800, // ExtraBold
+            fontStyle: 'normal',
+            fontSize: '48px',
+            lineHeight: '64px',
+            letterSpacing: '0px',
+            textAlign: 'center',
             my: { xs: 5, md: 10 },
+            color:'#00328A',
           }}
         >
           Frequently asked questions
         </Typography>
 
         <Box
-          gap={10}
-          display="grid"
-          gridTemplateColumns={{
-            xs: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
+          sx={{
+            display: 'grid',
+            gap: 10,
+            width: '100%',
+            maxWidth: '1200px',
+            mx: 'auto',
+            px: 2,
           }}
         >
           <FaqsList />
 
-          <FaqsForm />
+          {/* <FaqsForm /> */}
         </Box>
       </Container>
     </>

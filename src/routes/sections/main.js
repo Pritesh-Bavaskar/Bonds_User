@@ -44,6 +44,7 @@ export const mainRoutes = [
     children: [
       { path: 'about-us', element: <AboutPage /> },
       { path: 'bond-library', element: <BondLibraryPage /> },
+      { path: 'news-insight', element: <NewsInsightPage /> },
       { path: 'contact-us', element: <ContactPage /> },
       { path: 'faqs', element: <FaqsPage /> },
       {

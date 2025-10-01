@@ -45,7 +45,7 @@ export default function NewsInsightCardList() {
         maxWidth: '1100px',
         mx: { md: 'auto', xs: 0 },
         px: { md: 0, xs: 2 },
-        mb: '50px',
+        mb: '150px',
         // gap: { xs: 2, md: 10 },
       }}
     >
