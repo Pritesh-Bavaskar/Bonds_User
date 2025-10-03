@@ -54,6 +54,7 @@ export default function NewsInsightCard({ title, date, subtitle, subtitleBold })
             lineHeight: '18.51px',
             letterSpacing: '0px',
             textAlign: 'right',
+            mt: {xs: '15px', md: 0},
           }}
         >
           {subtitleBold}

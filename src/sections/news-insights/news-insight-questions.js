@@ -12,16 +12,12 @@ export default function NewsInsightQuestion() {
       >
         <Grid item md={12}>
           <Typography
+          variant='h1'
             sx={{
-              fontFamily: 'Public Sans',
-              fontWeight: 700,
-              fontStyle: 'bold',
-              fontSize: '48px',
-              lineHeight: '64px',
-              letterSpacing: '0px',
               textAlign: 'center',
               color: '#00328A',
               mb: '28px',
+              px: {xs: '10px', md: 0},
             }}
           >
             Have Questions?
@@ -33,11 +29,12 @@ export default function NewsInsightQuestion() {
               fontFamily: 'Public Sans',
               fontWeight: 400,
               fontSize: '20px',
-              lineHeight: '140%',
+              lineHeight: {md: '140%',  xs: '120%'},
               letterSpacing: 0,
               textAlign: 'center',
               maxWidth: '888px',
               mb: '75px',
+              px: {xs: '10px', md: 0},
             }}
           >
             Explore our comprehensive FAQ section to learn more about corporate bond investments,
