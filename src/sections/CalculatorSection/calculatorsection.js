@@ -6,13 +6,17 @@ import {
   Typography,
   Slider,
   Button,
-  TextField,
   useMediaQuery,
   useTheme,
-  CircularProgress,
 } from "@mui/material";
-import OvalImg from 'src/images/oval.png';
+import OvalImg from "src/images/oval.png";
 import SearchIcon from "@mui/icons-material/Search";
+
+// Chart.js imports
+import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function BondsCalculatorSection() {
   const theme = useTheme();
@@ -26,6 +30,39 @@ export default function BondsCalculatorSection() {
   const maturity = principal * Math.pow(1 + rate / 100, years);
   const returns = maturity - principal;
 
+  // Chart data
+  const chartData = {
+    labels: ["Total Investment", "Estimated Returns"],
+    datasets: [
+      {
+        data: [principal, returns],
+       backgroundColor:  ["#97C4FF" ,"#003289"],
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    cutout: "70%", // makes donut thick
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          boxWidth: 12,
+          padding: 15,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            let value = context.raw || 0;
+            return `₹ ${value.toLocaleString()}`;
+          },
+        },
+      },
+    },
+  };
+
   return (
     <Box sx={{ position: "relative", width: "100%", overflow: "hidden" }}>
       <Typography
@@ -34,7 +71,7 @@ export default function BondsCalculatorSection() {
           fontWeight: 600,
           color: "primary.main",
           textAlign: "left",
-          pl: '10%',
+          pl: "10%",
           mb: 1,
         }}
       >
@@ -51,11 +88,11 @@ export default function BondsCalculatorSection() {
           height: { xs: 300, md: 820 },
           objectFit: "cover",
           py: { xs: 3, md: 4 },
-          bgcolor: '#fff',
+          bgcolor: "#fff",
         }}
       />
 
-      {/* Small black pill over image */}
+      {/* Small pill over image */}
       <Box
         sx={{
           position: "absolute",
@@ -78,14 +115,14 @@ export default function BondsCalculatorSection() {
           sx={{
             fontSize: { xs: 14, md: 16 },
             fontWeight: 500,
-            color:'black',
+            color: "black",
           }}
         >
-          ISIN NUMBER 
+          ISIN NUMBER
         </Typography>
       </Box>
 
-      {/* Calculator Box - overlays the image */}
+      {/* Calculator Box */}
       <Box
         sx={{
           position: "absolute",
@@ -94,39 +131,46 @@ export default function BondsCalculatorSection() {
           transform: "translateX(-50%)",
           width: { xs: "90%", md: "75%" },
           bgcolor: "#f9f9f9",
-          // p: { xs: 3, md: 1 }, 
           py: { xs: 3, md: 6 },
           pr: { xs: 3, md: 16 },
           borderRadius: 3,
           boxShadow: 3,
           zIndex: 2,
-
         }}
       >
-
         <Grid
           container
           spacing={4}
           justifyContent="center"
           sx={{ maxWidth: 1200, mx: "auto" }}
         >
-
-
-          {/* Left Side - Chart */}
+          {/* Left Side - Donut Chart */}
           <Grid item xs={12} md={6} textAlign="center">
             <Typography variant="h6">Your Total Amount</Typography>
             <Typography variant="h4" fontWeight={600} color="primary">
               ₹ {maturity.toLocaleString()}
             </Typography>
 
-            <Box sx={{ my: 4 }}>
-              <CircularProgress
-                variant="determinate"
-                value={(principal / maturity) * 100}
-                size={isMobile ? 180 : 240}
-                thickness={4}
-                sx={{ color: theme.palette.primary.main }}
-              />
+            <Box sx={{ position: "relative", width: isMobile ? 200 : 280, mx: "auto", my: 4 }}>
+              <Doughnut data={chartData} options={chartOptions} />
+
+              {/* Center Text */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  textAlign: "center",
+                }}
+              >
+                <Typography variant="subtitle2" color="text.secondary">
+                  Total Amount
+                </Typography>
+                <Typography variant="h6" fontWeight={600} color="primary">
+                  ₹ {maturity.toLocaleString()}
+                </Typography>
+              </Box>
             </Box>
 
             <Typography variant="body2">
@@ -139,7 +183,7 @@ export default function BondsCalculatorSection() {
 
           {/* Right Side - Sliders */}
           <Grid item xs={12} md={6}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 4, }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <Box>
                 <Typography>Monthly Investment</Typography>
                 <Slider
@@ -150,9 +194,7 @@ export default function BondsCalculatorSection() {
                   step={1000}
                   valueLabelDisplay="auto"
                 />
-                <Typography variant="caption">
-                  Min ₹10k – Max ₹1L
-                </Typography>
+                <Typography variant="caption">Min ₹10k – Max ₹1L</Typography>
               </Box>
 
               <Box>
