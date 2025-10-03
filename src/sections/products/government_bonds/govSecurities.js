@@ -44,7 +44,7 @@ export default function GovSecurities() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 10, md: 15 },
+        py: { xs: 10, md: 10 },
         textAlign: 'center',
       }}
     >
@@ -65,7 +65,7 @@ export default function GovSecurities() {
           sx={{
             maxWidth: 1016,      // match the div width
             mx: 'auto',
-            mt: 6,
+            mt: 4,
             fontFamily: "Public Sans",
             color: theme.palette.text.secondary,
             height: 120,          // optional, match div height
@@ -89,7 +89,6 @@ export default function GovSecurities() {
                   height: '100%',
                   borderRadius: 1,
                   textAlign: 'center',
-                  mt: 4,
                 }}
               >
               <Box

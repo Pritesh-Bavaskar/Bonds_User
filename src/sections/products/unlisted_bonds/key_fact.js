@@ -45,7 +45,7 @@ export default function KeyFact() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 10, md: 15 },
+        py: { xs: 3, md: 3 },
         textAlign: 'center',
       }}
     >

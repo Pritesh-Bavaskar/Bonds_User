@@ -55,7 +55,7 @@ export default function GovSecurities() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 10, md: 15 },
+        py: { xs: 7, md: 7 },
         textAlign: 'center',
       }}
     >
@@ -74,6 +74,7 @@ export default function GovSecurities() {
             maxWidth: 1016,      // match the div width
             mx: 'auto',
             mt: 3,
+            mb:-8,
             fontFamily: "Public Sans",
             color: theme.palette.text.secondary,
             height: 120,          // optional, match div height
@@ -86,59 +87,59 @@ export default function GovSecurities() {
 
       {/* Features */}
 
-<Grid container spacing={4} justifyContent="center">
-  {FEATURES.map((item, index) => (
-    <Grid xs={12} sm={6} md={6} key={item.title}>
-      <m.div variants={varFade().inUp}>
-        
-        <Box
-          sx={{
-            p: 3,
-            height: '100%',
-            textAlign: 'left',
-            borderRadius: 2,
-            boxShadow: 3,
-            position: 'relative',
-            '&:hover': {
-              backgroundColor: theme.palette.action.hover,
-            },  
-            backgroundColor: item.backgroundColor,
-            height: 150,
-          }}
-        >
-            <Box
+      <Grid container spacing={4} justifyContent="center">
+        {FEATURES.map((item, index) => (
+          <Grid xs={12} sm={6} md={6} key={item.title}>
+            <m.div variants={varFade().inUp}>
+              
+              <Box
                 sx={{
-                    width: 36,                 // size of circle
-                    height: 36,
-                    borderRadius: '50%',
-                    backgroundColor: '#FFFFFF',  // circle color
-                    display: 'flex',
-                    }}
-                >
-                    <Iconify
-                        icon={item.icon}
-                        width={30}                  // icon size
-                        height={30}
-                        margin='2px'
-                        color={item.color} // icon color
-                    />
-            </Box>
+                  p: 3,
+                  height: '100%',
+                  textAlign: 'left',
+                  borderRadius: 2,
+                  boxShadow: 3,
+                  position: 'relative',
+                  '&:hover': {
+                    backgroundColor: theme.palette.action.hover,
+                  },  
+                  backgroundColor: item.backgroundColor,
+                  height: 150,
+                }}
+              >
+                  <Box
+                      sx={{
+                          width: 36,                 // size of circle
+                          height: 36,
+                          borderRadius: '50%',
+                          backgroundColor: '#FFFFFF',  // circle color
+                          display: 'flex',
+                          }}
+                      >
+                          <Iconify
+                              icon={item.icon}
+                              width={30}                  // icon size
+                              height={30}
+                              margin='2px'
+                              color={item.color} // icon color
+                          />
+                  </Box>
 
-            <Typography
-                gutterBottom
-                sx={{ fontWeight: 600, mb: 1, fontSize: 15, ml:8 ,mt:-3.5 }}
-            >
-                {item.title}
-            </Typography>
+                  <Typography
+                      gutterBottom
+                      sx={{ fontWeight: 600, mb: 1, fontSize: 15, ml:8 ,mt:-3.5 }}
+                  >
+                      {item.title}
+                  </Typography>
 
-          <Typography variant="body2" color="text.secondary" sx={{ height: 50,ml:8 }}>
-            {item.description}
-          </Typography>
-        </Box>
-      </m.div>
-    </Grid>
-  ))}
-</Grid>
+                <Typography variant="body2" color="text.secondary" sx={{ height: 50,ml:8 }}>
+                  {item.description}
+                </Typography>
+              </Box>
+            </m.div>
+          </Grid>
+        ))}
+      </Grid>
     </Container>
   );
 }

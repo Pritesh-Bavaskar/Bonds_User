@@ -20,11 +20,11 @@ function LearnMoreCard() {
         p: { xs: 4, md: 5 },
         maxWidth: 450,
         height:280,
-        mx: 'auto',          // centers horizontally
         textAlign: 'center',
         boxShadow: 3,
-        mt: 4,
+        mt: 3,
         mb:10,
+        mx: { xs: 2, md: 'auto'  },  // horizontal margin for small screens
       }}
     >
       {/* Icon */}

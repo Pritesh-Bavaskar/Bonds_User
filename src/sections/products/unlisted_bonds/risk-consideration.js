@@ -55,7 +55,7 @@ export default function RiskConsideration() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 10, md: 15 },
+        py: { xs: 10, md: 10 },
         textAlign: 'center',
       }}
     >
@@ -90,21 +90,22 @@ export default function RiskConsideration() {
     <Grid xs={12} sm={6} md={6} key={item.title}>
       <m.div variants={varFade().inUp}>
         
-        <Box
-          sx={{
-            p: 2,
-            height: '100%',
-            textAlign: 'left',
-            borderRadius: 2,
-            boxShadow: 3,
-            position: 'relative',
-            '&:hover': {
-              backgroundColor: theme.palette.action.hover,
-            },  
-            backgroundColor: item.backgroundColor,
-            maxHeight: 120,
-          }}
-        >
+          <Box
+            sx={{
+              p: 3,
+              textAlign: 'left',
+              borderRadius: 2,
+              boxShadow: 3,
+              position: 'relative',
+              '&:hover': {
+                backgroundColor: theme.palette.action.hover,
+              },
+              backgroundColor: item.backgroundColor,
+              maxWidth: { xs: 350, md: 600 },
+              maxHeight: { xs: 1000, md: 1000 }
+              
+            }}
+          >
             <Box
                 sx={{
                     width: 36,                 // size of circle
@@ -131,9 +132,21 @@ export default function RiskConsideration() {
                 {item.title}
             </Typography>
 
-          <Typography variant="subtitle2" color="text.secondary" sx={{ height: 50,ml:8 }}>
-            {item.description}
-          </Typography>
+            <Typography
+              variant="subtitle2"
+              color="text.secondary"
+              sx={{
+                ml: 8,
+                display: '-webkit-box',
+                WebkitLineClamp: 5,        // show only 3 lines
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {item.description}
+            </Typography>
+
         </Box>
       </m.div>
     </Grid>

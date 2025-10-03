@@ -47,7 +47,7 @@ export default function BondInvestment() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 8, md: 12 },
+        py: { xs: 8, md: 8 },
         maxWidth: '800px !important',
       }}
     >

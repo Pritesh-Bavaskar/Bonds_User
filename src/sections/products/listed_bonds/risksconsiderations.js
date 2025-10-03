@@ -18,7 +18,7 @@ export default function RisksConsiderations() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 8, md: 12 },
+        py: { xs: 3, md: 3 },
         textAlign: 'center',
       }}
     >
@@ -41,6 +41,7 @@ export default function RisksConsiderations() {
           textAlign: 'left',
           maxWidth: 800,
           mx: 'auto',
+          borderLeft: '1mm solid #FF6600',
         }}
       >
         <List>

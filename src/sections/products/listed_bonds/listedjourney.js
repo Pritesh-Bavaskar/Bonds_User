@@ -18,7 +18,6 @@ export default function ListedJourney() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 6, md: 15 },
         textAlign: 'center',
       }}
     >
