@@ -83,7 +83,7 @@ const WHY_ITEMS = [
     asapl: '12.00%',
     date: '14 AUG 20',
     brandLogo: '/assets/icons/bond-library/company.svg',
-  }
+  },
 ];
 
 export default function HomeWhyBonds() {
@@ -106,7 +106,7 @@ export default function HomeWhyBonds() {
       <Container maxWidth="lg">
         {/* Heading */}
         <Typography
-          variant='h1'
+          variant="h1"
           align="center"
           sx={{ fontWeight: 700, color: theme.palette.primary.main }}
         >
@@ -120,7 +120,9 @@ export default function HomeWhyBonds() {
           color="#18191B"
           sx={{ mt: 2, mx: 'auto', maxWidth: 900, fontWeight: 300 }}
         >
-          We bring together live market data, bond listings, and stock insights in one intuitive platform. Whether you’re a new investor or an experienced trader, our goal is to make exploring financial markets easier, faster, and smarter.
+          We bring together live market data, bond listings, and stock insights in one intuitive
+          platform. Whether you’re a new investor or an experienced trader, our goal is to make
+          exploring financial markets easier, faster, and smarter.
         </Typography>
 
         {/* Carousel */}
@@ -128,8 +130,18 @@ export default function HomeWhyBonds() {
           <CarouselArrows
             onNext={carousel.onNext}
             onPrev={carousel.onPrev}
-            leftButtonProps={{ sx: { left: -32 } }}
-            rightButtonProps={{ sx: { right: -32 } }}
+            leftButtonProps={{ 
+              sx: { 
+                left: -32,
+                display: { xs: 'none', md: 'inline-flex' }
+              } 
+            }}
+            rightButtonProps={{ 
+              sx: { 
+                right: -32,
+                display: { xs: 'none', md: 'inline-flex' }
+              } 
+            }}
             spacing={4}
           >
             <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
