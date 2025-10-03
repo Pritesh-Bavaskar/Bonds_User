@@ -25,6 +25,7 @@ export const paths = {
   payment: '/payment',
   bondLibrary: '/bond-library',
   about: '/about-us',
+  newsInsight:'/news-insight',
   contact: '/contact-us',
   faqs: '/faqs',
   page403: '/403',

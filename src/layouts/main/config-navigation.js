@@ -43,7 +43,7 @@ export const navConfig = [
         items: [
           { title: 'Blogs', path: paths.post.root },
           { title: 'FAQs', path: paths.faqs },
-          { title: 'News/Insight', path: paths.pricing },
+          { title: 'News/Insight', path: paths.newsInsight },
           { title: 'Calculator', path: paths.calculator },
           { title: 'Refer and Earn', path: paths.maintenance },
           { title: 'Issuers', path: paths.comingSoon },

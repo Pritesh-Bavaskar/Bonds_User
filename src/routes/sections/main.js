@@ -16,6 +16,7 @@ const Page403 = lazy(() => import('src/pages/403'));
 const Page404 = lazy(() => import('src/pages/404'));
 const FaqsPage = lazy(() => import('src/pages/faqs'));
 const AboutPage = lazy(() => import('src/pages/about-us'));
+const NewsInsightPage = lazy(() => import('src/pages/news-insights'));
 const ContactPage = lazy(() => import('src/pages/contact-us'));
 const PricingPage = lazy(() => import('src/pages/pricing'));
 const PaymentPage = lazy(() => import('src/pages/payment'));
@@ -62,6 +63,7 @@ export const mainRoutes = [
       { path: 'calculate', element: <Calculatesection /> },
       { path: 'about-us', element: <AboutPage /> },
       { path: 'bond-library', element: <BondLibraryPage /> },
+      { path: 'news-insight', element: <NewsInsightPage /> },
       { path: 'contact-us', element: <ContactPage /> },
       { path: 'faqs', element: <FaqsPage /> },
       {
