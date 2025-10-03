@@ -97,7 +97,7 @@ function StepItem({ index, title, subtitle }) {
       </Avatar>
 
       <Stack spacing={0.5} sx={{ maxWidth: 500 }}>
-        <Typography >{title}</Typography>
+        <Typography>{title}</Typography>
         <Typography variant="body2" color="text.secondary">
           {subtitle}
         </Typography>
@@ -120,7 +120,17 @@ export default function HomeGetStartedKYC() {
   return (
     <Box component="section" sx={{ py: { xs: 6, md: 10 } }}>
       <Container>
-        <Stack spacing={3} sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
+        <Stack
+          spacing={3}
+          sx={{
+            textAlign: 'center',
+            mb: { xs: 4, md: 6 },
+            justifyContent: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
           <Typography
             variant="h1"
             align="center"
@@ -130,48 +140,48 @@ export default function HomeGetStartedKYC() {
           </Typography>
           <Typography
             variant="h5"
-            color="text.secondary"
+            align="center"
             sx={{
               fontWeight: 300,
-              fontSize: '20px',
+              maxWidth: 900,
             }}
           >
             Completing your KYC is the first step toward investing seamlessly and securely on our
             platform. Our process is 100% paperless, quick, and compliant with SEBI regulations.
           </Typography>
-
+        </Stack>
+        <Box
+          sx={{
+            display: 'flex',
+            pt: { xs: 2, md: 4 },
+            pb: { xs: 2, md: 6 },
+            justifyContent: { xs: 'center', md: 'start' },
+          }}
+        >
           <Box
             sx={{
-              display: 'flex',
-              pt: { xs: 2, md: 6 },
-              justifyContent: { xs: 'center', md: 'start' },
+              borderRadius: 999,
+              px: 0,
+              py: 0,
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              bgcolor: 'background.paper',
+              display: 'inline-block',
+              width: '100%',
+              maxWidth: 350,
+              minWidth: 320,
             }}
           >
-            <Box
-              sx={{
-                borderRadius: 999,
-                px: 0,
-                py: 0,
-                border: (theme) => `1px solid ${theme.palette.divider}`,
-                bgcolor: 'background.paper',
-                display: 'inline-block',
-                width: '100%',
-                maxWidth: 350,
-                minWidth: 320,
-              }}
+            <PillTabs
+              value={tab}
+              onChange={handleChange}
+              aria-label="KYC type tabs"
+              variant="fullWidth"
             >
-              <PillTabs
-                value={tab}
-                onChange={handleChange}
-                aria-label="KYC type tabs"
-                variant="fullWidth"
-              >
-                <Tab value="issuer" label="Issuer KYC" />
-                <Tab value="customer" label="Customer KYC" />
-              </PillTabs>
-            </Box>
+              <Tab value="issuer" label="Issuer KYC" />
+              <Tab value="customer" label="Customer KYC" />
+            </PillTabs>
           </Box>
-        </Stack>
+        </Box>
         <Box sx={{ position: 'relative' }}>
           <Grid container spacing={4} alignItems="stretch">
             <Grid item xs={12} md={4.5} sx={{ position: 'relative', zIndex: 2 }}>

@@ -17,8 +17,8 @@ import {
 } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
-import BondLibraryCardList from './bond-library-card-list';
-import BondLibraryCardGrid from './bond-library-card-grid';
+import BondLibraryCardList from '../../components/bond-library-card/bond-library-card-list';
+import BondLibraryCardGrid from '../../components/bond-library-card/bond-library-card-grid';
 import BondLibraryFilterCriteria from './bond-library-filter-criteria';
 
 // ----------------------------------------------------------------------

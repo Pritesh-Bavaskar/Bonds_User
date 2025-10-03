@@ -1,135 +1,90 @@
 import { Box, Typography, Container, Button, Stack, Divider } from '@mui/material';
 import { useTheme, alpha } from '@mui/material/styles';
 import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
+import BondLibraryCardGrid from 'src/components/bond-library-card/bond-library-card-grid';
 
 // ----------------------------------------------------------------------
 
 const WHY_ITEMS = [
   {
-    id: 'acapl-1',
-    title: '12.00% ACAPL',
-    isin: 'INE08XP072B2',
-    price: '₹ 96,156.90',
-    coupon: '12.00%',
-    yield: '16.0000%',
-    ipFrequency: '₹ 96,156.90',
-    maturityDate: '₹ 96,156.90',
-    type: 'NCD TA...',
+    id: '1',
+    title: 'Government of India 10Y Bond',
+    isin: 'INE002A07KM3',
+    price: '₹101.50',
+    yield: '7.25%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '15/05/2033',
+    type: 'Sovereign',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
   },
   {
-    id: 'acapl-2',
-    title: '12.00% ACAPL',
-    isin: 'INE08XP072B2',
-    price: '₹ 96,156.90',
-    coupon: '12.00%',
-    yield: '16.0000%',
-    ipFrequency: '₹ 96,156.90',
-    maturityDate: '₹ 96,156.90',
-    type: 'NCD TA...',
+    id: '2',
+    title: 'HDFC Bank Limited',
+    isin: 'INE040A07CM2',
+    price: '₹102.75',
+    yield: '8.10%',
+    ipFrequency: 'Annual',
+    maturityDate: '10/12/2028',
+    type: 'Corporate',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
   },
   {
-    id: 'acapl-3',
-    title: '12.00% ACAPL',
-    isin: 'INE08XP072B2',
-    price: '₹ 96,156.90',
-    coupon: '12.00%',
-    yield: '16.0000%',
-    ipFrequency: '₹ 96,156.90',
-    maturityDate: '₹ 96,156.90',
-    type: 'NCD TA...',
+    id: '3',
+    title: 'Reliance Industries Limited',
+    isin: 'INE002A07KM4',
+    price: '₹100.25',
+    yield: '7.85%',
+    ipFrequency: 'Quarterly',
+    maturityDate: '22/08/2030',
+    type: 'Corporate',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
   },
   {
-    id: 'acapl-4',
-    title: '12.00% ACAPL',
-    isin: 'INE08XP072B2',
-    price: '₹ 96,156.90',
-    coupon: '12.00%',
-    yield: '16.0000%',
-    ipFrequency: '₹ 96,156.90',
-    maturityDate: '₹ 96,156.90',
-    type: 'NCD TA...',
+    id: '4',
+    title: 'State Bank of India',
+    isin: 'INE002A07KM5',
+    price: '₹99.90',
+    yield: '7.95%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '05/11/2032',
+    type: 'PSU',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
   },
   {
-    id: 'acapl-5',
-    title: '12.00% ACAPL',
-    isin: 'INE08XP072B2',
-    price: '₹ 96,156.90',
-    coupon: '12.00%',
-    yield: '16.0000%',
-    ipFrequency: '₹ 96,156.90',
-    maturityDate: '₹ 96,156.90',
-    type: 'NCD TA...',
+    id: '5',
+    title: 'Tata Motors Limited',
+    isin: 'INE002A07KM6',
+    price: '₹98.50',
+    yield: '8.45%',
+    ipFrequency: 'Annual',
+    maturityDate: '18/07/2029',
+    type: 'Corporate',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
   },
+  {
+    id: '6',
+    title: 'National Highways Authority',
+    isin: 'INE002A07KM7',
+    price: '₹100.00',
+    yield: '7.60%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '30/09/2035',
+    type: 'Infrastructure',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  }
 ];
-
-function BondCard({ item }) {
-  const theme = useTheme();
-
-  return (
-    <Box
-      sx={{
-        mx: 1.25,
-        borderRadius: 2,
-        bgcolor: 'background.paper',
-        overflow: 'hidden',
-        boxShadow: `0 4px 16px ${alpha(theme.palette.grey[500], 0.24)}`,
-        border: `1px solid ${alpha(theme.palette.grey[500], 0.16)}`,
-        minHeight: 320,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <Box sx={{ p: 2.25 }}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="caption" color="primary" sx={{ fontWeight: 700 }}>
-            Trending
-          </Typography>
-          <Box sx={{ width: 24, height: 24, bgcolor: alpha(theme.palette.primary.main, 0.08), borderRadius: '50%' }} />
-        </Stack>
-
-        <Typography variant="subtitle1" sx={{ mt: 1, fontWeight: 700 }}>
-          {item.title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">14..</Typography>
-
-        <Divider sx={{ my: 1.5 }} />
-        <Typography variant="caption" color="text.secondary">ISIN</Typography>
-        <Typography variant="body2" sx={{ fontWeight: 700 }}>{item.isin}</Typography>
-      </Box>
-
-      <Box sx={{ bgcolor: theme.palette.primary.dark, color: '#fff', mt: 'auto', p: 2.25 }}>
-        <Stack direction="row" spacing={2} sx={{ mb: 1.25 }}>
-          <Stack spacing={0.25}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>Price</Typography>
-            <Typography variant="subtitle2">{item.price}</Typography>
-          </Stack>
-          <Stack spacing={0.25}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>Yield</Typography>
-            <Typography variant="subtitle2">{item.yield}</Typography>
-          </Stack>
-        </Stack>
-
-        <Stack direction="row" spacing={2} sx={{ mb: 1.25 }}>
-          <Stack spacing={0.25}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>IP Frequency</Typography>
-            <Typography variant="subtitle2">{item.ipFrequency}</Typography>
-          </Stack>
-          <Stack spacing={0.25}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>Maturity Date</Typography>
-            <Typography variant="subtitle2">{item.maturityDate}</Typography>
-          </Stack>
-        </Stack>
-
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="caption">Type Of Bond {item.type}</Typography>
-          <Button size="small" variant="contained" color="info" sx={{ bgcolor: '#fff', color: theme.palette.primary.dark, '&:hover': { bgcolor: alpha('#fff', 0.9) } }}>
-            More
-          </Button>
-        </Stack>
-      </Box>
-    </Box>
-  );
-}
 
 export default function HomeWhyBonds() {
   const theme = useTheme();
@@ -161,7 +116,7 @@ export default function HomeWhyBonds() {
         {/* Subtitle */}
         <Typography
           align="center"
-          variant="h6"
+          variant="h5"
           color="#18191B"
           sx={{ mt: 2, mx: 'auto', maxWidth: 900, fontWeight: 300 }}
         >
@@ -173,13 +128,14 @@ export default function HomeWhyBonds() {
           <CarouselArrows
             onNext={carousel.onNext}
             onPrev={carousel.onPrev}
-            leftButtonProps={{ sx: { left: 16 } }}
-            rightButtonProps={{ sx: { right: 16 } }}
+            leftButtonProps={{ sx: { left: -32 } }}
+            rightButtonProps={{ sx: { right: -32 } }}
+            spacing={4}
           >
             <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
               {WHY_ITEMS.map((item) => (
                 <Box key={item.id} sx={{ px: 1 }}>
-                  <BondCard item={item} />
+                  <BondLibraryCardGrid item={item} />
                 </Box>
               ))}
             </Carousel>
