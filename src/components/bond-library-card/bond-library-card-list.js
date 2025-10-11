@@ -6,11 +6,17 @@ import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
+import { useRouter } from 'src/routes/hook/use-router';
 
 // ----------------------------------------------------------------------
 
 export default function BondLibraryCardList({ item }) {
   const theme = useTheme();
+  const router = useRouter();
+
+  const handleKnowMore = () => {
+    router.push(`/bond-details/${item.id}`);
+  };
 
   return (
     <Box
@@ -140,6 +146,7 @@ export default function BondLibraryCardList({ item }) {
           <Button
             size="small"
             variant="contained"
+            onClick={handleKnowMore}
             sx={{
               bgcolor: '#fff',
               color: theme.palette.primary.main,

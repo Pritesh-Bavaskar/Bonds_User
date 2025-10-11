@@ -23,6 +23,7 @@ const PaymentPage = lazy(() => import('src/pages/payment'));
 const ComingSoonPage = lazy(() => import('src/pages/coming-soon'));
 const MaintenancePage = lazy(() => import('src/pages/maintenance'));
 const BondLibraryPage = lazy(() => import('src/pages/bond-library'));
+const BondDetailsPage = lazy(() => import('src/pages/bond-details/[id]'));
 // PRODUCT
 const ProductListPage = lazy(() => import('src/pages/product/list'));
 const ProductDetailsPage = lazy(() => import('src/pages/product/details'));
@@ -91,6 +92,12 @@ export const mainRoutes = [
           { element: <PostListPage />, index: true },
           { path: 'list', element: <PostListPage /> },
           { path: ':title', element: <PostDetailsPage /> },
+        ],
+      },
+      {
+        path: 'bond-details',
+        children: [
+          { path: ':id', element: <BondDetailsPage /> },
         ],
       },
     ],

@@ -24,6 +24,7 @@ export const paths = {
   pricing: '/pricing',
   payment: '/payment',
   bondLibrary: '/bond-library',
+  bondDetails: (id) => `/bond-details/${id}`,
   about: '/about-us',
   newsInsight:'/news-insight',
   contact: '/contact-us',
