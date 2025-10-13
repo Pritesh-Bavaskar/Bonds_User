@@ -1,18 +1,14 @@
 import PropTypes from 'prop-types';
 import { m } from 'framer-motion';
 // @mui
-import { alpha, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import InputAdornment from '@mui/material/InputAdornment';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
-// theme
-import { bgGradient } from 'src/theme/css';
 // components
 import Iconify from 'src/components/iconify';
 import { MotionContainer, varFade } from 'src/components/animate';
+import { Typography } from '@mui/material';
+import FaqsSearch from './faqs-search';
 
 // ----------------------------------------------------------------------
 
@@ -22,17 +18,112 @@ export default function FaqsHero() {
   return (
     <Box
       sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.grey[900], 0.8),
-          imgUrl: '/assets/images/faqs/hero.jpg',
-        }),
-        height: { md: 560 },
+        height: { md: '577px' },
         py: { xs: 10, md: 0 },
         overflow: 'hidden',
         position: 'relative',
+        background: 'linear-gradient(to right, #0D327D, #1B0102)',
       }}
     >
-      <Container component={MotionContainer}>
+      <Stack direction={'column'} sx={{ mt: '22px' }}>
+        <Typography
+          sx={{
+            bgcolor: '#FFFFFF',
+            border: '1px solid #FFFFFF',
+            borderRadius: '50px',
+            textAlign: 'center',
+            padding: '12px 16px',
+            margin: '0 auto',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '10px',
+          }}
+        >
+          <Iconify icon="material-symbols:verified" sx={{ color: '#1877F2', fontSize: 24 }} />
+          Get instant answers to your questions
+        </Typography>
+        <Typography
+          variant="h1"
+          sx={{ color: '#FFFFFF', display: 'flex', justifyContent: 'center', mt: '25px' }}
+        >
+          Frequently Asked Questions
+        </Typography>
+        <Typography
+          variant="h3"
+          sx={{
+            color: '#FFFFFF',
+            display: 'flex',
+            justifyContent: 'center',
+            pt: '36px',
+            maxWidth: '900px',
+            lineHeight: '50px',
+            textAlign: 'center',
+            margin: '0 auto',
+          }}
+        >
+          Everything you need to know about our bond trading platform, from getting started to
+          advanced features
+        </Typography>
+        <Stack
+          direction="row"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ mt: '25px', columnGap: '95px' }}
+        >
+          <Typography
+            sx={{
+              color: '#FFFFFF',
+              border: '1px solid #FFAB00',
+              borderRadius: '50px',
+              textAlign: 'center',
+              padding: '12px 16px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+            }}
+          >
+            <Iconify
+              icon="material-symbols:star-outline"
+              style={{ color: '#FFAB00', fontSize: 24 }}
+            />
+            23+ Questions Answered
+          </Typography>
+          <Typography
+            sx={{
+              color: '#FFFFFF',
+              border: '1px solid #073DFF',
+              borderRadius: '50px',
+              textAlign: 'center',
+              padding: '12px 16px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+            }}
+          >
+            <Iconify icon="solar:chat-round-bold" style={{ color: '#073DFF', fontSize: 28 }} />
+            24/7 Support available
+          </Typography>
+        </Stack>
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            mt: '77px', 
+          }}
+        >
+          <Box sx={{ width: '100%', maxWidth: '842px' }}>
+            <FaqsSearch
+              onSearch={(val) => console.log('Searching for:', val)}
+            />
+          </Box>
+        </Box>
+      </Stack>
+      {/* <Container component={MotionContainer}>
         <Box
           sx={{
             bottom: { md: 80 },
@@ -76,7 +167,7 @@ export default function FaqsHero() {
             />
           </m.div>
         </Box>
-      </Container>
+      </Container> */}
     </Box>
   );
 }
