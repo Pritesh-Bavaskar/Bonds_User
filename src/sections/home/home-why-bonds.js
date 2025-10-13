@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Box, Typography, Container, Button, Stack, Divider } from '@mui/material';
 import { useTheme, alpha } from '@mui/material/styles';
 import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
@@ -86,7 +87,7 @@ const WHY_ITEMS = [
   },
 ];
 
-export default function HomeWhyBonds() {
+export default function HomeWhyBonds({ isDetails }) {
   const theme = useTheme();
 
   const carousel = useCarousel({
@@ -107,10 +108,15 @@ export default function HomeWhyBonds() {
         {/* Heading */}
         <Typography
           variant="h1"
-          align="center"
-          sx={{ fontWeight: 700, color: theme.palette.primary.main }}
+          align={isDetails ? 'left' : 'center'}
+          sx={{
+            fontWeight: 700,
+            color: theme.palette.primary.main,
+            display: 'flex',
+            justifyContent: isDetails ? 'flex-start' : 'center',
+          }}
         >
-          Why Choose Us?
+          {isDetails ? 'Similar Bonds' : 'Why Choose Us?'}
         </Typography>
 
         {/* Subtitle */}
@@ -118,7 +124,13 @@ export default function HomeWhyBonds() {
           align="center"
           variant="h5"
           color="#18191B"
-          sx={{ mt: 2, mx: 'auto', maxWidth: 900, fontWeight: 300 }}
+          sx={{
+            mt: 2,
+            mx: 'auto',
+            maxWidth: 900,
+            fontWeight: 300,
+            display: isDetails ? 'none' : 'block',
+          }}
         >
           We bring together live market data, bond listings, and stock insights in one intuitive
           platform. Whether you’re a new investor or an experienced trader, our goal is to make
@@ -130,17 +142,17 @@ export default function HomeWhyBonds() {
           <CarouselArrows
             onNext={carousel.onNext}
             onPrev={carousel.onPrev}
-            leftButtonProps={{ 
-              sx: { 
+            leftButtonProps={{
+              sx: {
                 left: -32,
-                display: { xs: 'none', md: 'inline-flex' }
-              } 
+                display: { xs: 'none', md: 'inline-flex' },
+              },
             }}
-            rightButtonProps={{ 
-              sx: { 
+            rightButtonProps={{
+              sx: {
                 right: -32,
-                display: { xs: 'none', md: 'inline-flex' }
-              } 
+                display: { xs: 'none', md: 'inline-flex' },
+              },
             }}
             spacing={4}
           >
@@ -155,7 +167,10 @@ export default function HomeWhyBonds() {
         </Box>
 
         {/* View all Button */}
-        <Stack alignItems="center" sx={{ mt: { xs: 4, md: 6 } }}>
+        <Stack
+          alignItems="center"
+          sx={{ mt: { xs: 4, md: 6 }, display: isDetails ? 'none' : 'flex' }}
+        >
           <Button
             variant="contained"
             color="primary"
@@ -175,3 +190,7 @@ export default function HomeWhyBonds() {
     </Box>
   );
 }
+
+HomeWhyBonds.propTypes = {
+  isDetails: PropTypes.bool,
+};
