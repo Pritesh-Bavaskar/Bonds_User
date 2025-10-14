@@ -226,6 +226,7 @@ export default function FAQSystem() {
                     height: '221px',
                     width: '280px',
                     borderRadius: '30px',
+                    mx: 'auto',
                   }}
                   onClick={() => handleCategoryClick(key)}
                 >
@@ -264,13 +265,24 @@ export default function FAQSystem() {
   const IconComponent = currentCategory.icon;
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#FFFFFF' }}>
+    <Grid
+      container
+      sx={{
+        minHeight: '100vh',
+        bgcolor: '#FFFFFF',
+        flexDirection: { xs: 'column', md: 'row' },
+      }}
+    >
       {/* Sidebar */}
-      <Box
+      <Grid
+        item
+        xs={12}
+        md={3}
         sx={{
-          width: 240,
+          width: { xs: '100%', md: 240 },
           bgcolor: 'white',
           p: 2,
+          borderBottom: { xs: '1px solid #E9ECEE', md: 'none' },
         }}
       >
         <List>
@@ -284,9 +296,9 @@ export default function FAQSystem() {
                 borderRadius: 1,
                 mb: 0.5,
                 '&.Mui-selected': {
-                  bgcolor: '#FFFFFF',
+                  bgcolor: '#E9F5FF',
                   '&:hover': {
-                    bgcolor: '#FFFFFF',
+                    bgcolor: '#E9F5FF',
                   },
                 },
               }}
@@ -295,10 +307,10 @@ export default function FAQSystem() {
             </ListItemButton>
           ))}
         </List>
-      </Box>
+      </Grid>
 
       {/* Main Content */}
-      <Box sx={{ flex: 1, width: '100%' }}>
+      <Grid item xs={12} md={9} flex={1} sx={{ width: '100%' }}>
         <Box sx={{ mb: 4, mt: 2 }}>
           <IconButton
             onClick={handleBackClick}
@@ -306,7 +318,7 @@ export default function FAQSystem() {
               mb: 2,
               padding: '0px 24px 0px 24px',
               '&:hover': {
-                backgroundColor: 'transparent', // disables background on hover
+                backgroundColor: 'transparent',
               },
             }}
           >
@@ -321,32 +333,28 @@ export default function FAQSystem() {
               px: 0,
             }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-                mb: 1,
-                padding: '0px 24px 0px 24px',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '45px',
-                  height: '45px',
-                  borderRadius: '10px',
-                  bgcolor: `#FFFFFF`,
-                }}
-              >
-                <IconComponent sx={{ color: currentCategory.color, fontSize: 24 }} />
-              </Box>
-              <Typography variant="h4" fontWeight="600">
-                {currentCategory.title}
-              </Typography>
-            </Box>
+            <Grid container alignItems="center" spacing={2} sx={{ mb: 1, px: '24px' }}>
+              <Grid item>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '45px',
+                    height: '45px',
+                    borderRadius: '10px',
+                    bgcolor: `#FFFFFF`,
+                  }}
+                >
+                  <IconComponent sx={{ color: currentCategory.color, fontSize: 24 }} />
+                </Box>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4" fontWeight="600">
+                  {currentCategory.title}
+                </Typography>
+              </Grid>
+            </Grid>
           </Box>
         </Box>
 
@@ -381,50 +389,86 @@ export default function FAQSystem() {
             </Accordion>
           ))}
         </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center', // centers the inner box horizontally
-            mt: 4, // optional top margin
-          }}
-        >
-          <Box
+
+        {/* Bottom Help Section */}
+        <Grid container justifyContent="center" sx={{ mt: 4, px: 2 }}>
+          <Grid
+            item
+            xs={12}
+            sm={10}
+            md="auto"
             sx={{
               display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
               alignItems: 'center',
               justifyContent: 'space-between',
               bgcolor: '#DBEFFF',
               borderRadius: 2,
               boxShadow: 2,
-              px: 3,
-              height: '394px',
-              width: '700px',
+              height: { md: '394px', xs: 'auto' },
+              width: { md: '700px', xs: '100%' },
             }}
           >
-            {/* Left side: title, subtitle, button */}
-            <Stack direction={'column'} spacing={3} sx={{maxWidth: '240px', paddingLeft: '80px'}}>
-              <Typography sx={{ paddingTop: '75.5px', fontWeight: 'bold' , fontSize: '24px', lineHeight: '38px' }}>
+            {/* Left Side */}
+            <Stack
+              direction="column"
+              sx={{
+                maxWidth: { md: '320px', xs: '100%' },
+                paddingLeft: { md: '80px', xs: '0' },
+                textAlign: { xs: 'center', md: 'left' },
+                // paddingTop: { md: '75.5px', xs: 0 },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 'bold',
+                  fontSize: '24px',
+                  lineHeight: '38px',
+                  pt: { xs: '30px' },
+                  px: { xs: '20px' },
+                }}
+              >
                 Still Have Questions?
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ my: 1 , fontSize: '18px',lineHeight: '25px'}}>
+              <Typography
+                // variant="body2"
+                color="text.secondary"
+                sx={{
+                  fontFamily: 'Public Sans',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '18px',
+                  lineHeight: '25px',
+                  pt: { xs: '30px', md: '20px' },
+                  px: { xs: '20px' },
+                }}
+              >
                 Our expert support team is available 24/7 to help you with any questions or issues.
               </Typography>
-              <Button variant="contained" color="primary" sx>
-                Start Chat
-              </Button>
+              <Grid sx={{ mt: '40px' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ maxWidth: { md: '320px', xs: '100%' }, width: '240px' }}
+                >
+                  Start Chat
+                </Button>
+              </Grid>
             </Stack>
 
-            {/* Right side: image */}
-            <Box>
+            {/* Right Side */}
+            <Box
+              sx={{ mt: { xs: 3, md: 0 }, paddingRight: { md: '50px', xs: 0 }, pb: { xs: '20px' } }}
+            >
               <img
                 src="/assets/images/faqs/faq-have-question.png"
                 alt="Card"
-                style={{ width: '290px', height: 'auto'}}
+                style={{ width: '290px', height: 'auto' }}
               />
             </Box>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }
