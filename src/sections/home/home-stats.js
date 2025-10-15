@@ -2,16 +2,18 @@
 import { Box, Typography, Grid, Container } from '@mui/material';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
-
-const defaultStats = [
-  { value: 200, label: 'Users' },
-  { value: 1000, label: 'Bonds' },
-  { value: 10000, label: 'Minimum Investment' },
-  { value: 50, label: 'Stable Returns' },
-];
+import { useGetStats } from 'src/api/stats';
 
 export default function HomeStats() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
+  const { stats } = useGetStats();
+
+  const defaultStats = [
+    { value: stats?.totalCustomers, label: 'Customers' },
+    { value: stats?.totalBonds, label: 'Bonds' },
+    { value: stats?.totalIssuers, label: 'Issuers' },
+    { value: stats?.stableReturnPercent , label: 'Stable Returns %' },
+  ];
 
   return (
     <Box

@@ -51,6 +51,14 @@ export const endpoints = {
     details: '/api/product/details',
     search: '/api/product/search',
   },
+  // bond: {
+  //   list: '/api/bonds/bonds',
+  //   details: '/api/bond/details',
+  //   search: '/api/bond/search',
+  // },
+  stats: {
+    list: '/api/bonds/stats',
+  },
   scheduler: {
     list: '/schedulers',
     filterList: (filter) => `/schedulers?filter=${filter}`,
