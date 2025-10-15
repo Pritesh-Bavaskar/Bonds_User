@@ -21,8 +21,6 @@ export default function HomeView() {
 
   const { featuredBonds } = useGetFeaturedBonds();
 
-  console.log('featuredBonds', featuredBonds);
-
   return (
     <>
       <ScrollProgress scrollYProgress={scrollYProgress} />

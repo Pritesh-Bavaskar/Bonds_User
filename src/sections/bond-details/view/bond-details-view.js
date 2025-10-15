@@ -17,7 +17,7 @@ export default function BondDetailsView() {
       <BondDetailsRatioAnalysis />
       <BondDetailsAboutCompany />
       <BondDetailsFinancialRating />
-      <HomeWhyBonds isDetails />
+      {/* <HomeWhyBonds isDetails /> */}
     </Container>
   );
 }

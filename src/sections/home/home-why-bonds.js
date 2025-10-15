@@ -163,7 +163,7 @@ export default function HomeWhyBonds({ isDetails, bonds }) {
             spacing={4}
           >
             <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-              {bonds.map((item) => (
+              {bonds?.map((item) => (
                 <Box key={item.isin_code} sx={{ px: 1 }}>
                   <BondLibraryCardGrid item={item} />
                 </Box>

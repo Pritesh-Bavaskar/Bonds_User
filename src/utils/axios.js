@@ -54,7 +54,7 @@ export const endpoints = {
   bond: {
     list: '/api/bonds/bonds',
     featured: '/api/bonds/bonds/featured',
-    search: '/api/bond/search',
+    search: (id) => `/api/bonds/bonds/search?isin=${id}`,
   },
   stats: {
     list: '/api/bonds/stats',

@@ -46,21 +46,21 @@ export function useGetBond(productId) {
 // ----------------------------------------------------------------------
 
 export function useSearchBonds(query) {
-  const URL = query ? [endpoints.bond.search, { params: { query } }] : null;
+  const URL = query ? endpoints.bond.search(query) : null;
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, URL ? {
     keepPreviousData: true,
-  });
+  } : null);
 
   const memoizedValue = useMemo(
     () => ({
-      searchResults: data?.bonds || [],
+      searchResults: data?.results || [],
       searchLoading: isLoading,
       searchError: error,
       searchValidating: isValidating,
-      searchEmpty: !isLoading && !data?.bonds.length,
+      searchEmpty: !isLoading && !data?.results?.length,
     }),
-    [data?.results, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
@@ -74,8 +74,6 @@ export function useGetFeaturedBonds() {
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, {
     keepPreviousData: true,
   });
-
-  console.log('featuredBonds', data);
 
   const memoizedValue = useMemo(
     () => ({
