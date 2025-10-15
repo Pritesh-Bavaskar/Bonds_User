@@ -5,19 +5,26 @@ import { fetcher, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-export function useGetBonds() {
-  const URL = endpoints.bond.list;
+export function useGetBonds(page = 1, pageSize = 10) {
+  const URL = `${endpoints.bond.list}?page=${page}&page_size=${pageSize}`;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
   const memoizedValue = useMemo(
     () => ({
       Bonds: data?.results || [],
+      pagination: {
+        count: data?.count || 0,
+        next: data?.next,
+        previous: data?.previous,
+        currentPage: page,
+        totalPages: data?.count ? Math.ceil(data.count / pageSize) : 0,
+      },
       BondsLoading: isLoading,
       BondsError: error,
       BondsValidating: isValidating,
       BondsEmpty: !isLoading && !data?.results?.length,
     }),
-    [data, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating, page, pageSize]
   );
 
   return memoizedValue;
