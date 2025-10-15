@@ -14,13 +14,7 @@ import {
   Stack,
   Container,
   Grid,
-  Pagination,
-  PaginationItem,
-  Skeleton,
-  Alert,
-  CircularProgress,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import BondLibraryCardList from '../../components/bond-library-card/bond-library-card-list';
@@ -36,41 +30,173 @@ const SORT_OPTIONS = [
   { value: 'oldest', label: 'Oldest' },
 ];
 
-// Skeleton Loader Component
-const BondCardSkeleton = ({ view }) => (
-  <Grid
-    item
-    xs={12}
-    sm={view === 'grid' ? 6 : 12}
-    md={view === 'grid' ? 4 : 12}
-    lg={view === 'grid' ? 4 : 12}
-  >
-    <Skeleton variant="rounded" width="100%" height={view === 'grid' ? 400 : 180} />
-  </Grid>
-);
+const BOND_LIBRARY_DATA = [
+  {
+    id: '1',
+    title: 'Government of India 10Y Bond',
+    isin: 'INE002A07KM3',
+    price: '₹101.50',
+    yield: '7.25%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '15/05/2033',
+    type: 'Sovereign',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '2',
+    title: 'HDFC Bank Limited',
+    isin: 'INE040A07CM2',
+    price: '₹102.75',
+    yield: '8.10%',
+    ipFrequency: 'Annual',
+    maturityDate: '10/12/2028',
+    type: 'Corporate',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '3',
+    title: 'Reliance Industries Limited',
+    isin: 'INE002A07KM4',
+    price: '₹100.25',
+    yield: '7.85%',
+    ipFrequency: 'Quarterly',
+    maturityDate: '22/08/2030',
+    type: 'Corporate',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '4',
+    title: 'State Bank of India',
+    isin: 'INE002A07KM5',
+    price: '₹99.90',
+    yield: '7.95%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '05/11/2032',
+    type: 'PSU',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '5',
+    title: 'Tata Motors Limited',
+    isin: 'INE002A07KM6',
+    price: '₹98.50',
+    yield: '8.45%',
+    ipFrequency: 'Annual',
+    maturityDate: '18/07/2029',
+    type: 'Corporate',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '6',
+    title: 'National Highways Authority',
+    isin: 'INE002A07KM7',
+    price: '₹100.00',
+    yield: '7.60%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '30/09/2035',
+    type: 'Infrastructure',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '7',
+    title: 'National Highways Authority',
+    isin: 'INE002A07KM7',
+    price: '₹100.00',
+    yield: '7.60%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '30/09/2035',
+    type: 'Infrastructure',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '8',
+    title: 'National Highways Authority',
+    isin: 'INE002A07KM7',
+    price: '₹100.00',
+    yield: '7.60%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '30/09/2035',
+    type: 'Infrastructure',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '9',
+    title: 'National Highways Authority',
+    isin: 'INE002A07KM7',
+    price: '₹100.00',
+    yield: '7.60%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '30/09/2035',
+    type: 'Infrastructure',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '10',
+    title: 'National Highways Authority',
+    isin: 'INE002A07KM7',
+    price: '₹100.00',
+    yield: '7.60%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '30/09/2035',
+    type: 'Infrastructure',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '11',
+    title: 'National Highways Authority',
+    isin: 'INE002A07KM7',
+    price: '₹100.00',
+    yield: '7.60%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '30/09/2035',
+    type: 'Infrastructure',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+  {
+    id: '12',
+    title: 'National Highways Authority',
+    isin: 'INE002A07KM7',
+    price: '₹100.00',
+    yield: '7.60%',
+    ipFrequency: 'Semi-Annual',
+    maturityDate: '30/09/2035',
+    type: 'Infrastructure',
+    asapl: '12.00%',
+    date: '14 AUG 20',
+    brandLogo: '/assets/icons/bond-library/company.svg',
+  },
+];
 
-BondCardSkeleton.propTypes = {
-  view: PropTypes.oneOf(['grid', 'list']),
-};
-
-export default function BondLibraryList({
-  bonds = [],
-  loading = false,
-  error = null,
-  empty = false,
-  page = 1,
-  pageSize = 10,
-  totalItems = 0,
-  totalPages = 1,
-  onPageChange = () => {},
-  onPageSizeChange = () => {},
-}) {
+export default function BondLibraryList({ bonds }) {
   const settings = useSettingsContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [view, setView] = useState('grid');
   const [sortBy, setSortBy] = useState('latest');
 
+  console.log('bonds', bonds)
   const handleChangeView = (event, newView) => {
     if (newView !== null) {
       setView(newView);
@@ -80,49 +206,6 @@ export default function BondLibraryList({
   const handleSortBy = (event) => {
     setSortBy(event.target.value);
   };
-
-  const handlePageChange = (event, newPage) => {
-    onPageChange(event, newPage);
-  };
-
-  const handlePageSizeChange = (event) => {
-    onPageSizeChange(event);
-  };
-
-  // Show loading skeleton
-  if (loading && bonds.length === 0) {
-    return (
-      <Container sx={{ py: 5 }}>
-        <Grid container spacing={3}>
-          {[...Array(6)].map((_, index) => (
-            <BondCardSkeleton key={index} view={view} />
-          ))}
-        </Grid>
-      </Container>
-    );
-  }
-
-  // Show error message
-  if (error) {
-    return (
-      <Container sx={{ py: 5 }}>
-        <Alert severity="error" sx={{ mb: 3 }}>
-          Error loading bonds: {error.message || 'Unknown error occurred'}
-        </Alert>
-      </Container>
-    );
-  }
-
-  // Show empty state
-  if (empty) {
-    return (
-      <Container sx={{ py: 5, textAlign: 'center' }}>
-        <Typography variant="h6" color="text.secondary">
-          No bonds found
-        </Typography>
-      </Container>
-    );
-  }
 
   return (
     <Container sx={{ py: 5 }}>
@@ -159,23 +242,6 @@ export default function BondLibraryList({
               ),
             }}
           />
-
-          <Stack direction="row" spacing={2} alignItems="center">
-            <FormControl size="small" variant="outlined" sx={{ minWidth: 120 }}>
-              <Select
-                value={pageSize}
-                onChange={handlePageSizeChange}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Items per page' }}
-              >
-                {[10, 20, 50, 100].map((size) => (
-                  <MenuItem key={size} value={size}>
-                    {size} per page
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Stack>
 
           <Stack
             direction={{ xs: 'column', md: 'row' }}
@@ -272,44 +338,7 @@ export default function BondLibraryList({
                   )}
                 </Grid>
               ))}
-
-              {/* Show loading indicator when loading more items */}
-              {loading && bonds.length > 0 && (
-                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-                  <CircularProgress />
-                </Grid>
-              )}
             </Grid>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-                <Pagination
-                  count={totalPages}
-                  page={page}
-                  onChange={handlePageChange}
-                  color="primary"
-                  showFirstButton
-                  showLastButton
-                  siblingCount={1}
-                  boundaryCount={1}
-                  renderItem={(item) => (
-                    <PaginationItem
-                      {...item}
-                      sx={{
-                        '&.Mui-selected': {
-                          bgcolor: 'primary.main',
-                          color: 'primary.contrastText',
-                          '&:hover': {
-                            bgcolor: 'primary.dark',
-                          },
-                        },
-                      }}
-                    />
-                  )}
-                />
-              </Box>
-            )}
           </Grid>
         </Grid>
       </Stack>
@@ -317,15 +346,7 @@ export default function BondLibraryList({
   );
 }
 
+
 BondLibraryList.propTypes = {
   bonds: PropTypes.array,
-  loading: PropTypes.bool,
-  error: PropTypes.object,
-  empty: PropTypes.bool,
-  page: PropTypes.number,
-  pageSize: PropTypes.number,
-  totalItems: PropTypes.number,
-  totalPages: PropTypes.number,
-  onPageChange: PropTypes.func,
-  onPageSizeChange: PropTypes.func,
 };
