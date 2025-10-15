@@ -15,8 +15,48 @@ export default function BondLibraryCardGrid({ item }) {
   const router = useRouter();
 
   const handleKnowMore = () => {
-    router.push(`/bond-details/${item.id}`);
+    router.push(`/bond-details/${item.isin_code}`);
   };
+
+  //   {
+  //     "isin_code": "INE013A07L06",
+  //     "price": "1000000.00",
+  //     "tenure": {
+  //         "years": -2008,
+  //         "months": -8,
+  //         "days": -5
+  //     },
+  //     "ratings": [
+  //         {
+  //             "agency": "CARE",
+  //             "rating": "AAA"
+  //         }
+  //     ],
+  //     "security_type": null,
+  //     "isin_description": "ZERO COUPON SECURED REDEEMABLE NON CONVERTIBLE DEBENTURES. SERIES FB-NCD 321. DATE OF MATURITY 10/02/2017",
+  //     "issue_description": "RELIANCE CAPITAL LIMITED SR-FB/321 NCD 10FB17 FVRS10LAC",
+  //     "coupon_rate_percent": "0.000",
+  //     "maturity_date": "0017-02-10",
+  //     "ytm_percent": null,
+  //     "face_value_rs": "1000000.00",
+  //     "issuer_name": null,
+  //     "issuer_type": null,
+  //     "issue_size_lakhs": "10000.00",
+  //     "issue_date": null,
+  //     "isin_active": true,
+  //     "listed_unlisted": "Listed",
+  //     "trading_status": null,
+  //     "tax_category": "TAXABLE",
+  //     "secured": true,
+  //     "transferable": false,
+  //     "primary_exchange": "NSE",
+  //     "minimum_investment_rs": null,
+  //     "interest_payment_frequency": "UNKNOWN",
+  //     "series": "FB-NCD-321",
+  //     "tax_free": null,
+  //     "option_type": "NONE",
+  //     "seniority": "Senior"
+  // }
 
   return (
     <Box
@@ -54,9 +94,9 @@ export default function BondLibraryCardGrid({ item }) {
 
         {/* Company Logo (optional) */}
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          {item.date && (
+          {item.issue_date && (
             <Typography variant="subtitle2" sx={{ mt: 2, fontWeight: 700 }}>
-              {item.date}
+              {item.issue_date}
             </Typography>
           )}
           {item.brandLogo && (
@@ -66,7 +106,12 @@ export default function BondLibraryCardGrid({ item }) {
 
         {/* ISN */}
         <Typography variant="body2" sx={{ fontWeight: 700, pt: 4 }}>
-          <span sx={{ fontWeight: 700, color: 'text.secondary' }}>ISN</span> {item.isin}
+          {item.isin_code && (
+            <>
+              <span sx={{ fontWeight: 700, color: 'text.secondary' }}>ISN </span>
+              {item.isin_code}
+            </>
+          )}
         </Typography>
       </Box>
 
@@ -83,62 +128,76 @@ export default function BondLibraryCardGrid({ item }) {
         <Stack direction="row" spacing={3} sx={{ mb: 2 }}>
           {/* First Column */}
           <Stack spacing={2} sx={{ flex: 1 }}>
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Price
-              </Typography>
-              <Typography variant="caption">{item.price}</Typography>
-            </Stack>
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Coupon
-              </Typography>
-              <Typography variant="caption">{item.coupon}%</Typography>
-            </Stack>
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                IP Frequency
-              </Typography>
-              <Typography variant="caption">{item.ipFrequency}</Typography>
-            </Stack>
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Type of Bond
-              </Typography>
-              <Typography variant="caption">{item.type}</Typography>
-            </Stack>
+            {item.price && (
+              <Stack spacing={0.5}>
+                <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                  Price
+                </Typography>
+                <Typography variant="caption">{item?.price}</Typography>
+              </Stack>
+            )}
+            {item.coupon_rate_percent && (
+              <Stack spacing={0.5}>
+                <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                  Coupon
+                </Typography>
+                <Typography variant="caption">{item?.coupon_rate_percent}%</Typography>
+              </Stack>
+            )}
+            {item.interest_payment_frequency && (
+              <Stack spacing={0.5}>
+                <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                  IP Frequency
+                </Typography>
+                <Typography variant="caption">{item?.interest_payment_frequency}</Typography>
+              </Stack>
+            )}
+            {item.issuer_type && (
+              <Stack spacing={0.5}>
+                <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                  Type of Bond
+                </Typography>
+                <Typography variant="caption">{item?.issuer_type}</Typography>
+              </Stack>
+            )}
           </Stack>
 
           {/* Second Column */}
           <Stack spacing={2} sx={{ flex: 1 }}>
-            <Box
-              sx={{
-                width: 60,
-                height: 60,
-                borderRadius: '50%',
-                bgcolor: alpha('#fff', 0.6),
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mb: 1,
-              }}
-            >
-              {/* <Typography variant="h6" fontWeight={700}>
-                {item.yield}%
-              </Typography> */}
-            </Box>
-            <Stack spacing={0.5} sx={{ width: '100%' }}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Yield
-              </Typography>
-              <Typography variant="caption">{item.yield}%</Typography>
-            </Stack>
-            <Stack spacing={0.5} sx={{ width: '100%' }}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Maturity Date
-              </Typography>
-              <Typography variant="caption">{item.maturityDate}</Typography>
-            </Stack>
+            {item?.ratings?.length > 0 && (
+              <Box
+                sx={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: '50%',
+                  bgcolor: alpha('#fff', 0.6),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mb: 1,
+                }}
+              >
+                <Typography variant="h6" fontWeight={700}>
+                  {item?.ratings[0]?.rating}
+                </Typography>
+              </Box>
+            )}
+            {item.ytm_percent && (
+              <Stack spacing={0.5} sx={{ width: '100%' }}>
+                <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                  Yield
+                </Typography>
+                <Typography variant="caption">{item?.ytm_percent}%</Typography>
+              </Stack>
+            )}
+            {item.maturity_date && (
+              <Stack spacing={0.5} sx={{ width: '100%' }}>
+                <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                  Maturity Date
+                </Typography>
+                <Typography variant="caption">{item?.maturity_date}</Typography>
+              </Stack>
+            )}
           </Stack>
         </Stack>
 

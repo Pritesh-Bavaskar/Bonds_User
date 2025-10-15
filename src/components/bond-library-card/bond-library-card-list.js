@@ -15,7 +15,7 @@ export default function BondLibraryCardList({ item }) {
   const router = useRouter();
 
   const handleKnowMore = () => {
-    router.push(`/bond-details/${item.id}`);
+    router.push(`/bond-details/${item.isin_code}`);
   };
 
   return (
@@ -55,15 +55,17 @@ export default function BondLibraryCardList({ item }) {
           </Typography>
 
           {/* Company Logo (optional) */}
-          {item.date && (
+          {item.issue_date && (
             <Typography variant="subtitle2" sx={{ mt: 0, fontWeight: 700 }}>
-              {item.date}
+              {item.issue_date}
             </Typography>
           )}
           {/* ISN */}
-          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-            <span sx={{ fontWeight: 700, color: 'text.secondary' }}>ISN</span> {item.isin}
-          </Typography>
+          {item.isin_code && (
+            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+              <span sx={{ fontWeight: 700, color: 'text.secondary' }}>ISN</span> {item.isin_code}
+            </Typography>
+          )}
 
           {item.brandLogo && (
             <Box component="img" src={item.brandLogo} alt="logo" sx={{ height: 22 }} />
@@ -84,64 +86,76 @@ export default function BondLibraryCardList({ item }) {
         <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
           {/* First Column */}
           {/* <Stack spacing={2} sx={{ flex: 1 }}> */}
-          <Stack spacing={0.5}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>
-              Price
-            </Typography>
-            <Typography variant="caption">{item.price}</Typography>
-          </Stack>
-          <Stack spacing={0.5}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>
-              Coupon
-            </Typography>
-            <Typography variant="caption">{item.coupon}%</Typography>
-          </Stack>
-         
-         
-          <Stack spacing={0.5}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>
-              Yield
-            </Typography>
-            <Typography variant="caption">{item.yield}%</Typography>
-          </Stack>
-          <Stack spacing={0.5}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>
-              IP Frequency
-            </Typography>
-            <Typography variant="caption">{item.ipFrequency}</Typography>
-          </Stack>
-          <Stack spacing={0.5}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>
-              Maturity Date
-            </Typography>
-            <Typography variant="caption">{item.maturityDate}</Typography>
-          </Stack>
-          <Stack spacing={0.5}>
-            <Typography variant="caption" sx={{ opacity: 0.72 }}>
-              Type of Bond
-            </Typography>
-            <Typography variant="caption">{item.type}</Typography>
-          </Stack>
+          {item.price && (
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Price
+              </Typography>
+              <Typography variant="caption">{item.price}</Typography>
+            </Stack>
+          )}
+          {item.coupon_rate_percent && (
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Coupon
+              </Typography>
+              <Typography variant="caption">{item.coupon_rate_percent}%</Typography>
+            </Stack>
+          )}
+          {item.ytm_percent && (
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Yield
+              </Typography>
+              <Typography variant="caption">{item.ytm_percent}%</Typography>
+            </Stack>
+          )}
+          {item.interest_payment_frequency && (
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                IP Frequency
+              </Typography>
+              <Typography variant="caption">{item.interest_payment_frequency}</Typography>
+            </Stack>
+          )}
+          {item.maturity_date && (
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Maturity Date
+              </Typography>
+              <Typography variant="caption">{item.maturity_date}</Typography>
+            </Stack>
+          )}
+          {item.issuer_type && (
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Type of Bond
+              </Typography>
+              <Typography variant="caption">{item.issuer_type}</Typography>
+            </Stack>
+          )}
           {/* </Stack> */}
 
           {/* Second Column */}
           {/* <Stack spacing={2} sx={{ flex: 1 }}> */}
-          <Box
-            sx={{
-              width: 60,
-              height: 60,
-              borderRadius: '50%',
-              bgcolor: alpha('#fff', 0.6),
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              mb: 1,
-            }}
-          >
-            {/* <Typography variant="h6" fontWeight={700}>
-                {item.yield}%
-              </Typography> */}
-          </Box>
+          {item?.ratings?.length > 0 && (
+            <Box
+              sx={{
+                width: 60,
+                height: 60,
+                borderRadius: '50%',
+                bgcolor: alpha('#fff', 0.6),
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mb: 1,
+              }}
+            >
+              <Typography variant="h6" fontWeight={700}>
+                {item?.ratings[0]?.rating}
+              </Typography>
+            </Box>
+          )}
           {/* </Stack> */}
           <Button
             size="small"

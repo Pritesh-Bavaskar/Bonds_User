@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Container, Button, Stack, Divider } from '@mui/material';
 import { useTheme, alpha } from '@mui/material/styles';
 import Carousel, { useCarousel, CarouselArrows } from 'src/components/carousel';
@@ -87,8 +88,13 @@ const WHY_ITEMS = [
   },
 ];
 
-export default function HomeWhyBonds({ isDetails }) {
+export default function HomeWhyBonds({ isDetails, bonds }) {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleViewAllClick = () => {
+    navigate('/bond-library');
+  };
 
   const carousel = useCarousel({
     slidesToShow: 4,
@@ -157,8 +163,8 @@ export default function HomeWhyBonds({ isDetails }) {
             spacing={4}
           >
             <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-              {WHY_ITEMS.map((item) => (
-                <Box key={item.id} sx={{ px: 1 }}>
+              {bonds.map((item) => (
+                <Box key={item.isin_code} sx={{ px: 1 }}>
                   <BondLibraryCardGrid item={item} />
                 </Box>
               ))}
@@ -174,6 +180,7 @@ export default function HomeWhyBonds({ isDetails }) {
           <Button
             variant="contained"
             color="primary"
+            onClick={handleViewAllClick}
             sx={{
               borderRadius: '8px',
               fontWeight: 700,
@@ -181,6 +188,9 @@ export default function HomeWhyBonds({ isDetails }) {
               fontSize: '14px',
               px: '24px',
               py: '6px',
+              '&:hover': {
+                bgcolor: theme.palette.primary.dark,
+              },
             }}
           >
             View all
@@ -193,4 +203,5 @@ export default function HomeWhyBonds({ isDetails }) {
 
 HomeWhyBonds.propTypes = {
   isDetails: PropTypes.bool,
+  bonds: PropTypes.array,
 };

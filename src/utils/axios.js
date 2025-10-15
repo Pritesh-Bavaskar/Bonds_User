@@ -51,11 +51,11 @@ export const endpoints = {
     details: '/api/product/details',
     search: '/api/product/search',
   },
-  // bond: {
-  //   list: '/api/bonds/bonds',
-  //   details: '/api/bond/details',
-  //   search: '/api/bond/search',
-  // },
+  bond: {
+    list: '/api/bonds/bonds',
+    featured: '/api/bonds/bonds/featured',
+    search: '/api/bond/search',
+  },
   stats: {
     list: '/api/bonds/stats',
   },

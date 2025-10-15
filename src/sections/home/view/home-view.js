@@ -13,10 +13,15 @@ import HomeExplore from '../home-explore';
 import HomeSignupRequest from '../home-signup-request';
 import HomeFeaturedBlogs from '../home-fearured-blogs';
 import HomeGetStartedKYC from '../home-getstarted-kyc';
+import { useGetFeaturedBonds } from 'src/api/bonds';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
   const { scrollYProgress } = useScroll();
+
+  const { featuredBonds } = useGetFeaturedBonds();
+
+  console.log('featuredBonds', featuredBonds);
 
   return (
     <>
@@ -25,7 +30,7 @@ export default function HomeView() {
       <HomeHero />
       <HomeStats />
       <HomeWhatBonds />
-      <HomeWhyBonds />
+      <HomeWhyBonds bonds={featuredBonds} />
       <HomeGetStartedKYC />
       <HomeFeaturedBlogs />
       <HomeExplore />

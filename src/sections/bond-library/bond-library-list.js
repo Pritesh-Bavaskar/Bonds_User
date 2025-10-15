@@ -20,6 +20,7 @@ import { useSettingsContext } from 'src/components/settings';
 import BondLibraryCardList from '../../components/bond-library-card/bond-library-card-list';
 import BondLibraryCardGrid from '../../components/bond-library-card/bond-library-card-grid';
 import BondLibraryFilterCriteria from './bond-library-filter-criteria';
+import PropTypes from 'prop-types';
 
 // ----------------------------------------------------------------------
 
@@ -188,13 +189,14 @@ const BOND_LIBRARY_DATA = [
   },
 ];
 
-export default function BondLibraryList() {
+export default function BondLibraryList({ bonds }) {
   const settings = useSettingsContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [view, setView] = useState('grid');
   const [sortBy, setSortBy] = useState('latest');
 
+  console.log('bonds', bonds)
   const handleChangeView = (event, newView) => {
     if (newView !== null) {
       setView(newView);
@@ -320,9 +322,9 @@ export default function BondLibraryList() {
           {/* Right Content (Bond Cards) */}
           <Grid item xs={12} md={9} lg={9}>
             <Grid container spacing={3}>
-              {BOND_LIBRARY_DATA.map((bond) => (
+              {bonds?.map((bond) => (
                 <Grid
-                  key={bond.id}
+                  key={bond.isin_code}
                   item
                   xs={12}
                   sm={view === 'grid' ? 6 : 12}
@@ -343,3 +345,8 @@ export default function BondLibraryList() {
     </Container>
   );
 }
+
+
+BondLibraryList.propTypes = {
+  bonds: PropTypes.array,
+};

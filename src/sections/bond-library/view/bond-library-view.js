@@ -9,16 +9,18 @@ import BondLibraryHero from '../bond-library-hero';
 import BondLibraryList from '../bond-library-list';
 import BondLibraryDisclaimer from '../bond-library-disclaimer';
 import BondLibraryQuestion from '../bond-library-question';
+import { useGetBonds } from 'src/api/bonds';
 
 // ----------------------------------------------------------------------
 
 export default function BondLibraryView() {
   const settings = useSettingsContext();
 
+  const {Bonds} = useGetBonds();
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <BondLibraryHero />
-      <BondLibraryList />
+      <BondLibraryList bonds={Bonds} />
       <BondLibraryDisclaimer />
       <BondLibraryQuestion />
     </Container>
