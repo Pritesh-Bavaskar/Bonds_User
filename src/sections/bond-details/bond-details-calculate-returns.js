@@ -14,24 +14,41 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useSettingsContext } from 'src/components/settings';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-export default function BondDetailsCalculateReturns() {
+export default function BondDetailsCalculateReturns({ bond }) {
   const settings = useSettingsContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [unitCount, setUnitCount] = useState(1);
+
+  const handleAddUnit = () => {
+    setUnitCount(prev => prev + 1);
+  };
+
+  const handleRemoveUnit = () => {
+    if (unitCount > 1) {
+      setUnitCount(prev => prev - 1);
+    }
+  };
 
   // Top 4 and Bottom 4 mock data
   const topCards = [
-    { title: 'Returns (YTM)', value: '12.50%', icon: '/icons/return.svg' },
-    { title: 'Payment Terms', value: 'Quarterly', icon: '/icons/payment.svg' },
-    { title: 'Remaining Tenure', value: '2Y10M28Days', icon: '/icons/tenure.svg' },
-    { title: 'Min. investment', value: '₹ 96,826.98', icon: '/icons/investment.svg' },
+    { title: 'Returns (YTM)', value: `${bond?.bond?.ytm_percent || 'N.A.'}%`, icon: '/icons/return.svg' },
+    { title: 'Payment Terms', value: bond?.bond?.payment_terms || 'N.A.', icon: '/icons/payment.svg' },
+    { 
+      title: 'Remaining Tenure', 
+      value: `${bond?.bond?.tenure?.years || 0} years ${bond?.bond?.tenure?.months || 0} months ${bond?.bond?.tenure?.days || 0} days`, 
+      icon: '/icons/tenure.svg' 
+    },
+    { title: 'Min. investment', value: `₹${bond?.bond?.minimum_investment_rs || 'N.A.'}`, icon: '/icons/investment.svg' },
   ];
 
   const bottomCards = [
-    { title: 'Credit Rating', value: 'ACUITE A/STABLE (Provisional)' },
-    { title: 'Seniority', value: 'SENIOR' },
-    { title: 'Security', value: 'Secured' },
+    { title: 'Credit Rating', value: bond?.bond?.credit_rating || 'N.A.' },
+    { title: 'Seniority', value: bond?.bond?.seniority || 'N.A.' },
+    { title: 'Security', value: bond?.bond?.security_type || 'N.A.' },
     { title: 'Default History', value: 'Zero' },
   ];
 
@@ -62,16 +79,16 @@ export default function BondDetailsCalculateReturns() {
             >
               <Grid container spacing={2} sx={{ height: '100%' }}>
                 {topCards.map((card, index) => (
-                  <Grid 
-                    item 
-                    xs={12} 
-                    sm={6} 
-                    key={index} 
-                    sx={{ 
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    key={index}
+                    sx={{
                       height: { xs: 'auto', sm: '50%' },
                       minHeight: { xs: '100px', sm: 'auto' },
                       display: 'flex',
-                      flexDirection: 'column'
+                      flexDirection: 'column',
                     }}
                   >
                     <Box
@@ -126,28 +143,29 @@ export default function BondDetailsCalculateReturns() {
                 width: '100%',
                 flex: { md: '1 1 48%' },
                 minHeight: { xs: 'auto', md: '300px' },
-                mt: { xs: 2, md: 0 }
+                mt: { xs: 2, md: 0 },
               }}
             >
               <Grid container spacing={2} sx={{ height: '100%' }}>
                 {bottomCards.map((card, index) => (
-                  <Grid 
-                    item 
-                    xs={12} 
-                    sm={6} 
-                    key={index} 
-                    sx={{ 
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    key={index}
+                    sx={{
                       height: { xs: 'auto', sm: '50%' },
                       minHeight: { xs: '100px', sm: 'auto' },
                       display: 'flex',
-                      flexDirection: 'column'
+                      flexDirection: 'column',
                     }}
                   >
                     <Box
                       sx={{
                         border: '1.04px solid #FFE9CA',
                         borderRadius: 2,
-                        background: 'radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #FFF7DA 99.99%)',
+                        background:
+                          'radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #FFF7DA 99.99%)',
                         p: { xs: 1.5, sm: 2 },
                         position: 'relative',
                         display: 'flex',
@@ -158,21 +176,21 @@ export default function BondDetailsCalculateReturns() {
                         minHeight: '100px',
                       }}
                     >
-                      <Typography 
-                        variant="body2" 
-                        sx={{ 
+                      <Typography
+                        variant="body2"
+                        sx={{
                           color: '#565454',
-                          fontSize: { xs: '0.875rem', sm: '0.9rem' }
+                          fontSize: { xs: '0.875rem', sm: '0.9rem' },
                         }}
                       >
                         {card.title}
                       </Typography>
-                      <Typography 
-                        variant="subtitle1" 
-                        sx={{ 
-                          color: '#EA9F00', 
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          color: '#EA9F00',
                           fontWeight: 600,
-                          fontSize: { xs: '0.95rem', sm: '1rem' }
+                          fontSize: { xs: '0.95rem', sm: '1rem' },
                         }}
                       >
                         {card.value}
@@ -276,16 +294,23 @@ export default function BondDetailsCalculateReturns() {
 
             {/* Unit Selector */}
             <Box display="flex" alignItems="center" justifyContent="center" sx={{ mt: 2, mb: 2 }}>
-              <IconButton>
+              <IconButton 
+                onClick={handleRemoveUnit}
+                disabled={unitCount <= 1}
+                aria-label="remove unit"
+              >
                 <RemoveIcon />
               </IconButton>
               <Typography
                 variant="body1"
                 sx={{ mx: 2, fontWeight: 'bold', minWidth: 24, textAlign: 'center' }}
               >
-                1 Unit
+                {unitCount} {unitCount === 1 ? 'Unit' : 'Units'}
               </Typography>
-              <IconButton>
+              <IconButton 
+                onClick={handleAddUnit}
+                aria-label="add unit"
+              >
                 <AddIcon />
               </IconButton>
             </Box>
@@ -311,3 +336,7 @@ export default function BondDetailsCalculateReturns() {
     </Box>
   );
 }
+
+BondDetailsCalculateReturns.propTypes = {
+  bond: PropTypes.object.isRequired,
+};

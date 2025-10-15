@@ -51,25 +51,25 @@ export default function BondLibraryCardList({ item }) {
         {/* ASAPL */}
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle2" sx={{ mt: 0, fontWeight: 700 }}>
-            {item.asapl} ASAPL
+            {item?.asapl || 'N.A.'} ASAPL
           </Typography>
 
           {/* Company Logo (optional) */}
-          {item.issue_date && (
-            <Typography variant="subtitle2" sx={{ mt: 0, fontWeight: 700 }}>
-              {item.issue_date}
-            </Typography>
-          )}
+          <Typography variant="subtitle2" sx={{ mt: 0, fontWeight: 700 }}>
+            {item?.issue_date || 'N.A.'}
+          </Typography>
           {/* ISN */}
-          {item.isin_code && (
-            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-              <span sx={{ fontWeight: 700, color: 'text.secondary' }}>ISN</span> {item.isin_code}
-            </Typography>
-          )}
+          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+            <span sx={{ fontWeight: 700, color: 'text.secondary' }}>ISN</span>{' '}
+            {item?.isin_code || 'N.A.'}
+          </Typography>
 
-          {item.brandLogo && (
-            <Box component="img" src={item.brandLogo} alt="logo" sx={{ height: 22 }} />
-          )}
+          <Box
+            component="img"
+            src={item.brandLogo || '/assets/icons/bond-library/company.svg'}
+            alt="logo"
+            sx={{ height: 22 }}
+          />
         </Stack>
       </Box>
 
@@ -86,76 +86,62 @@ export default function BondLibraryCardList({ item }) {
         <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
           {/* First Column */}
           {/* <Stack spacing={2} sx={{ flex: 1 }}> */}
-          {item.price && (
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Price
-              </Typography>
-              <Typography variant="caption">{item.price}</Typography>
-            </Stack>
-          )}
-          {item.coupon_rate_percent && (
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Coupon
-              </Typography>
-              <Typography variant="caption">{item.coupon_rate_percent}%</Typography>
-            </Stack>
-          )}
-          {item.ytm_percent && (
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Yield
-              </Typography>
-              <Typography variant="caption">{item.ytm_percent}%</Typography>
-            </Stack>
-          )}
-          {item.interest_payment_frequency && (
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                IP Frequency
-              </Typography>
-              <Typography variant="caption">{item.interest_payment_frequency}</Typography>
-            </Stack>
-          )}
-          {item.maturity_date && (
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Maturity Date
-              </Typography>
-              <Typography variant="caption">{item.maturity_date}</Typography>
-            </Stack>
-          )}
-          {item.issuer_type && (
-            <Stack spacing={0.5}>
-              <Typography variant="caption" sx={{ opacity: 0.72 }}>
-                Type of Bond
-              </Typography>
-              <Typography variant="caption">{item.issuer_type}</Typography>
-            </Stack>
-          )}
+          <Stack spacing={0.5}>
+            <Typography variant="caption" sx={{ opacity: 0.72 }}>
+              Price
+            </Typography>
+            <Typography variant="caption">{item?.price || 'N.A.'}</Typography>
+          </Stack>
+          <Stack spacing={0.5}>
+            <Typography variant="caption" sx={{ opacity: 0.72 }}>
+              Coupon
+            </Typography>
+            <Typography variant="caption">{item?.coupon_rate_percent || 'N.A.'}%</Typography>
+          </Stack>
+          <Stack spacing={0.5}>
+            <Typography variant="caption" sx={{ opacity: 0.72 }}>
+              Yield
+            </Typography>
+            <Typography variant="caption">{item?.ytm_percent || 'N.A.'}%</Typography>
+          </Stack>
+          <Stack spacing={0.5}>
+            <Typography variant="caption" sx={{ opacity: 0.72 }}>
+              IP Frequency
+            </Typography>
+            <Typography variant="caption">{item?.interest_payment_frequency || 'N.A.'}</Typography>
+          </Stack>
+          <Stack spacing={0.5}>
+            <Typography variant="caption" sx={{ opacity: 0.72 }}>
+              Maturity Date
+            </Typography>
+            <Typography variant="caption">{item?.maturity_date || 'N.A.'}</Typography>
+          </Stack>
+          <Stack spacing={0.5}>
+            <Typography variant="caption" sx={{ opacity: 0.72 }}>
+              Type of Bond
+            </Typography>
+            <Typography variant="caption">{item?.issuer_type || 'N.A.'}</Typography>
+          </Stack>
           {/* </Stack> */}
 
           {/* Second Column */}
           {/* <Stack spacing={2} sx={{ flex: 1 }}> */}
-          {item?.ratings?.length > 0 && (
-            <Box
-              sx={{
-                width: 60,
-                height: 60,
-                borderRadius: '50%',
-                bgcolor: alpha('#fff', 0.6),
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mb: 1,
-              }}
-            >
-              <Typography variant="h6" fontWeight={700}>
-                {item?.ratings[0]?.rating}
-              </Typography>
-            </Box>
-          )}
+          <Box
+            sx={{
+              width: 60,
+              height: 60,
+              borderRadius: '50%',
+              bgcolor: alpha('#fff', 0.6),
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: 1,
+            }}
+          >
+            <Typography variant="h6" fontWeight={700}>
+              {item?.ratings[0]?.rating || 'N.A.'}
+            </Typography>
+          </Box>
           {/* </Stack> */}
           <Button
             size="small"

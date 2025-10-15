@@ -1,9 +1,10 @@
 import { Container, Box, Typography, useTheme } from '@mui/material';
 import { useSettingsContext } from 'src/components/settings';
+import PropTypes from 'prop-types';
 
 const companyLogo = '/assets/icons/bond-library/company-img.svg';
 
-export default function BondDetailsAboutCompany() {
+export default function BondDetailsAboutCompany({ bond }) {
   const settings = useSettingsContext();
   const theme = useTheme();
 
@@ -17,7 +18,7 @@ export default function BondDetailsAboutCompany() {
             lineHeight: 1.2,
           }}
         >
-          About Satya MicroCapital Ltd (Issuer Info)
+          About {bond?.rta?.rta?.rta_name || "Company Name"} (Issuer Info)
         </Typography>
         <Typography
           variant="h5"
@@ -28,9 +29,7 @@ export default function BondDetailsAboutCompany() {
             lineHeight: 1.6,
           }}
         >
-          Satya MicroCapital Limited is an NBFC-Microfinance (NBFC-MFI) company in India, focused on
-          providing small loans (especially to women) using Joint Liability Group (JLG) models and
-          affordable individual loans. They also have a subsidiary for housing finance.
+          {bond?.bond?.issue_description || 'N.A.'}
         </Typography>
 
         <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
@@ -39,17 +38,17 @@ export default function BondDetailsAboutCompany() {
               Issuer Name:
             </Typography>
             <Typography variant="h4" sx={{ fontWeight: 700, color: '#fea92b' }}>
-              KEERTANA FINSERV PRIVATE LIMITED
+              {bond?.bond?.issuer_name || 'N.A.'}
             </Typography>
           </Box>
           <Typography variant="h5" sx={{ fontWeight: 700, color: '#FFAB00', pt: 2 }}>
-            ISIN: INE0NES07261
+            ISIN: {bond?.bond?.isin_code || 'N.A.'}
           </Typography>
           <Typography
             variant="h5"
             sx={{ fontWeight: 700, bgcolor: 'background.neutral', p: 2, borderRadius: 1, my: 1 }}
           >
-            11.1% KEERTANA FINSERV PRIVATE LIMITED Secured Rated Listed NCD Maturity 19-Aug-2027
+            {bond?.bond?.isin_description || 'N.A.'}
           </Typography>
 
           <Box
@@ -101,3 +100,7 @@ export default function BondDetailsAboutCompany() {
     </Box>
   );
 }
+
+BondDetailsAboutCompany.propTypes = {
+  bond: PropTypes.object,
+};

@@ -6,18 +6,24 @@ import BondDetailsAboutCompany from '../bond-details-about-company';
 import BondDetailsFinancialRating from '../bond-details-financial-rating';
 import BondDetailsRatioAnalysis from '../bond-details-ratio-analysis';
 import BondDetailsCompanyFinancials from '../bond-details-company-financials';
+import { useGetBond, useGetSimilarBonds } from 'src/api/bonds';
+import { useParams } from 'react-router-dom';
 
 export default function BondDetailsView() {
-  
+  const { id } = useParams();
+  const { Bond } = useGetBond(id);
+  const { SimilarBonds } = useGetSimilarBonds(id);
+  console.log('Bond', Bond);
+  console.log('SimilarBonds', SimilarBonds);
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
-      <BondDetailsHero />
-      <BondDetailsCalculateReturns />
+      <BondDetailsHero bond={Bond} />
+      <BondDetailsCalculateReturns bond={Bond}/>
       <BondDetailsCompanyFinancials />
       <BondDetailsRatioAnalysis />
-      <BondDetailsAboutCompany />
+      <BondDetailsAboutCompany bond={Bond} />
       <BondDetailsFinancialRating />
-      {/* <HomeWhyBonds isDetails /> */}
+      <HomeWhyBonds isDetails bonds={SimilarBonds} />
     </Container>
   );
 }

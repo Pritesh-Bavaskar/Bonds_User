@@ -1,9 +1,10 @@
 import { Container, Box, Typography, useTheme } from '@mui/material';
+import PropTypes from 'prop-types';
 import { useSettingsContext } from 'src/components/settings';
 
 const companyLogo = '/assets/icons/bond-library/company-img.svg';
 
-export default function BondDetailsHero() {
+export default function BondDetailsHero({bond}) {
   const settings = useSettingsContext();
   const theme = useTheme();
 
@@ -30,7 +31,7 @@ export default function BondDetailsHero() {
           {/* Company Logo */}
           <Box
             component="img"
-            src={companyLogo}
+            src={bond?.brandLogo || companyLogo}
             alt="Company Logo"
             sx={{
               width: 280,
@@ -50,10 +51,14 @@ export default function BondDetailsHero() {
               mt: 2,
             }}
           >
-            Satya MicroCapital Ltd.
+            {bond?.rta?.rta?.rta_name || 'Company Name'}
           </Typography>
         </Box>
       </Container>
     </Box>
   );
 }
+
+BondDetailsHero.propTypes = {
+  bond: PropTypes.object,
+};

@@ -25,19 +25,39 @@ export function useGetBonds() {
 
 // ----------------------------------------------------------------------
 
-export function useGetBond(productId) {
-  const URL = productId ? [endpoints.bond.details, { params: { productId } }] : null;
+export function useGetBond(bondISIN) {
+  const URL = bondISIN ? endpoints.bond.details(bondISIN) : null;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
     () => ({
-      Bond: data?.bond,
+      Bond: data,
       BondLoading: isLoading,
       BondError: error,
       BondValidating: isValidating,
     }),
-    [data?.bond, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+// ----------------------------------------------------------------------
+
+export function useGetSimilarBonds(bondISIN) {
+  const URL = bondISIN ? endpoints.bond.similar(bondISIN) : null;
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  
+  const memoizedValue = useMemo(
+    () => ({
+      SimilarBonds: data,
+      SimilarBondsLoading: isLoading,
+      SimilarBondsError: error,
+      SimilarBondsValidating: isValidating,
+    }),
+    [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
