@@ -8,6 +8,7 @@ import BondDetailsRatioAnalysis from '../bond-details-ratio-analysis';
 import BondDetailsCompanyFinancials from '../bond-details-company-financials';
 import { useGetBond, useGetSimilarBonds } from 'src/api/bonds';
 import { useParams } from 'react-router-dom';
+import FaqsComponent from 'src/sections/faqs/faq-component';
 
 export default function BondDetailsView() {
   const { id } = useParams();
@@ -24,6 +25,7 @@ export default function BondDetailsView() {
       <BondDetailsAboutCompany bond={Bond} />
       <BondDetailsFinancialRating />
       <HomeWhyBonds isDetails bonds={SimilarBonds} />
+      <FaqsComponent />
     </Container>
   );
 }
