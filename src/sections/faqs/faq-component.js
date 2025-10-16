@@ -7,13 +7,14 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import { _faqs } from 'src/_mock';
 // components
 import Iconify from 'src/components/iconify';
+import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 export default function FaqsComponent() {
   return (
     <>
-      <div>
+      <Box>
         <Typography
           variant="h1"
           sx={{ color: '#00328A', display: 'flex', justifyContent: 'center', pt: '20px', }}
@@ -36,8 +37,8 @@ export default function FaqsComponent() {
         >
           Get answers to common questions about unlisted bond investments and private placements.
         </Typography>
-      </div>
-      <div>
+      </Box>
+      <Box sx={{ maxWidth: '893px', margin: '0 auto', pb: '20px' }}>
         {_faqs.map((accordion) => (
           <Accordion key={accordion.id}>
             <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
@@ -49,7 +50,7 @@ export default function FaqsComponent() {
             </AccordionDetails>
           </Accordion>
         ))}
-      </div>
+      </Box>
     </>
   );
 }

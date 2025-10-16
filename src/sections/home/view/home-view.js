@@ -13,6 +13,7 @@ import HomeExplore from '../home-explore';
 import HomeSignupRequest from '../home-signup-request';
 import HomeFeaturedBlogs from '../home-fearured-blogs';
 import HomeGetStartedKYC from '../home-getstarted-kyc';
+import FaqsComponent from 'src/sections/faqs/faq-component';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
@@ -30,7 +31,7 @@ export default function HomeView() {
       <HomeFeaturedBlogs />
       <HomeExplore />
       <HomeSignupRequest />
-
+      <FaqsComponent />
     </>
   );
 }
