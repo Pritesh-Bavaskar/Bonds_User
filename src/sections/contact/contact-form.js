@@ -15,6 +15,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import axiosInstance from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -35,23 +36,31 @@ export default function ContactForm() {
     message: Yup.string().required('Message is required'),
   });
 
-  const defaultValues = useMemo(
-    () => ({ name: '', email: '', phone: '', message: '' }),
-    []
-  );
+  const defaultValues = useMemo(() => ({ name: '', email: '', phone: '', message: '' }), []);
 
   const methods = useForm({ resolver: yupResolver(Schema), defaultValues });
-  const { handleSubmit, formState: { isSubmitting } } = methods;
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((r) => setTimeout(r, 600));
-      enqueueSnackbar('Message sent!');
-      // You can plug an API call here
+      const payload = {
+        name: data.name,
+        email: data.email,
+        phone_number: data.phone,
+        message: data.message,
+      };
+
+      await axiosInstance.post('/api/bonds/contact', payload);
+      enqueueSnackbar('Message sent successfully!');
+      methods.reset();
       methods.reset();
       // eslint-disable-next-line no-console
       console.info('CONTACT_FORM', data);
     } catch (error) {
+      enqueueSnackbar('Something went wrong!', { variant: 'error' });
       // eslint-disable-next-line no-console
       console.error(error);
     }
@@ -74,7 +83,8 @@ export default function ContactForm() {
             pointerEvents: 'none',
             position: 'absolute',
             inset: 0,
-            background: 'url(/assets/illustrations/illustration_dashboard.png) center/60% no-repeat',
+            background:
+              'url(/assets/illustrations/illustration_dashboard.png) center/60% no-repeat',
             opacity: 0.05,
           }}
         />
@@ -83,12 +93,25 @@ export default function ContactForm() {
           {/* Left: Contact details */}
           <Grid xs={12} md={6}>
             <Stack spacing={2.5} sx={{ position: 'relative' }}>
-              <InfoRow iconSrc="/assets/icons/contact/phone.svg" title="Call us" subtitle="+91 987654321" />
-              <InfoRow iconSrc="/assets/icons/contact/email.svg" title="Email Us" subtitle="xyz@gmail.com" />
+              <InfoRow
+                iconSrc="/assets/icons/contact/phone.svg"
+                title="Call us"
+                subtitle="+91 987654321"
+              />
+              <InfoRow
+                iconSrc="/assets/icons/contact/email.svg"
+                title="Email Us"
+                subtitle="xyz@gmail.com"
+              />
 
               <Card variant="outlined" sx={{ p: 2 }}>
                 <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
-                  <Box component="img" src="/assets/icons/contact/send.svg" alt="send" sx={{ width: 20, height: 20 }} />
+                  <Box
+                    component="img"
+                    src="/assets/icons/contact/send.svg"
+                    alt="send"
+                    sx={{ width: 20, height: 20 }}
+                  />
                   <Typography variant="subtitle1">Connect with us</Typography>
                 </Stack>
                 <Stack direction="row" spacing={1} sx={{ overflowX: 'auto', flexWrap: 'nowrap' }}>
@@ -102,14 +125,20 @@ export default function ContactForm() {
 
               <Card variant="outlined" sx={{ p: 2 }}>
                 <Stack direction="row" spacing={1.5} alignItems="flex-start">
-                  <Box component="img" src="/assets/icons/contact/location.svg" alt="location" sx={{ width: 16, height: 16, mt: 0.3 }} />
+                  <Box
+                    component="img"
+                    src="/assets/icons/contact/location.svg"
+                    alt="location"
+                    sx={{ width: 16, height: 16, mt: 0.3 }}
+                  />
                   <Box>
                     <Typography variant="subtitle1" sx={{ mb: 0.5 }}>
                       Registered address
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      xyz Nashik road 2nd floor of abc building near z temple Nashik Maharashtra 4225544 xyz
-                      Nashik road 2nd floor of abc building near z temple Nashik Maharashtra
+                      xyz Nashik road 2nd floor of abc building near z temple Nashik Maharashtra
+                      4225544 xyz Nashik road 2nd floor of abc building near z temple Nashik
+                      Maharashtra
                     </Typography>
                   </Box>
                 </Stack>
@@ -123,7 +152,12 @@ export default function ContactForm() {
               Write to us
             </Typography>
 
-            <Box display="grid" rowGap={2} columnGap={2} gridTemplateColumns={{ xs: '1fr', sm: '1fr' }}>
+            <Box
+              display="grid"
+              rowGap={2}
+              columnGap={2}
+              gridTemplateColumns={{ xs: '1fr', sm: '1fr' }}
+            >
               <RHFTextField name="name" label="Name" placeholder="Enter your name" />
               <RHFTextField name="email" label="Email" placeholder="Enter your email ID" />
               <RHFTextField
@@ -198,7 +232,7 @@ function InfoRow({ icon, iconSrc, title, subtitle }) {
 function IconButtonLink({ icon, href = '#' }) {
   return (
     <Button
-      href={href}
+      // href={href}
       variant="soft"
       color="inherit"
     >
