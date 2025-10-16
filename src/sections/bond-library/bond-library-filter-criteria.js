@@ -18,6 +18,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useTheme } from '@mui/material/styles';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import PropTypes from 'prop-types';
 
 // ----------------------------------------------------------------------
 
@@ -132,16 +133,16 @@ const CollapsibleSection = ({ title, children, defaultOpen = true }) => {
   );
 };
 
-export default function BondLibraryFilterCriteria() {
+export default function BondLibraryFilterCriteria({ onFilterChange }) {
   const [filters, setFilters] = useState({
     bondTypes: [],
     creditRating: [],
     interestPaymentFrequency: [],
-    couponRange: [0, 15],
-    maturityDate: { from: null, to: null },
-    prepetual: false,
-    zero_coupon: false,
-    call_put: false,
+    // couponRange: [0, 15],
+    // maturityDate: { from: null, to: null },
+    // prepetual: false,
+    // zero_coupon: false,
+    // call_put: false,
     yield: [],
     balance_tenure: [],
     taxation: [],
@@ -152,9 +153,10 @@ export default function BondLibraryFilterCriteria() {
   });
 
   useEffect(() => {
-    console.log('filters', filters);
+    // console.log('filters', filters);
     const queryParams = generateQueryParams(filters);
-    console.log('Query Params:', queryParams);
+    // console.log('Query Params:', queryParams);
+    onFilterChange?.(filters);
   }, [filters]);
 
   const generateQueryParams = (filters) => {
@@ -240,8 +242,8 @@ export default function BondLibraryFilterCriteria() {
       faceValueRanges: checked
         ? [...prev.faceValueRanges, optionRange]
         : prev.faceValueRanges.filter(
-            (range) => !(range.min === optionRange.min && range.max === optionRange.max)
-          ),
+          (range) => !(range.min === optionRange.min && range.max === optionRange.max)
+        ),
     }));
   };
 
@@ -279,8 +281,8 @@ export default function BondLibraryFilterCriteria() {
         ...prev,
         yield: isSelected
           ? prev.yield.filter(
-              (range) => !(range.min === optionRange.min && range.max === optionRange.max)
-            )
+            (range) => !(range.min === optionRange.min && range.max === optionRange.max)
+          )
           : [...prev.yield, optionRange],
       };
     });
@@ -300,8 +302,8 @@ export default function BondLibraryFilterCriteria() {
         ...prev,
         coupon: isSelected
           ? prev.coupon.filter(
-              (range) => !(range.min === optionRange.min && range.max === optionRange.max)
-            )
+            (range) => !(range.min === optionRange.min && range.max === optionRange.max)
+          )
           : [...prev.coupon, optionRange],
       };
     });
@@ -321,8 +323,8 @@ export default function BondLibraryFilterCriteria() {
         ...prev,
         balance_tenure: isSelected
           ? prev.balance_tenure.filter(
-              (range) => !(range.min === optionRange.min && range.max === optionRange.max)
-            )
+            (range) => !(range.min === optionRange.min && range.max === optionRange.max)
+          )
           : [...prev.balance_tenure, optionRange],
       };
     });
@@ -344,7 +346,7 @@ export default function BondLibraryFilterCriteria() {
       ...prev,
       creditRating: checked
         ? [...prev.creditRating, value]
-        : prev.interestPaymentFrequency.filter((type) => type !== value),
+        : prev.creditRating.filter((type) => type !== value),
     }));
   };
 
@@ -369,18 +371,20 @@ export default function BondLibraryFilterCriteria() {
   const handleClearAll = () => {
     setFilters({
       bondTypes: [],
-      interestPaymentFrequency: [],
       creditRating: [],
-      couponRange: [0, 15],
-      maturityDate: { from: null, to: null },
-      prepetual: false,
-      zero_coupon: false,
-      call_put: false,
+      interestPaymentFrequency: [],
+      // couponRange: [0, 15],
+      // maturityDate: { from: null, to: null },
+      // prepetual: false,
+      // zero_coupon: false,
+      // call_put: false,
       yield: [],
       balance_tenure: [],
-      coupon: [],
       taxation: [],
       bond_price_lvl: [],
+      coupon: [],
+      faceValueRanges: [],
+      issuerTypes: [],
     });
   };
 
@@ -781,3 +785,8 @@ export default function BondLibraryFilterCriteria() {
     </Box>
   );
 }
+
+
+BondLibraryFilterCriteria.propTypes = {
+  onFilterChange: PropTypes.func,
+};

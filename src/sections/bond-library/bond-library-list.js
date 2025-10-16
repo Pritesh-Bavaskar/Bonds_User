@@ -30,7 +30,7 @@ const SORT_OPTIONS = [
   { value: 'oldest', label: 'Oldest' },
 ];
 
-export default function BondLibraryList({ bonds, onSearchChange }) {
+export default function BondLibraryList({ bonds, onSearchChange, onFilterChange }) {
   const settings = useSettingsContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -38,13 +38,18 @@ export default function BondLibraryList({ bonds, onSearchChange }) {
   const [sortBy, setSortBy] = useState('latest');
   const [searchTerm, setSearchTerm] = useState('');
 
+   const handleFilterChange = (queryParams) => {
+    // console.log('Filter changed:', queryParams);
+    onFilterChange?.(queryParams);
+  };
+
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
     onSearchChange(value);
   };
 
-  console.log('bonds', bonds)
+  // console.log('bonds', bonds)
   const handleChangeView = (event, newView) => {
     if (newView !== null) {
       setView(newView);
@@ -166,7 +171,7 @@ export default function BondLibraryList({ bonds, onSearchChange }) {
           {/* Left Sidebar (Filter Criteria) */}
           <Grid item xs={12} md={3} lg={3}>
             {/* Replace with your filter component */}
-            <BondLibraryFilterCriteria />
+            <BondLibraryFilterCriteria onFilterChange={handleFilterChange} />
           </Grid>
 
           {/* Right Content (Bond Cards) */}
@@ -200,4 +205,5 @@ export default function BondLibraryList({ bonds, onSearchChange }) {
 BondLibraryList.propTypes = {
   bonds: PropTypes.array,
   onSearchChange: PropTypes.func.isRequired,
+  onFilterChange: PropTypes.func,
 };
