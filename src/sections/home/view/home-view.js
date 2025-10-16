@@ -14,6 +14,7 @@ import HomeSignupRequest from '../home-signup-request';
 import HomeFeaturedBlogs from '../home-fearured-blogs';
 import HomeGetStartedKYC from '../home-getstarted-kyc';
 import { useGetFeaturedBonds } from 'src/api/bonds';
+import FaqsComponent from 'src/sections/faqs/faq-component';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
@@ -33,7 +34,7 @@ export default function HomeView() {
       <HomeFeaturedBlogs />
       <HomeExplore />
       <HomeSignupRequest />
-
+      <FaqsComponent />
     </>
   );
 }
