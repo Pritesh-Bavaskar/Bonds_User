@@ -30,171 +30,19 @@ const SORT_OPTIONS = [
   { value: 'oldest', label: 'Oldest' },
 ];
 
-const BOND_LIBRARY_DATA = [
-  {
-    id: '1',
-    title: 'Government of India 10Y Bond',
-    isin: 'INE002A07KM3',
-    price: '₹101.50',
-    yield: '7.25%',
-    ipFrequency: 'Semi-Annual',
-    maturityDate: '15/05/2033',
-    type: 'Sovereign',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '2',
-    title: 'HDFC Bank Limited',
-    isin: 'INE040A07CM2',
-    price: '₹102.75',
-    yield: '8.10%',
-    ipFrequency: 'Annual',
-    maturityDate: '10/12/2028',
-    type: 'Corporate',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '3',
-    title: 'Reliance Industries Limited',
-    isin: 'INE002A07KM4',
-    price: '₹100.25',
-    yield: '7.85%',
-    ipFrequency: 'Quarterly',
-    maturityDate: '22/08/2030',
-    type: 'Corporate',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '4',
-    title: 'State Bank of India',
-    isin: 'INE002A07KM5',
-    price: '₹99.90',
-    yield: '7.95%',
-    ipFrequency: 'Semi-Annual',
-    maturityDate: '05/11/2032',
-    type: 'PSU',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '5',
-    title: 'Tata Motors Limited',
-    isin: 'INE002A07KM6',
-    price: '₹98.50',
-    yield: '8.45%',
-    ipFrequency: 'Annual',
-    maturityDate: '18/07/2029',
-    type: 'Corporate',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '6',
-    title: 'National Highways Authority',
-    isin: 'INE002A07KM7',
-    price: '₹100.00',
-    yield: '7.60%',
-    ipFrequency: 'Semi-Annual',
-    maturityDate: '30/09/2035',
-    type: 'Infrastructure',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '7',
-    title: 'National Highways Authority',
-    isin: 'INE002A07KM7',
-    price: '₹100.00',
-    yield: '7.60%',
-    ipFrequency: 'Semi-Annual',
-    maturityDate: '30/09/2035',
-    type: 'Infrastructure',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '8',
-    title: 'National Highways Authority',
-    isin: 'INE002A07KM7',
-    price: '₹100.00',
-    yield: '7.60%',
-    ipFrequency: 'Semi-Annual',
-    maturityDate: '30/09/2035',
-    type: 'Infrastructure',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '9',
-    title: 'National Highways Authority',
-    isin: 'INE002A07KM7',
-    price: '₹100.00',
-    yield: '7.60%',
-    ipFrequency: 'Semi-Annual',
-    maturityDate: '30/09/2035',
-    type: 'Infrastructure',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '10',
-    title: 'National Highways Authority',
-    isin: 'INE002A07KM7',
-    price: '₹100.00',
-    yield: '7.60%',
-    ipFrequency: 'Semi-Annual',
-    maturityDate: '30/09/2035',
-    type: 'Infrastructure',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '11',
-    title: 'National Highways Authority',
-    isin: 'INE002A07KM7',
-    price: '₹100.00',
-    yield: '7.60%',
-    ipFrequency: 'Semi-Annual',
-    maturityDate: '30/09/2035',
-    type: 'Infrastructure',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-  {
-    id: '12',
-    title: 'National Highways Authority',
-    isin: 'INE002A07KM7',
-    price: '₹100.00',
-    yield: '7.60%',
-    ipFrequency: 'Semi-Annual',
-    maturityDate: '30/09/2035',
-    type: 'Infrastructure',
-    asapl: '12.00%',
-    date: '14 AUG 20',
-    brandLogo: '/assets/icons/bond-library/company.svg',
-  },
-];
-
-export default function BondLibraryList({ bonds }) {
+export default function BondLibraryList({ bonds, onSearchChange }) {
   const settings = useSettingsContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [view, setView] = useState('grid');
   const [sortBy, setSortBy] = useState('latest');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    onSearchChange(value);
+  };
 
   console.log('bonds', bonds)
   const handleChangeView = (event, newView) => {
@@ -221,6 +69,8 @@ export default function BondLibraryList({ bonds }) {
           <TextField
             placeholder="Search Issuer, ISIN, Security Name"
             variant="outlined"
+            value={searchTerm}
+            onChange={handleSearchChange}
             sx={{
               width: { xs: 1, sm: 400 },
               '& .MuiOutlinedInput-root': {
@@ -349,4 +199,5 @@ export default function BondLibraryList({ bonds }) {
 
 BondLibraryList.propTypes = {
   bonds: PropTypes.array,
+  onSearchChange: PropTypes.func.isRequired,
 };

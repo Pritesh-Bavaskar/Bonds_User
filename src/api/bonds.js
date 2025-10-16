@@ -25,6 +25,26 @@ export function useGetBonds() {
 
 // ----------------------------------------------------------------------
 
+export function useGetBondsFilter(filter) {
+  const URL = endpoints.bond.filterList(filter);
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const memoizedValue = useMemo(
+    () => ({
+      Bonds: data?.results || [],
+      BondsLoading: isLoading,
+      BondsError: error,
+      BondsValidating: isValidating,
+      BondsEmpty: !isLoading && !data?.results?.length,
+    }),
+    [data, error, isLoading, isValidating]
+  );
+
+  return memoizedValue;
+}
+
+// ----------------------------------------------------------------------
+
 export function useGetBond(bondISIN) {
   const URL = bondISIN ? endpoints.bond.details(bondISIN) : null;
 
