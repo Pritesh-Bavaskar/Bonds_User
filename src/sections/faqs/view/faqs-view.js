@@ -7,6 +7,7 @@ import FaqsHero from '../faqs-hero';
 import FaqsList from '../faqs-list';
 import FaqsForm from '../faqs-form';
 import FaqsCategory from '../faqs-category';
+import FAQSystem from '../faqs-category';
 
 // ----------------------------------------------------------------------
 
@@ -22,9 +23,10 @@ export default function FaqsView() {
           position: 'relative',
         }}
       >
-        <FaqsCategory />
+        {/* <FaqsCategory /> */}
+        <FAQSystem />
 
-        <Typography
+        {/* <Typography
           variant="h3"
           display="flex"
           justifyContent="center"
@@ -41,9 +43,9 @@ export default function FaqsView() {
           }}
         >
           Frequently asked questions
-        </Typography>
+        </Typography> */}
 
-        <Box
+        {/* <Box
           sx={{
             display: 'grid',
             gap: 10,
@@ -55,8 +57,8 @@ export default function FaqsView() {
         >
           <FaqsList />
 
-          {/* <FaqsForm /> */}
-        </Box>
+          <FaqsForm />
+        </Box> */}
       </Container>
     </>
   );
