@@ -1,6 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 
 export default function NewsInsightQuestion() {
+  const navigate = useNavigate();
+
+  const handleFaqClick = () => {
+    navigate('/faqs');
+  };
+
   return (
     <Grid container justifyContent="center">
       <Stack
@@ -54,6 +61,7 @@ export default function NewsInsightQuestion() {
               alignItems: 'center',
               gap: 1,
             }}
+             onClick={handleFaqClick}
           >
             View FAQ
             <Box

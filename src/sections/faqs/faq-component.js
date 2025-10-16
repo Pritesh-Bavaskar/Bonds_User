@@ -17,7 +17,7 @@ export default function FaqsComponent() {
       <Box>
         <Typography
           variant="h1"
-          sx={{ color: '#00328A', display: 'flex', justifyContent: 'center', pt: '20px', }}
+          sx={{ color: '#00328A', display: 'flex', justifyContent: 'center', pt: { xs: 6, md: 12 }, }}
         >
           Frequently Asked Questions
         </Typography>

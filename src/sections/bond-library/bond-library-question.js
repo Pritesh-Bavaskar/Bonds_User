@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { alpha } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -11,6 +12,11 @@ import { useTheme } from '@mui/material/styles';
 
 export default function BondLibraryQuestion() {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleFaqClick = () => {
+    navigate('/faqs');
+  };
 
   return (
     <Box
@@ -30,7 +36,7 @@ export default function BondLibraryQuestion() {
               mb: 2
             }}
           >
-            Bond Library
+            Have Questions
           </Typography>
           <Typography
             variant="h5"
@@ -40,11 +46,12 @@ export default function BondLibraryQuestion() {
               fontWeight: 'normal'
             }}
           >
-            Explore our comprehensive collection of bond-related resources, guides, and educational materials to enhance your understanding of bond investments and market trends.
+            Explore our comprehensive FAQ section to learn more about corporate bond investments, processes, and requirements.
           </Typography>
           <Button
             variant="outlined"
             color="primary"
+            onClick={handleFaqClick}
             sx={{
               mt: 0,
               px: 2,
@@ -53,6 +60,7 @@ export default function BondLibraryQuestion() {
               '&:hover': {
                 borderWidth: '1px',
               },
+              cursor: 'pointer',
             }}
           >
             <Typography
