@@ -208,7 +208,7 @@ export default function FAQSystem() {
 
   if (!selectedCategory) {
     return (
-      <Container maxWidth="lg" sx={{ py: 6 }}>
+      <Container maxWidth="lg" >
         <Grid container spacing={3}>
           {Object.entries(faqData).map(([key, category]) => {
             const IconComponent = category.icon;
@@ -224,9 +224,8 @@ export default function FAQSystem() {
                       boxShadow: 4,
                     },
                     height: '221px',
-                    width: '280px',
+                    width: '100%',
                     borderRadius: '30px',
-                    mx: 'auto',
                   }}
                   onClick={() => handleCategoryClick(key)}
                 >
@@ -391,7 +390,7 @@ export default function FAQSystem() {
         </Box>
 
         {/* Bottom Help Section */}
-        <Grid container justifyContent="center" sx={{ mt: 4, px: 2 }}>
+        <Grid container justifyContent="center" sx={{ mt: 10, px: 2 }}>
           <Grid
             item
             xs={12}

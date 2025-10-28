@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import { Autocomplete, Box, Grid, TextField, Typography } from '@mui/material';
+import React from 'react';
+import { Grid, Box, Container } from '@mui/material';
 import NewsInsightCard from './news-insight-card';
-import { paths } from 'src/routes/paths';
-import PropTypes from 'prop-types';
-import NewsInsightSearch from './news-insights-search';
 
 const cardsData = [
   {
@@ -31,40 +28,36 @@ const cardsData = [
     subtitleBold: 'IMPORTANT DETAIL 4',
   },
 ];
+
 export default function NewsInsightCardList() {
-  
   return (
-    <Grid
-      container
-      rowSpacing={3}
-      columnGap={10}
-      // columnSpacing={{ xs: 0, md: 10 }}
-      justifyContent="center"
+    <Box
       sx={{
         width: '100%',
-        maxWidth: '1100px',
-        mx: { md: 'auto', xs: 0 },
-        px: { md: 0, xs: 2 },
-        mb: '150px',
-        // gap: { xs: 2, md: 10 },
+        mx: 'auto',
+        px: { xs: 2, md: 3 },
+        mb: { xs: 10, md: 15 },
       }}
     >
-      {cardsData.map((card, index) => (
-        <Grid
-          item
-          key={index}
-          md={5}
-          xs={12}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <NewsInsightCard {...card} />
+      <Container maxWidth="lg">
+        <Grid container spacing={{ xs: 3, md: 6 }} justifyContent="center">
+          {cardsData.map((card, index) => (
+            <Grid
+              item
+              key={index}
+              xs={12}
+              sm={6}
+              md={6}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <NewsInsightCard {...card} />
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
+      </Container>
+    </Box>
   );
 }
-
-
