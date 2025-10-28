@@ -118,7 +118,7 @@ export default function HomeGetStartedKYC() {
   const imageSrc = isCustomer ? preferredCustomerSrc : '/assets/images/home/kyc/kyc_issuer.svg';
 
   return (
-    <Box component="section" sx={{ py: { xs: 6, md: 10 } }}>
+    <Box component="section" sx={{ pt: { xs: 6, md: 15 } }}>
       <Container>
         <Stack
           spacing={3}

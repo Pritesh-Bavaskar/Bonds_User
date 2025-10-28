@@ -73,7 +73,7 @@ export default function HomeHero() {
   });
 
   return (
-    <Box sx={{ py: { xs: 14, sm: 6, md: 20 }, px: 0 }}>
+    <Box sx={{ py: { xs: 14, sm: 6, md: 20 }, pb: { xs: 14, sm: 6, md: 11 },px: 0 }}>
       <Container maxWidth="lg">
         <Stack
           spacing={{ xs: 3, sm: 4 }}

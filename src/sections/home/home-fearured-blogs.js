@@ -42,7 +42,7 @@ export default function HomeFeaturedBlogs() {
   const featured = MOCK_FEATURED;
 
   return (
-    <Box component="section" sx={{ py: { xs: 6, md: 12 } }}>
+    <Box component="section" sx={{ pt: { xs: 6, md: 15 } }}>
       <Container maxWidth="lg">
         <Typography
           align="center"

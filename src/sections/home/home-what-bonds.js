@@ -35,7 +35,7 @@ export default function HomeWhatBonds() {
   const theme = useTheme();
 
   return (
-    <Box component="section" sx={{ py: { xs: 6, md: 15 } }}>
+    <Box component="section" sx={{ pt: { xs: 6, md: 15 } }}>
       <Container maxWidth="lg">
         {/* Heading */}
         <Typography

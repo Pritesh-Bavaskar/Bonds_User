@@ -10,6 +10,7 @@ export default function HomeSignupRequest() {
     <Box
       component="section"
       sx={{
+        mt: { xs: 6, md: 15 },
         background: 'linear-gradient(90deg, #003EAA 0%, #020D1E 100%)',
         minHeight: { xs: 200, sm: 220, md: 250 },
         display: 'flex',
