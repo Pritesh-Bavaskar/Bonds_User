@@ -17,6 +17,7 @@ const ROOTS = {
 // ----------------------------------------------------------------------
 
 export const paths = {
+  issuer:'/issuer',
   calculator:'/calculator',
   calculate:'/calculate',
   comingSoon: '/coming-soon',
