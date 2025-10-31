@@ -44,7 +44,7 @@ export default function PostDetailsHomeView() {
   const MOCK_POST = {
     id: 'mock-post-1',
     title: 'The Rise of Alternative Investments: Why They Matter for You',
-    coverUrl: '/assets/background/overlay_3.jpg',
+    coverUrl: '/assets/images/blogs/blog-details.png',
     author: { name: 'xyz co.' },
     createdAt: new Date().toISOString(),
     description:
@@ -128,23 +128,11 @@ export default function PostDetailsHomeView() {
 
   const MOCK_LATEST = [
     {
-      id: 'ml1',
-      title: 'Understanding Corporate Bonds: A Beginner’s Guide',
-      coverUrl: '/assets/background/overlay_3.jpg',
+      id: 'post-2',
+      title: 'The Future of Corporate Bond Investing: Trends Shaping 2025',
+      coverUrl: '/assets/images/blogs/blog1.png',
       description:
-        'Learn the basics of corporate bonds, how they work, and how to evaluate risk and returns before investing.',
-      author: { name: 'Bonds Team' },
-      createdAt: new Date().toISOString(),
-      categories: ['Education'],
-      totalViews: 1200,
-      readingTime: '6 min read',
-    },
-    {
-      id: 'ml2',
-      title: 'How To Evaluate Bond Ratings And Yield',
-      coverUrl: '/assets/background/overlay_4.jpg',
-      description:
-        'A practical framework to read bond ratings, interpret yields, and balance risk with expected returns.',
+        "Explore the emerging trends in corporate bond markets, from ESG integration to digital trading platforms, and how they're reshaping investment strategies for the coming year.",
       author: { name: 'Research Desk' },
       createdAt: new Date(Date.now() - 86400000).toISOString(),
       categories: ['Education'],
@@ -152,11 +140,11 @@ export default function PostDetailsHomeView() {
       readingTime: '7 min read',
     },
     {
-      id: 'ml3',
-      title: 'Taxation Of Interest Income In India: What To Know',
-      coverUrl: '/assets/background/overlay_2.jpg',
+      id: 'post-3',
+      title: 'The Future of Corporate Bond Investing: Trends Shaping 2025',
+      coverUrl: '/assets/images/blogs/blog2.png',
       description:
-        'From TDS to ITR reporting—understand how interest from bonds and FDs is taxed and how to optimize.',
+        "Explore the emerging trends in corporate bond markets, from ESG integration to digital trading platforms, and how they're reshaping investment strategies for the coming year.",
       author: { name: 'Finance Coach' },
       createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
       categories: ['Taxes'],
@@ -164,11 +152,11 @@ export default function PostDetailsHomeView() {
       readingTime: '5 min read',
     },
     {
-      id: 'ml4',
-      title: 'Fixed-Income Vs Equity: Building A Balanced Portfolio',
-      coverUrl: '/assets/background/overlay_2.jpg',
+      id: 'post-4',
+      title: 'The Future of Corporate Bond Investing: Trends Shaping 2025',
+      coverUrl: '/assets/images/blogs/blog3.png',
       description:
-        'We compare risk, liquidity, and returns to help you decide the right mix for your risk profile.',
+        "Explore the emerging trends in corporate bond markets, from ESG integration to digital trading platforms, and how they're reshaping investment strategies for the coming year.",
       author: { name: 'Bonds Team' },
       createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
       categories: ['Strategy'],
