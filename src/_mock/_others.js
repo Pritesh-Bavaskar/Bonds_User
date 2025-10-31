@@ -11,12 +11,56 @@ export const _carouselsMembers = [...Array(6)].map((_, index) => ({
 
 // ----------------------------------------------------------------------
 
-export const _faqs = [...Array(8)].map((_, index) => ({
-  id: _mock.id(index),
-  value: `panel${index + 1}`,
-  heading: `Questions ${index + 1}`,
-  detail: _mock.description(index),
-}));
+export const _faqs = [
+  {
+    id: _mock.id(0),
+    value: 'panel1',
+    heading: 'What are listed and unlisted bonds?',
+    detail: 'Listed and unlisted bonds are two different types of bonds that differ in their trading platforms and liquidity.',
+  },
+  {
+    id: _mock.id(1),
+    value: 'panel2',
+    heading: 'Can I buy or sell stocks and bonds directly through this platform?',
+    detail: 'Yes, you can buy and sell stocks and bonds directly through our platform with a few simple clicks.',
+  },
+  {
+    id: _mock.id(2),
+    value: 'panel3',
+    heading: 'What is a bond maturity date and why is it important?',
+    detail: 'A bond maturity date is the date when the principal amount of the bond is paid back to the investor, and it is important because it determines when you will receive your initial investment back.',
+  },
+  {
+    id: _mock.id(3),
+    value: 'panel4',
+    heading: 'Are government bonds risk-free?',
+    detail: 'Government bonds are generally considered low-risk investments, but they are not completely risk-free as they are still subject to interest rate risk and inflation risk.',
+  },
+  {
+    id: _mock.id(4),
+    value: 'panel5',
+    heading: 'Are the prices shown on the website real-time?',
+    detail: 'Yes, the prices shown on our website are updated in real-time to provide you with the most current market information.',
+  },
+  {
+    id: _mock.id(5),
+    value: 'panel6',
+    heading: 'What is the difference between stocks and bonds?',
+    detail: 'The main difference between stocks and bonds is that stocks represent ownership in a company while bonds are a form of debt that companies or governments issue to raise capital.',
+  },
+  {
+    id: _mock.id(6),
+    value: 'panel7',
+    heading: 'Can beginners use this platform?',
+    detail: 'Absolutely, our platform is designed to be user-friendly and accessible for both beginners and experienced investors.',
+  },
+  {
+    id: _mock.id(7),
+    value: 'panel8',
+    heading: 'Is there a cost to use the platform?',
+    detail: 'There may be certain fees associated with using our platform, which will be clearly outlined in our fee schedule.',
+  },
+];
 
 // ----------------------------------------------------------------------
 

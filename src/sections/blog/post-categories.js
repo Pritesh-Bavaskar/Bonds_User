@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useRouter } from 'src/routes/hook';
 // @mui
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
@@ -24,11 +25,32 @@ export default function PostCategories({ items, value, onChange, sx }) {
   const [internal, setInternal] = useState(categories[0]);
   const selected = value !== undefined ? value : internal;
 
+  const router = useRouter();
+
   const handleSelect = (cat) => {
     if (value === undefined) {
       setInternal(cat);
     }
     onChange?.(cat);
+
+    // Handle navigation based on the selected category
+    switch(cat) {
+      case 'Corporate Bonds':
+        router.push('/products/corporate_bond');
+        break;
+      case 'Government Bonds':
+        router.push('/products/government-bond');
+        break;
+      case 'listed Bonds':
+        router.push('/products/listed-bond');
+        break;
+      case 'Unlisted Bonds':
+        router.push('/products/unlisted-bond');
+        break;
+      default:
+        // Handle default case or do nothing
+        break;
+    }
   };
 
   return (
