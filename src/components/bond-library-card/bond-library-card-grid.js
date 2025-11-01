@@ -148,7 +148,18 @@ export default function BondLibraryCardGrid({ item }) {
               <Typography variant="caption" sx={{ opacity: 0.72 }}>
                 Type of Bond
               </Typography>
-              <Typography variant="caption">{item?.issuer_type || 'N.A.'}</Typography>
+              <Typography 
+                variant="caption" 
+                noWrap 
+                sx={{
+                  display: 'inline-block',
+                  maxWidth: '90px',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden'
+                }}
+              >
+                {item?.issuer_type || 'N.A.'}
+              </Typography>
             </Stack>
           </Stack>
 
