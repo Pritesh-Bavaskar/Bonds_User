@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { m } from 'framer-motion';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -10,6 +11,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 // components
 import { RouterLink } from 'src/routes/components';
 import { MotionContainer, varFade } from 'src/components/animate';
+import MultiStepLoginDialog from '../user/issuer-login';
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +34,8 @@ const StyledContent = styled('div')(({ theme }) => ({
 }));
 
 export default function HomeHero() {
+  const [openLogin, setOpenLogin] = useState(false);
+
   return (
     <Container sx={{ pt: { xs: 5, md: 10 } }}>
       <StyledHero>
@@ -69,9 +73,9 @@ export default function HomeHero() {
                 <m.div variants={varFade().inUp}>
                   <Stack direction={{md:"row", xs:"column"}} spacing={2}>
                     <Button
-                      component={RouterLink}
                       variant="contained"
                       size="large"
+                      onClick={() => setOpenLogin(true)}
                       sx={{
                         bgcolor: '#000000',
                         color: '#FFFFFF',
@@ -90,6 +94,10 @@ export default function HomeHero() {
                     >
                       Start Registration
                     </Button>
+                    <MultiStepLoginDialog 
+                      open={openLogin} 
+                      onClose={() => setOpenLogin(false)} 
+                    />
                     <Button
                       component={RouterLink}
                       variant="outlined"
