@@ -9,14 +9,17 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+// components
+import Iconify from 'src/components/iconify';
 import OvalImg from "src/images/oval.png";
-import SearchIcon from "@mui/icons-material/Search";
 import { Container } from "@mui/material";
 // Chart.js imports
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 export default function BondsCalculatorSection() {
   const theme = useTheme();
@@ -36,7 +39,7 @@ export default function BondsCalculatorSection() {
     datasets: [
       {
         data: [principal, returns],
-        backgroundColor:  ["#97C4FF" ,"#003289"], // dark + light blue
+        backgroundColor: ["#97C4FF", "#003289"], // dark + light blue
         borderWidth: 0,
       },
     ],
@@ -64,23 +67,23 @@ export default function BondsCalculatorSection() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{
+    <Container maxWidth="100%" sx={{
       py: 0,
-      maxWidth: '1600px',
-      width: '1600px',mx:"auto",
+      maxWidth: '100%',
+      width: '100%',
+      // mx: "auto",
       height: '800px',
     }}>
 
-      <Box sx={{ position: "relative", width: "100%", overflow: "hidden" ,mx:"auto"}}>
+      <Box sx={{ position: "relative", width: "100%", overflow: "hidden", }}>
         <Typography
           sx={{
             fontSize: { xs: 28, md: 35 },
             fontWeight: 600,
             color: "primary.main",
             textAlign: "left",
-            pl: "91px",
-            mb: 1,
-            ml: { xs: 0, md: 3  }
+            // pl: "91px",
+
           }}
         >
           Bonds Calculator
@@ -92,52 +95,53 @@ export default function BondsCalculatorSection() {
           src={OvalImg}
           alt="Calculator"
           sx={{
+
             width: "70%",
-            height: { xs: 300, md: 600 },
+            height: { xs: 300, md: 800 },
             objectFit: "cover",
-            py: { xs: 3, md: 4 },
+            py: { xs: 3, md: 3 },
             bgcolor: "#fff",
           }}
         />
-
         {/* Small pill over image */}
-        <Box
+        <TextField
+          halfWidth
+          placeholder="ISIN Number"
+          variant="outlined"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Iconify icon="eva:search-fill" width={22} />
+              </InputAdornment>
+            ),
+          }}
+
           sx={{
             position: "absolute",
-            top: "15%",
-            width: { xs: "40%", md: "25%" },
-            height: 50,
-            bgcolor: "#fff",
-            color: "red",
-            borderRadius: "100px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "left",
-            zIndex: 2,
-            px: 4,
-            marginLeft: { xs: "5%", md: "120px" }
+            top: { xs: "20%", md: "15%" },
+            left: "11%",
+            zIndex: 3,
+            paddingBottom: { xs: 3, sm: 4, md: 1 },
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '10px',
+              bgcolor: 'background.paper',
+              boxShadow: (theme) => theme.customShadows?.z8 || '0 2px 12px rgba(0,0,0,0.08)',
+              '& fieldset': { borderColor: 'divider' },
+              '&:hover fieldset': { borderColor: 'text.disabled' },
+            },
+            '& input': { py: { xs: 1.25, sm: 1.5 } },
+            maxWidth: { xs: '100%', sm: 680, md: 800 },
           }}
-        >
-          <SearchIcon sx={{ color: "black" }} />
-          <Typography
-            sx={{
-              fontSize: { xs: 14, md: 16 },
-              fontWeight: 500,
-              color: "black",
-            }}
-          >
-            ISIN NUMBER
-          </Typography>
-        </Box>
+        />
 
         {/* Calculator Box */}
         <Box
           sx={{
             position: "absolute",
             top: { xs: "20%", md: "25%" },
-            left: "54%",
+            left: "48%",
             transform: "translateX(-50%)",
-            width: { xs: "90%", md: "1000px" },
+            width: { xs: "90%", md: "1100px" },
             bgcolor: "#f9f9f9",
             py: { xs: 3, md: 6 },
             pr: { xs: 3, md: 16 },
@@ -153,17 +157,51 @@ export default function BondsCalculatorSection() {
             sx={{ maxWidth: 1200, mx: "auto" }}
           >
             {/* Left Side - Donut Chart */}
-            <Grid item xs={12} md={6} textAlign="center">
-              <Typography variant="h6">Your Total Amount</Typography>
-              <Typography variant="h4" fontWeight={600} color="primary">
-                ₹ {maturity.toLocaleString()}
-              </Typography>
+            <Grid item xs={12} md={6} textAlign="center" >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  mt: 2,
+                }}
+              >
+                <Typography variant="h5" fontWeight={600}>
+                  Your Total Amount
+                </Typography>
 
-              <Box sx={{ position: "relative", width: isMobile ? 200 : 280, mx: "auto", my: 4 }}>
+                <Typography
+                  variant="h6"
+                  fontWeight={600}
+                  color="primary"
+                >
+                  ₹{maturity.toLocaleString()}
+                </Typography>
+
+                <Typography variant="body2" color="text.secondary">
+                  9.00% interest rate per annum
+                </Typography>
+              </Box>
+
+
+              <Box sx={{ position: "relative", width: isMobile ? 200 : 300, mx: " auto", my: 2 }}>
                 <Doughnut data={chartData} options={chartOptions} />
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    display: 'flex',
+                    gap: 5,
+                    ml: 2,
+                    justifyContent: 'center',
+
+                  }}>
+                  <span> ₹{principal.toLocaleString()}</span>
+                  <span>₹{returns.toLocaleString()}</span>
+                </Typography>
+
 
                 {/* Center Text */}
-                <Box
+                {/* <Box
                   sx={{
                     position: "absolute",
                     top: "50%",
@@ -178,67 +216,136 @@ export default function BondsCalculatorSection() {
                   <Typography variant="h6" fontWeight={600} color="primary">
                     ₹ {maturity.toLocaleString()}
                   </Typography>
-                </Box>
+                </Box>  */}
               </Box>
 
-              <Typography variant="body2">
-                <strong>Total Investment:</strong> ₹{principal.toLocaleString()}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Estimated Returns:</strong> ₹{returns.toLocaleString()}
-              </Typography>
+
             </Grid>
 
             {/* Right Side - Sliders */}
             <Grid item xs={12} md={6}>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 4,width:"500px" }}>
-                <Box>
-                  <Typography>Monthly Investment</Typography>
+               <Box margin={3}>              
+               {/* Monthly Investment */}
+
+              <Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}>
+                  <Typography variant="h5" fontWeight='bold'>Monthly Investment</Typography>
+                  <Typography
+                    sx={{
+                      border: "1px solid #ccc",
+                      px: 3,
+                      py: 0.3,
+                      borderRadius: 1,
+                      fontWeight: 500,
+                      minWidth: 80,
+                      textAlign: "center",
+                      bgcolor: "#fff",
+                    }}
+                  >
+                    ₹{investment.toLocaleString()}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ ml: 5 }}>
                   <Slider
                     value={investment}
                     onChange={(_, val) => setInvestment(val)}
                     min={10000}
                     max={100000}
                     step={1000}
-                    valueLabelDisplay="auto"
                   />
-                  <Typography variant="caption">Min ₹10k – Max ₹1L</Typography>
+                  <Box sx={{ display: "flex", flexDirection: 'row ', justifyContent: "space-between" }}>
+                    <Typography variant="caption">Min ₹10k</Typography>
+                    <Typography variant="caption">Max ₹1Lakh</Typography>
+                  </Box>
                 </Box>
+              </Box>  
 
-                <Box>
-                  <Typography>Expected Return (%)</Typography>
+              {/* Expected Return */}
+              <Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <Typography variant="h5" fontWeight='bold'>Expected Return (%)</Typography>
+                  <Typography
+                    sx={{
+                      border: "1px solid #ccc",
+                      px: 3,
+                      py: 0.3,
+                      borderRadius: 1,
+                      fontWeight: 500,
+                      minWidth: 60,
+                      textAlign: "center",
+                      bgcolor: "#fff",
+                    }}
+                  >
+                    {rate}%
+                  </Typography>
+                </Box>
+                <Box sx={{ ml:5 }}>
                   <Slider
                     value={rate}
                     onChange={(_, val) => setRate(val)}
-                    min={5}
+                    min={8}
                     max={15}
                     step={0.5}
-                    valueLabelDisplay="auto"
+                    sx={{ mt: 0 }}
                   />
+                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Typography variant="caption">Min 8%</Typography>
+                    <Typography variant="caption">Max 15%</Typography>
+                  </Box>
                 </Box>
+              </Box>
 
-                <Box>
-                  <Typography>Time Period (Years)</Typography>
+              {/* Time Period */}
+              <Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <Typography variant="h5" fontWeight='bold'>Time Period</Typography>
+                  <Typography
+                    sx={{
+                      border: "1px solid #ccc",
+                      px: 3,
+                      py: 0.3,
+                      borderRadius: 1,
+                      fontWeight: 500,
+                      minWidth: 70,
+                      textAlign: "center",
+                      bgcolor: "#fff",
+                    }}
+                  >
+                    {years} Years
+                  </Typography>
+                </Box>
+                <Box sx={{ ml: 5 }}>
+
                   <Slider
                     value={years}
                     onChange={(_, val) => setYears(val)}
                     min={1}
                     max={15}
                     step={1}
-                    valueLabelDisplay="auto"
+                    sx={{ mt: 0 }}
                   />
+                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Typography variant="caption">Min 1 year</Typography>
+                    <Typography variant="caption">Max 15 Years</Typography>
+                  </Box>
                 </Box>
+              </Box>
+              </Box>
 
-                <Button
-                  size="large"
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}>
+                <Button size="230px"
                   sx={{
                     mt: 2,
-                    borderRadius: 2,
+                    py: 2,
+                    px: 5,
+                    borderRadius: 0,
                     bgcolor: "primary.main",
-                    color: "#fff",
-                    "&:hover": { bgcolor: "primary.dark" },
-                  }}
-                >
+                    color: "#fff", "&:hover": { bgcolor: "primary.dark" },
+                  }} >
                   Invest Now
                 </Button>
               </Box>
