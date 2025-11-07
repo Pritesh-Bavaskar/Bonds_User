@@ -44,6 +44,18 @@ const Calculatesection = lazy(() => import('src/pages/CalculatorSection/Calculat
 //   import('src/sections/products/UnListed_Bonds/view/unLiBond-view')
 // );
 
+// KYC
+const KYCViewPage = lazy(() => import('src/pages/kyc/kyc'));
+const KYCBasicInfoPage = lazy(() => import('src/pages/kyc/kyc-basic-info'));
+const KycAddressInfoPage = lazy(() => import('src/pages/kyc/kyc-address-info'));
+const KYCCompanyDetailsPage = lazy(() => import('src/pages/kyc/kyc-company-details'));
+const KYCBankDetailsPage = lazy(() => import('src/pages/kyc/kyc-bank-details'));
+
+const KYCSignatoriesPage = lazy(() => import('src/pages/kyc/kyc-signatories'));
+const KYCReviewAndSubmitPage = lazy(() => import('src/pages/kyc/kyc-review-and-submit'));
+const KYCSuccessfulPage = lazy(() => import('src/pages/kyc/kyc-successful'));
+const KYCPendingPage = lazy(() => import('src/pages/kyc/kyc-pending'));
+
 // ----------------------------------------------------------------------
 
 const ProductGoBond = lazy(() =>
@@ -108,6 +120,16 @@ export const mainRoutes = [
         children: [{ path: ':id', element: <BondDetailsPage /> }],
       },
       { path: 'issuer', element: <IssuerPage /> },
+      { path: 'kyc', element: <KYCViewPage /> },
+      { path: 'kyc/basic-info', element: <KYCBasicInfoPage /> },
+      { path: 'kyc/address-info', element: <KycAddressInfoPage /> },
+      { path: 'kyc/company-details', element: <KYCCompanyDetailsPage /> },
+      { path: 'kyc/bank-details', element: <KYCBankDetailsPage /> },
+
+      { path: 'kyc/signatories', element: <KYCSignatoriesPage /> },
+      { path: 'kyc/review-and-submit', element: <KYCReviewAndSubmitPage /> },
+      { path: 'kyc/successful', element: <KYCSuccessfulPage /> },
+      { path: 'kyc/pending', element: <KYCPendingPage /> },
     ],
   },
   {

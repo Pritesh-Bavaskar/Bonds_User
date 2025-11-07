@@ -12,6 +12,8 @@ import {
 } from '@mui/material';
 import { m, AnimatePresence } from 'framer-motion';
 import Image from 'src/components/image';
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 
 export default function MultiStepLoginDialog({ open, onClose }) {
   const [step, setStep] = useState('phone');
@@ -62,8 +64,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
             display: 'flex',
             minHeight: 400,
             borderRadius: 0,
-            backgroundColor: 'transparent'
-
+            backgroundColor: 'transparent',
           }}
         >
           {/* Left Side - Form Steps */}
@@ -137,9 +138,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
                   <Typography variant="h6" gutterBottom>
                     Enter OTP
                   </Typography>
-                  <Typography sx={{ mb: 2 }}>
-                    We’ve sent an OTP to {mobile}
-                  </Typography>
+                  <Typography sx={{ mb: 2 }}>We’ve sent an OTP to {mobile}</Typography>
 
                   <Grid container spacing={2} sx={{ mb: 3 }}>
                     {otp.map((digit, i) => (
@@ -219,9 +218,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
                   <Typography variant="h6" gutterBottom>
                     Enter OTP
                   </Typography>
-                  <Typography sx={{ mb: 2 }}>
-                    We’ve sent an OTP to {email}
-                  </Typography>
+                  <Typography sx={{ mb: 2 }}>We’ve sent an OTP to {email}</Typography>
 
                   <Grid container spacing={2} sx={{ mb: 3 }}>
                     {otp.map((digit, i) => (
@@ -249,7 +246,12 @@ export default function MultiStepLoginDialog({ open, onClose }) {
                     <Button onClick={handleBack} sx={{ mr: 2 }}>
                       Back
                     </Button>
-                    <Button variant="contained" onClick={onClose}>
+                    <Button
+                      variant="contained"
+                      component={RouterLink}
+                      to={paths.KYCViewPage}
+                      onClick={onClose}
+                    >
                       Verify
                     </Button>
                   </Box>
@@ -269,11 +271,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
               p: 3,
             }}
           >
-            <Image
-              src={login_img}
-              alt="illustration"
-              sx={{ width: '100%', maxWidth: '100%' }}
-            />
+            <Image src={login_img} alt="illustration" sx={{ width: '100%', maxWidth: '100%' }} />
           </Box>
         </Paper>
       </DialogContent>
@@ -282,7 +280,17 @@ export default function MultiStepLoginDialog({ open, onClose }) {
         <Button onClick={onClose}>Close</Button>
       </DialogActions> */}
 
-      <Box sx={{ position: 'absolute', top: 0, right: 0, left: '40%', width: '100%', height: '100%', display: { xs: 'none', md: 'flex' }, }}>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          left: '40%',
+          width: '100%',
+          height: '100%',
+          display: { xs: 'none', md: 'flex' },
+        }}
+      >
         <Image
           src="/assets/images/issuer-login/background.png"
           alt="illustration"
