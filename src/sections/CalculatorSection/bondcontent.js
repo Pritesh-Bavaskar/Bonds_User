@@ -6,9 +6,9 @@ export default function BondsCalculatorContent() {
   return (
     <Container maxWidth="lg" sx={{
       py: 6,
-      maxWidth: '1133px',
-      width: '1133px',
-      height: '2066px',
+      maxWidth: '100%',
+      width: '100%',
+      height: '2000px',
     }}>
 
       <Typography fontWeight={700} gutterBottom
@@ -260,7 +260,7 @@ export default function BondsCalculatorContent() {
         FAQs About Bonds Calculator
       </Typography>
       <List sx={{ pl: 3 }}>
-        <ListItem>1. Minimum amount to invest? → ₹10,000 in most bonds.</ListItem>
+        <ListItem>1. .</ListItem>
         <ListItem>
           2. Tenure options: short (1–3 yrs), medium (5–7 yrs), long (10–15 yrs).
         </ListItem>
