@@ -4,7 +4,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-
+import { RouterLink } from 'src/routes/components';
+import { paths } from 'src/routes/paths';
 // If you have your own Iconify setup, you can use that instead of MUI icons
 // import Iconify from 'src/components/iconify';
 
@@ -19,18 +20,22 @@ function LearnMoreCard() {
         borderRadius: 3,
         p: { xs: 4, md: 5 },
         maxWidth: 450,
-        height:280,
+        height: 280,
         textAlign: 'center',
         boxShadow: 3,
         mt: 3,
-        mb:10,
-        mx: { xs: 2, md: 'auto'  },  // horizontal margin for small screens
+        mb: 10,
+        mx: { xs: 2, md: 'auto' }, // horizontal margin for small screens
       }}
     >
       {/* Icon */}
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
         <svg width="38" height="38" fill="none" viewBox="0 0 24 24">
-          <path stroke="#00C48C" strokeWidth="2" d="M3 6.75A2.25 2.25 0 0 1 5.25 4.5h4.5a2.25 2.25 0 0 1 2.25 2.25v11.25A2.25 2.25 0 0 0 9.75 20.25h-4.5A2.25 2.25 0 0 1 3 18V6.75Zm18 0A2.25 2.25 0 0 0 18.75 4.5h-4.5A2.25 2.25 0 0 0 12 6.75v11.25a2.25 2.25 0 0 1 2.25 2.25h4.5A2.25 2.25 0 0 0 21 18V6.75Z"/>
+          <path
+            stroke="#00C48C"
+            strokeWidth="2"
+            d="M3 6.75A2.25 2.25 0 0 1 5.25 4.5h4.5a2.25 2.25 0 0 1 2.25 2.25v11.25A2.25 2.25 0 0 0 9.75 20.25h-4.5A2.25 2.25 0 0 1 3 18V6.75Zm18 0A2.25 2.25 0 0 0 18.75 4.5h-4.5A2.25 2.25 0 0 0 12 6.75v11.25a2.25 2.25 0 0 1 2.25 2.25h4.5A2.25 2.25 0 0 0 21 18V6.75Z"
+          />
         </svg>
       </Box>
 
@@ -43,6 +48,8 @@ function LearnMoreCard() {
 
       <Button
         variant="contained"
+        component={RouterLink}
+        to={paths.comingSoon}
         sx={{
           bgcolor: '#fff',
           color: '#00296B',
@@ -54,14 +61,11 @@ function LearnMoreCard() {
           '&:hover': { bgcolor: '#f3f6f9' },
         }}
         endIcon={<OpenInNewIcon sx={{ fontSize: 18 }} />}
-        href="https://your-educational-resource-link.com"
-        target="_blank"
       >
         Educational Resources
       </Button>
     </Box>
   );
 }
-
 
 export default LearnMoreCard;

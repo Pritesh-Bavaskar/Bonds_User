@@ -13,32 +13,38 @@ import { MotionViewport, varFade } from 'src/components/animate';
 const FEATURES = [
   {
     title: 'Higher Returns',
-    description: 'Access yields typically higher than listed bonds due to illiquidity premium and private placement nature.',
+    description:
+      'Access yields typically higher than listed bonds due to illiquidity premium and private placement nature.',
     icon: 'carbon:growth',
   },
   {
     title: 'Flexible Structuring',
-    description: 'Customized terms, tenures, and payment structures tailored to meet specific investor requirements.  ',
+    description:
+      'Customized terms, tenures, and payment structures tailored to meet specific investor requirements.  ',
     icon: 'weui:setting-outlined',
   },
   {
     title: 'Secured / Collateral-Backed',
-    description: 'Many unlisted bonds offer asset backing or collateral security, reducing default risk.',
+    description:
+      'Many unlisted bonds offer asset backing or collateral security, reducing default risk.',
     icon: 'line-md:security',
   },
   {
     title: 'Portfolio Diversification',
-    description: 'Access to unique investment opportunities not available in public markets for better portfolio balance.',
+    description:
+      'Access to unique investment opportunities not available in public markets for better portfolio balance.',
     icon: 'bytesize:portfolio',
   },
   {
     title: 'Private Placement Access',
-    description: 'Exclusive access to institutional-grade investments typically reserved for qualified investors.',
-    icon: 'ph:hand-heart-light', 
+    description:
+      'Exclusive access to institutional-grade investments typically reserved for qualified investors.',
+    icon: 'ph:hand-heart-light',
   },
   {
     title: 'Negotiated Terms',
-    description: 'Ability to negotiate specific terms, covenants, and conditions directly with the issuer.',
+    description:
+      'Ability to negotiate specific terms, covenants, and conditions directly with the issuer.',
     icon: 'heroicons:document-check',
   },
 ];
@@ -57,7 +63,7 @@ export default function Benefit() {
     >
       {/* Title */}
       <m.div variants={varFade().inRight}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
             Benefits of Investing in Unlisted Bonds
           </Box>
@@ -67,15 +73,16 @@ export default function Benefit() {
       {/* Subtitle */}
       <m.div variants={varFade().inUp}>
         <Typography
+          variant="h5"
           sx={{
-            maxWidth: 730,
             mx: 'auto',
             mb: 6,
             mt: 3,
-            fontWeight:500,        
+            fontWeight: 500,
           }}
         >
-          Discover the unique advantages of private placement bonds for sophisticated investors seeking enhanced returns.
+          Discover the unique advantages of private placement bonds for sophisticated investors
+          seeking enhanced returns.
         </Typography>
       </m.div>
 
@@ -103,27 +110,18 @@ export default function Benefit() {
                     width: 50,
                     height: 50,
                     borderRadius: '50%',
-                    backgroundColor: "#E9F4FF",
+                    backgroundColor: '#E9F4FF',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     margin: '0 auto 10px',
                   }}
                 >
-                  <Iconify
-                    icon={item.icon}
-                    width={25}
-                    height={25}
-                    color={"#000000"}
-                  />
+                  <Iconify icon={item.icon} width={25} height={25} color={'#000000'} />
                 </Box>
 
                 {/* Title */}
-                <Typography
-                  variant="h5"
-                  gutterBottom
-                  sx={{ fontWeight: 600, mb: 2 }}
-                >
+                <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
                   {item.title}
                 </Typography>
 

@@ -51,7 +51,7 @@ export default function KeyFact() {
     >
       {/* Title */}
       <m.div variants={varFade().inUp}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
             Key Facts
           </Box>

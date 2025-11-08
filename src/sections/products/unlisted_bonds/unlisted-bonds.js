@@ -52,7 +52,7 @@ export default function UnListBonds() {
       }}
     >
 
-      <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+      <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
             What Are 
           </Box>{' '}
@@ -64,9 +64,8 @@ export default function UnListBonds() {
 
       {/* Description */}
       <m.div>
-        <Typography variant="subtitle1" align="center"
+        <Typography variant="h5" align="center"
           sx={{
-            maxWidth: 1016,      // match the div width
             mx: 'auto',
             mt: 3,
             height: "auto", 
