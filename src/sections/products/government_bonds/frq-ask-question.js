@@ -41,7 +41,7 @@ export default function FAQSection() {
     >
       <Box sx={{ textAlign: 'center', mb: 4 }}>
         <Typography
-          variant="h3"
+          variant="h1"
           sx={{
             fontWeight: 'bold',
             color: theme.palette.primary.main,
@@ -52,9 +52,9 @@ export default function FAQSection() {
           Frequently Asked Questions
         </Typography>
         <Typography
+          variant="h5"
           sx={{
             color: theme.palette.text.secondary,
-            fontSize: '1rem',
             mb: 4
           }}
         >

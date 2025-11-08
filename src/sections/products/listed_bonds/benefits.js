@@ -14,7 +14,8 @@ import { MotionViewport, varFade } from 'src/components/animate';
 const FEATURES = [
   {
     title: 'High Liquidity',
-    description: 'Trade bonds easily during market hours with immediate settlement and transparent pricing.',
+    description:
+      'Trade bonds easily during market hours with immediate settlement and transparent pricing.',
     icon: 'carbon:growth',
   },
   {
@@ -35,7 +36,7 @@ const FEATURES = [
   {
     title: 'Retail Accessibility',
     description: 'Lower minimum investment amounts make bonds accessible to individual investors.',
-    icon: 'ph:hand-heart-light', 
+    icon: 'ph:hand-heart-light',
   },
   {
     title: 'Exchange Discovery',
@@ -58,9 +59,9 @@ export default function Benefits() {
     >
       {/* Title */}
       <m.div variants={varFade().inRight}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
-           Advantages of Listed Bonds
+            Advantages of Listed Bonds
           </Box>
         </Typography>
       </m.div>
@@ -68,19 +69,17 @@ export default function Benefits() {
       {/* Subtitle */}
       <m.div variants={varFade().inUp}>
         <Typography
-        variant='subtitle1'
+          variant="h5"
           sx={{
-            maxWidth: 656,
-            height:48,
             mx: 'auto',
             mb: 8,
             mt: 2,
             fontWeight: 300,
             color: 'black',
-
           }}
         >
-        Discover why listed bonds offer superior benefits for modern investors seeking transparency and liquidity.
+          Discover why listed bonds offer superior benefits for modern investors seeking
+          transparency and liquidity.
         </Typography>
       </m.div>
 
@@ -115,20 +114,11 @@ export default function Benefits() {
                     margin: '0 auto 10px',
                   }}
                 >
-                  <Iconify
-                    icon={item.icon}
-                    width={28}
-                    height={28}
-                    color="black"
-                  />
+                  <Iconify icon={item.icon} width={28} height={28} color="black" />
                 </Box>
 
                 {/* Title */}
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{ fontWeight: 600, mb: 2 }}
-                >
+                <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
                   {item.title}
                 </Typography>
 

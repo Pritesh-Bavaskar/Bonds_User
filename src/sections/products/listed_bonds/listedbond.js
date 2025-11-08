@@ -5,35 +5,34 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import arrow from 'src/images/svg/arrow.svg';
+import { Button } from '@mui/material';
 
 // components
 import { MotionContainer, varFade } from 'src/components/animate';
+import { RouterLink } from 'src/routes/components';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
 export default function Listedbond() {
   return (
     <Box
-    sx={{
-        maxWidth:{xs:'600px', md:'1300px'},
-          mx:'auto',
+      sx={{
+        mx: 'auto',
         height: { md: 560 },
         py: { xs: 10, md: 0 },
         overflow: 'hidden',
         position: 'relative',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundImage:
-          'url(/assets/images/products/listedbond.jpg)',
+        backgroundImage: 'url(/assets/images/products/listedbond.jpg)',
       }}
     >
       <Container component={MotionContainer}>
         <Box
           sx={{
-            left: {  md: 100 },
-            top: { md: 60 },
-            position: { md: 'absolute' },
             textAlign: { xs: 'left', md: 'unset' },
+            py: { xs: 0, md: 10 },
           }}
         >
           {/* Headline */}
@@ -41,10 +40,9 @@ export default function Listedbond() {
             text="Listed"
             variants={varFade().inRight}
             sx={{
-              
               fontFamily: 'Public Sans, sans-serif',
               fontWeight: 700,
-              fontSize: { xs: '32px', md: '64px',lg:'64px' },
+              fontSize: { xs: '32px', md: '64px', lg: '64px' },
               lineHeight: 1.2,
               color: 'warning.main',
               display: 'inline-block',
@@ -57,7 +55,7 @@ export default function Listedbond() {
             sx={{
               fontFamily: 'Public Sans, sans-serif',
               fontWeight: 700,
-              fontSize: { xs: '32px', md: '64px', lg:'64px' },
+              fontSize: { xs: '32px', md: '64px', lg: '64px' },
               lineHeight: 1.2,
               color: 'primary.main',
               display: 'inline-block',
@@ -69,38 +67,38 @@ export default function Listedbond() {
           <m.div variants={varFade().inUp}>
             <Typography
               sx={{
-                mt:1,
-                width:{ xs:'355px',md:'489px'},
-                height:'70px',
-                color: "primary.main",
-                fontFamily: "Public Sans, sans-serif",
+                mt: 1,
+                width: { xs: '355px', md: '489px' },
+                height: '70px',
+                color: 'primary.main',
+                fontFamily: 'Public Sans, sans-serif',
                 fontWeight: 600,
-                fontSize: "20px",
-                lineHeight: "24px",
-                letterSpacing: "0px",
-                textAlign: "left",
-                display: "flex",
-                alignItems: "center",   // vertical alignment
-                justifyContent: "center", // horizontal alignment
+                fontSize: '20px',
+                lineHeight: '24px',
+                letterSpacing: '0px',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center', // vertical alignment
+                justifyContent: 'center', // horizontal alignment
               }}
             >
               Trade sovereign & corporate bonds with transparency and ease.
             </Typography>
           </m.div>
 
-
           {/* CTA */}
           <m.div variants={varFade().inRight}>
-            <Typography
-              variant="button"
+            <Button
+              component={RouterLink}
+              to={paths.bondLibrary}
               sx={{
                 mt: 3,
                 px: 3,
                 py: 1.2,
                 borderRadius: 1,
-                bgcolor: 'common.white',  
+                bgcolor: 'common.white',
                 color: 'primary.main',
-                border:'1px solid hsla(0, 0%, 85%, 1)',
+                border: '1px solid hsla(0, 0%, 85%, 1)',
                 fontWeight: 600,
                 fontSize: '16px',
                 textTransform: 'none',
@@ -113,18 +111,11 @@ export default function Listedbond() {
               }}
             >
               Explore Listed Bonds
-             <Box
-             component='Img'
-             src={arrow}
-             alt='arrow'
-             sx={{ width:'25px', height:'25px'}}
-
-             />
-            </Typography>
+              <Box component="Img" src={arrow} alt="arrow" sx={{ width: '25px', height: '25px' }} />
+            </Button>
           </m.div>
         </Box>
       </Container>
-
     </Box>
   );
 }

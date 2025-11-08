@@ -8,7 +8,8 @@ import Button from '@mui/material/Button';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 // components
 import { MotionViewport } from 'src/components/animate';
-
+import { RouterLink } from 'src/routes/components';
+import { paths } from 'src/routes/paths';
 // ----------------------------------------------------------------------
 
 export default function ListedJourney() {
@@ -50,8 +51,8 @@ export default function ListedJourney() {
             px: { xs: 1, md: 0 },
           }}
         >
-          Join thousands of investors who choose the transparency and liquidity of
-          exchange-traded bonds.
+          Join thousands of investors who choose the transparency and liquidity of exchange-traded
+          bonds.
         </Typography>
 
         {/* Buttons */}
@@ -67,6 +68,8 @@ export default function ListedJourney() {
         >
           <Button
             variant="contained"
+            component={RouterLink}
+            to={paths.comingSoon}
             sx={{
               bgcolor: '#fff',
               color: '#00296B',
@@ -79,14 +82,14 @@ export default function ListedJourney() {
               '&:hover': { bgcolor: '#f3f6f9' },
             }}
             endIcon={<OpenInNewIcon sx={{ fontSize: 18 }} />}
-            href="https://your-educational-resource-link.com"
-            target="_blank"
           >
             Start Investing
           </Button>
 
           <Button
             variant="contained"
+            component={RouterLink}
+            to={paths.calculator}
             sx={{
               bgcolor: '#fff',
               color: '#00296B',
@@ -114,29 +117,27 @@ export default function ListedJourney() {
             mt: { xs: 4, md: 6 },
           }}
         >
-          {['SEBI Regulated', 'Real-time Trading', 'Transparent Pricing'].map(
-            (item) => (
-              <Typography
-                key={item}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  fontFamily: 'Public Sans, sans-serif',
-                  fontWeight: 400,
-                  fontSize: { xs: '14px', md: '20px' },
-                  lineHeight: '140%',
-                  color: '#fff',
-                }}
-              >
-                <Box
-                  component="img"
-                  src="/assets/Svg/tick1.svg"
-                  sx={{ width: 20, height: 20, mr: 1 }}
-                />
-                {item}
-              </Typography>
-            )
-          )}
+          {['SEBI Regulated', 'Real-time Trading', 'Transparent Pricing'].map((item) => (
+            <Typography
+              key={item}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                fontFamily: 'Public Sans, sans-serif',
+                fontWeight: 400,
+                fontSize: { xs: '14px', md: '20px' },
+                lineHeight: '140%',
+                color: '#fff',
+              }}
+            >
+              <Box
+                component="img"
+                src="/assets/Svg/tick1.svg"
+                sx={{ width: 20, height: 20, mr: 1 }}
+              />
+              {item}
+            </Typography>
+          ))}
         </Box>
       </Box>
     </Container>

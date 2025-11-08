@@ -11,25 +11,25 @@ import { MotionViewport, varFade } from 'src/components/animate';
 
 const FAQS = [
   {
-    question: "What is the minimum investment for listed bonds?",
+    question: 'What is the minimum investment for listed bonds?',
     answer:
-      "The minimum investment depends on the bond and the exchange regulations. Typically, listed corporate bonds in India can be bought in lots of ₹10,000 or ₹1 lakh face value, though some retail-oriented issues allow smaller ticket sizes."
+      'The minimum investment depends on the bond and the exchange regulations. Typically, listed corporate bonds in India can be bought in lots of ₹10,000 or ₹1 lakh face value, though some retail-oriented issues allow smaller ticket sizes.',
   },
   {
-    question: "Can I redeem listed bonds before maturity?",
+    question: 'Can I redeem listed bonds before maturity?',
     answer:
-      "Unlike fixed deposits, listed bonds cannot be prematurely redeemed with the issuer. However, investors can sell them on stock exchanges any time during trading hours at the prevailing market price, subject to liquidity."
+      'Unlike fixed deposits, listed bonds cannot be prematurely redeemed with the issuer. However, investors can sell them on stock exchanges any time during trading hours at the prevailing market price, subject to liquidity.',
   },
   {
-    question: "How are listed bonds taxed in India?",
+    question: 'How are listed bonds taxed in India?',
     answer:
-      "Interest earned on listed bonds is taxed as per your income tax slab. If you sell bonds before maturity, capital gains tax applies: short-term gains (if held ≤12 months) are taxed at your slab rate, while long-term gains (held >12 months) are taxed at 10% without indexation."
+      'Interest earned on listed bonds is taxed as per your income tax slab. If you sell bonds before maturity, capital gains tax applies: short-term gains (if held ≤12 months) are taxed at your slab rate, while long-term gains (held >12 months) are taxed at 10% without indexation.',
   },
   {
-    question: "What are the trading hours for listed bonds?",
+    question: 'What are the trading hours for listed bonds?',
     answer:
-      "Listed bonds trade on NSE and BSE during normal market hours: Monday to Friday, 9:15 AM to 3:30 PM (IST), excluding exchange holidays."
-  }
+      'Listed bonds trade on NSE and BSE during normal market hours: Monday to Friday, 9:15 AM to 3:30 PM (IST), excluding exchange holidays.',
+  },
 ];
 
 export default function FAQSection() {
@@ -45,21 +45,20 @@ export default function FAQSection() {
     >
       <Box sx={{ textAlign: 'center', mb: 4 }}>
         <Typography
-          variant="h3"
+          variant="h1"
           sx={{
             fontWeight: 'bold',
             color: theme.palette.primary.main,
             mb: 1,
-            fontSize: { xs: '1.5rem', md: '2rem' }
           }}
         >
           Frequently Asked Questions
         </Typography>
         <Typography
+          variant="h5"
           sx={{
             color: theme.palette.text.secondary,
-            fontSize: '1rem',
-            mb: 2
+            mb: 2,
           }}
         >
           Get answers to common questions about government bond investments.
@@ -75,7 +74,7 @@ export default function FAQSection() {
             border: '1px solid #eee',
             borderRadius: 1,
             '&:before': { display: 'none' },
-            width: '100%' // let it take full width of container
+            width: '100%', // let it take full width of container
           }}
         >
           <AccordionSummary
@@ -83,12 +82,10 @@ export default function FAQSection() {
             aria-controls={`faq-content-${idx}`}
             id={`faq-header-${idx}`}
             sx={{
-              '& .MuiAccordionSummary-content': { my: 0.5 }
+              '& .MuiAccordionSummary-content': { my: 0.5 },
             }}
           >
-            <Typography sx={{ fontWeight: 500, fontSize: '1rem' }}>
-              {faq.question}
-            </Typography>
+            <Typography sx={{ fontWeight: 500, fontSize: '1rem' }}>{faq.question}</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ bgcolor: '#fafbfc' }}>
             <Typography sx={{ color: theme.palette.text.secondary, fontSize: '0.98rem' }}>

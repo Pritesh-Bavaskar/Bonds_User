@@ -59,7 +59,7 @@ export default function Benefit() {
     >
       {/* Title */}
       <m.div variants={varFade().inRight}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
             Benefits of Government Bonds
           </Box>
@@ -69,8 +69,8 @@ export default function Benefit() {
       {/* Subtitle */}
       <m.div variants={varFade().inUp}>
         <Typography
+          variant="h5"
           sx={{
-            maxWidth: 800,
             mx: 'auto',
             mb: 5,
             mt: 3,

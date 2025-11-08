@@ -83,8 +83,8 @@ export default function ListUnlistBond() {
 
       {/* Subtitle */}
       <m.div variants={varFade().inUp} >
-        <Typography
         variant="subtitle1"
+        <Typography
           sx={{
             maxWidth: 700,
             mx: 'auto',

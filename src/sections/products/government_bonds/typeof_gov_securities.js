@@ -73,7 +73,7 @@ export default function Gov_securities_type() {
     >
       {/* Title */}
       <m.div variants={varFade().inRight}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
             Types of Government Securities
           </Box>
@@ -83,8 +83,8 @@ export default function Gov_securities_type() {
       {/* Subtitle */}
       <m.div variants={varFade().inUp}>
         <Typography
+          variant="h5"
           sx={{
-            maxWidth: 800,
             mx: 'auto',
             mb: 5,
             mt: 3,

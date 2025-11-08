@@ -33,7 +33,7 @@ export default function AboutHero() {
         <Box
           sx={{
             maxWidth: '1200px',
-            position: { md: 'absolute' },
+            // position: { md: 'absolute' },
             textAlign: { xs: 'left', md: 'left' },
             py: { xs: 0, md: 10 },
           }}
