@@ -20,7 +20,7 @@ export default function ListedCorporateBonds() {
 
   return (
     <LazyMotion features={domAnimation}>
-      <Container maxWidth="md" sx={{ textAlign: "center", py: 6 }}>
+      <Container sx={{ textAlign: "center", py: 6 }}>
         {/* Title */}
         <m.div
           initial={{ opacity: 0, y: -40 }}
@@ -28,11 +28,10 @@ export default function ListedCorporateBonds() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <Typography
-            variant="h3"
+            variant="h1"
             
             sx={{
               fontFamily: "Public Sans, sans-serif",
-              lineHeight: "64px",
               fontWeight: 700,
               color: "primary.main",
               mb: 3,
@@ -57,9 +56,9 @@ export default function ListedCorporateBonds() {
         >
           <Stack
             spacing={4}
+            variant="h5"
             sx={{
-              fontFamily: "Public Sans, sans-serif",
-              fontSize: "20px",
+              // fontFamily: "Public Sans, sans-serif",
               fontWeight: "300",
               fontStyle: "light",
               lineHeight: "150%",

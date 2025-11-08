@@ -11,7 +11,8 @@ import { m } from 'framer-motion'; // <-- Add this
 const features = [
   {
     title: 'Stability',
-    description: 'Fixed returns not linked to volatile market movements, providing predictable income streams.',
+    description:
+      'Fixed returns not linked to volatile market movements, providing predictable income streams.',
     icon: <SecurityIcon />,
     color: '#D1FADF',
   },
@@ -42,19 +43,19 @@ const features = [
   {
     title: 'Liquidity',
     description: 'Easy trading on NSE/BSE exchanges for improved liquidity and exit options.',
-     icon: <ShowChartIcon/>,
+    icon: <ShowChartIcon />,
     color: '#F2F4F7',
   },
 ];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 }
+  visible: { opacity: 1, y: 0 },
 };
 
 const fadeRight = {
   hidden: { opacity: 0, x: -40 },
-  visible: { opacity: 1, x: 0 }
+  visible: { opacity: 1, x: 0 },
 };
 
 const FeatureCard = ({ icon, title, description, color, index }) => (
@@ -66,12 +67,15 @@ const FeatureCard = ({ icon, title, description, color, index }) => (
     transition={{ duration: 0.6, delay: index * 0.15 }}
     style={{ height: '100%' }}
   >
-    <Card elevation={0} sx={{
-      p: 2, 
-      textAlign: "center",
-      borderRadius: 2,
-      height: "192px",
-    }}>
+    <Card
+      elevation={0}
+      sx={{
+        p: 2,
+        textAlign: 'center',
+        borderRadius: 2,
+        height: '192px',
+      }}
+    >
       <Box
         sx={{
           px: { xs: 2, md: 3 },
@@ -85,8 +89,6 @@ const FeatureCard = ({ icon, title, description, color, index }) => (
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          
-          
         }}
       >
         {icon}
@@ -113,41 +115,41 @@ const WhyInvest = () => {
       >
         <Box
           sx={{
-            width: '888px',
-            maxWidth: "100%",
+            width: '100%',
+            maxWidth: '1200px',
             mx: 'auto',
             alignItems: 'center',
             mb: 8,
             textAlign: 'center',
-            fontFamily: "Public Sans, sans-serif",
+            fontFamily: 'Public Sans, sans-serif',
           }}
         >
-          <Typography 
-           variant="h3"sx={{
-            
-            fontFamily: "Public Sans, sans-serif",
-            lineHeight: '50px',            
-            color: 'primary.main',
-            fontWeight:700,
-          }}>
+          <Typography
+            variant="h1"
+            sx={{
+              fontFamily: 'Public Sans, sans-serif',
+              color: 'primary.main',
+              fontWeight: 700,
+            }}
+          >
             Why Invest in Listed Corporate Bonds?
           </Typography>
           <Typography
-           variant="h5"
             sx={{
-              p:4,
-              fontWeight:400,
-              lineHeight:1.5,
-              height: '56px',
-              mb:2,
-              fontFamily: "Public Sans, sans-serif",
-            }}>
-            Discover the compelling advantages that make corporate bonds an essential component of a diversified investment portfolio
+              variant: "h5",
+              fontWeight: 400,
+              lineHeight: 1.5,
+              my: 2,
+              fontFamily: 'Public Sans, sans-serif',
+            }}
+          >
+            Discover the compelling advantages that make corporate bonds an essential component of a
+            diversified investment portfolio
           </Typography>
         </Box>
       </m.div>
 
-      <Box sx={{ maxWidth: "1200px", mx: "auto" }}>
+      <Box sx={{ maxWidth: '1200px', mx: 'auto' }}>
         <Grid container spacing={3}>
           {features.map((feature, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
