@@ -54,9 +54,16 @@ export default function KYCStepper({ statuses = [] }) {
     <Stack
       direction="row"
       alignItems="flex-start"
-      justifyContent="space-between"
-      spacing={4}
-      sx={{ width: '100%', pt: 6 }}
+      justifyContent={{ xs: 'flex-start', md: 'space-between' }}
+      spacing={{ xs: 2, sm: 3, md: 4 }}
+      sx={{
+        width: '100%',
+        pt: 6,
+        overflowX: { xs: 'auto', md: 'visible' },
+        pb: { xs: 1, md: 0 },
+        // smooth scroll for mobile usability
+        scrollBehavior: 'smooth',
+      }}
     >
       {steps.map((step, idx) => {
         const status = statuses[idx] || 'not-started';
@@ -66,19 +73,20 @@ export default function KYCStepper({ statuses = [] }) {
           <Stack
             key={step.number}
             alignItems="center"
-            spacing={1.25}
+            spacing={{ xs: 1, sm: 1.25 }}
             sx={{
-              minWidth: 96,
+              minWidth: { xs: 80, sm: 96 },
               textDecoration: 'none',
               color: 'inherit',
               cursor: to ? 'pointer' : 'default',
+              flexShrink: 0,
             }}
             {...(to ? { component: RouterLink, to } : {})}
           >
             <Box
               sx={{
-                width: 40,
-                height: 40,
+                width: { xs: 32, sm: 36, md: 40 },
+                height: { xs: 32, sm: 36, md: 40 },
                 borderRadius: '50%',
                 border: `2px solid ${colors.border}`,
                 display: 'flex',
@@ -88,7 +96,10 @@ export default function KYCStepper({ statuses = [] }) {
                 backgroundColor: '#fff',
               }}
             >
-              <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#111827' }}>
+              <Typography
+                variant="subtitle2"
+                sx={{ fontWeight: 600, color: '#111827', fontSize: { xs: '0.875rem', sm: '0.95rem', md: '1rem' } }}
+              >
                 {step.number}
               </Typography>
             </Box>
@@ -98,7 +109,7 @@ export default function KYCStepper({ statuses = [] }) {
                   key={i}
                   variant="caption"
                   component="div"
-                  sx={{ lineHeight: 1.2, color: colors.text, display: 'block' }}
+                  sx={{ lineHeight: 1.2, color: colors.text, display: 'block', fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
                 >
                   {line}
                 </Typography>
