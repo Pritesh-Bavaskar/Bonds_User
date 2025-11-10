@@ -16,6 +16,7 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hook';
+import { setSession } from 'src/auth/context/jwt/utils';
 
 export default function MultiStepLoginDialog({ open, onClose }) {
   const [step, setStep] = useState('phone');
@@ -59,6 +60,10 @@ export default function MultiStepLoginDialog({ open, onClose }) {
         data = await res.json();
       } catch (e) {
         data = {};
+      }
+      const token = data?.data?.access_token || data?.access_token;
+      if (token) {
+        setSession(token);
       }
       if (data && data.message) {
         enqueueSnackbar(data.message, { variant: 'success' });

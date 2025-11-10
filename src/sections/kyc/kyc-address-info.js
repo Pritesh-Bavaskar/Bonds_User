@@ -286,7 +286,7 @@ export default function KycAddressInfo() {
                 <Grid container spacing={3}>
                   {/* Registered Address */}
                   <Grid xs={12} md={6}>
-                    <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
+                    <Typography variant="h5" sx={{ mb: 3, mt: 1, fontWeight: 600, color: 'primary.main' }}>
                       Registered Address
                     </Typography>
                     <Stack spacing={2}>
