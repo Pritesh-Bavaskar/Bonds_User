@@ -48,13 +48,12 @@ export default function BondInvestment() {
       component={MotionViewport}
       sx={{
         py: { xs: 3, md: 3 },
-        maxWidth: '800px !important',
       }}
     >
       {/* Header */}
       <Box sx={{ textAlign: 'center', mb: 6 }}>
         <m.div variants={varFade().inRight}>
-          <Typography variant="h3" sx={{ fontWeight: 'bold' ,mb: 3 }}>
+          <Typography variant="h1" sx={{ fontWeight: 'bold' ,mb: 3 }}>
             <Box component="span" sx={{ color: 'primary.main' }}>
               How to Invest in Unlisted Bonds
             </Box>
@@ -63,9 +62,8 @@ export default function BondInvestment() {
         
         <m.div variants={varFade().inUp}>
           <Typography
-          variant="subtitle1"
+          variant="h5"
             sx={{
-              maxWidth: 700,
               mx: 'auto',
               fontSize: '1rem',
               lineHeight: 1.6,

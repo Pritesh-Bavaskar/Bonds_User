@@ -62,7 +62,7 @@ export default function Header() {
         <Container
           sx={{ height: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <Badge
+          {/* <Badge
             sx={{
               [`& .${badgeClasses.badge}`]: {
                 top: 8,
@@ -82,9 +82,9 @@ export default function Header() {
                 </Label>
               </Link>
             }
-          >
+          > */}
             <Logo />
-          </Badge>
+          {/* </Badge> */}
 
           {/* <Box sx={{ flexGrow: 1 }} /> */}
 

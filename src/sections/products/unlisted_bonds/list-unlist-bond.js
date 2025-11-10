@@ -74,7 +74,7 @@ export default function ListUnlistBond() {
     >
       {/* Title */}
       <m.div variants={varFade().inRight}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold' , mb: 3 }}>
+        <Typography variant="h1" sx={{ fontWeight: 'bold' , mb: 3 }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
             Listed vs Unlisted Bonds
           </Box>
@@ -82,11 +82,10 @@ export default function ListUnlistBond() {
       </m.div>
 
       {/* Subtitle */}
-      <m.div variants={varFade().inUp} >
+      <m.div variants={varFade().inUp}>
         <Typography
-        variant="subtitle1"
+          variant="h5"
           sx={{
-            maxWidth: 700,
             mx: 'auto',
             mb: 6,
             mt: 2,

@@ -1,5 +1,14 @@
 import { m } from 'framer-motion';
-import { Box, Container, Typography, Paper, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  Box,
+  Container,
+  Typography,
+  Paper,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
 import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import { MotionViewport, varFade } from 'src/components/animate';
@@ -18,15 +27,15 @@ export default function RisksConsiderations() {
     <Container
       component={MotionViewport}
       sx={{
-        py: { xs: 3, md: 3 },
+        py: { xs: 3, md: 10 },
         textAlign: 'center',
       }}
     >
       {/* Title */}
       <m.div variants={varFade().inUp}>
         <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={4}>
-          <WarningAmberRoundedIcon color="error" />
-          <Typography variant="h5" fontWeight="bold">
+          <WarningAmberRoundedIcon sx={{ fontSize: 48 }} color="error" />
+          <Typography variant="h1" fontWeight="bold">
             Risks & Considerations
           </Typography>
         </Box>
@@ -66,17 +75,16 @@ export default function RisksConsiderations() {
             bgcolor: '#FFF5F0',
             borderRadius: 1,
             border: '1px solid #FFE0D6',
-            display:'flex',
-            flexDirection:'row',
-
+            display: 'flex',
+            flexDirection: 'row',
           }}
         >
           <Typography variant="body2" sx={{ color: 'error.main', fontWeight: 'bold' }}>
             Important:
           </Typography>
           <Typography variant="body2" sx={{ mx: 0.5, color: 'hsla(17, 100%, 31%, 1)' }}>
-            Please carefully consider these risks and consult with qualified financial advisors before
-            making investment decisions. Past performance does not guarantee future results.
+            Please carefully consider these risks and consult with qualified financial advisors
+            before making investment decisions. Past performance does not guarantee future results.
           </Typography>
         </Box>
       </Paper>

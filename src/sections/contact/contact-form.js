@@ -148,7 +148,7 @@ export default function ContactForm() {
 
           {/* Right: Form */}
           <Grid xs={12} md={6}>
-            <Typography variant="h5" sx={{ color: 'primary.main', mb: 2 }}>
+            <Typography sx={{ color: 'primary.main', mb: 2, fontSize: { xs: 14, md: 16, lg: 24 } }}>
               Write to us
             </Typography>
 

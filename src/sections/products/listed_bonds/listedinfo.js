@@ -15,16 +15,16 @@ export default function ListedInfo() {
 
   const features = [
     {
-      title: "Openly Traded",
-      subtitle: "High liquidity with easy buy/sell options",
+      title: 'Openly Traded',
+      subtitle: 'High liquidity with easy buy/sell options',
     },
     {
-      title: "Price Transparency",
-      subtitle: "Public pricing with real-time discovery",
+      title: 'Price Transparency',
+      subtitle: 'Public pricing with real-time discovery',
     },
     {
-      title: "SEBI Regulated",
-      subtitle: "Enhanced investor protection",
+      title: 'SEBI Regulated',
+      subtitle: 'Enhanced investor protection',
     },
   ];
 
@@ -32,13 +32,12 @@ export default function ListedInfo() {
     <Container
       component={MotionViewport}
       sx={{
-        maxWidth: '1061px',
         py: { xs: 10, md: 10 },
         textAlign: 'center',
       }}
     >
       {/* Heading */}
-      <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+      <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
         <Box component="span" sx={{ color: 'primary.main' }}>
           What Are
         </Box>{' '}
@@ -50,20 +49,18 @@ export default function ListedInfo() {
       {/* Description */}
       <m.div>
         <Typography
-          variant="subtitle1"
+          variant="h5"
           sx={{
-            maxWidth: { xs: "600px", md: "1016px" },
-            fontWeight:500,
-           px:3,
+            fontWeight: 500,
+            px: 3,
             mx: 'auto',
             mt: 6,
             fontFamily: 'Public Sans',
-           
           }}
         >
-       Listed bonds are debt securities issued by governments or corporations and traded on stock 
-       exchanges such as NSE or BSE. These bonds offer investors a regulated, transparent way to 
-       invest in debt instruments with enhanced liquidity and market oversight
+          Listed bonds are debt securities issued by governments or corporations and traded on stock
+          exchanges such as NSE or BSE. These bonds offer investors a regulated, transparent way to
+          invest in debt instruments with enhanced liquidity and market oversight
         </Typography>
       </m.div>
 
@@ -73,7 +70,7 @@ export default function ListedInfo() {
         spacing={4}
         sx={{
           mt: 6,
-          display:'flex',
+          display: 'flex',
           justifyContent: 'center',
           textAlign: { xs: 'center', md: 'center' },
         }}

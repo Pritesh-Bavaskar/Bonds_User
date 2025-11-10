@@ -60,7 +60,7 @@ export default function GovSecurities() {
       }}
     >
       {/* Title */}
-     <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+     <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
             Important Investor Notes
           </Box>
@@ -70,8 +70,8 @@ export default function GovSecurities() {
       {/* Description */}
       <m.div>
         <Typography
+          variant="h5"
           sx={{
-            maxWidth: 1016,      // match the div width
             mx: 'auto',
             mt: 3,
             mb:-8,

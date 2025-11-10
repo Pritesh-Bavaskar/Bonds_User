@@ -51,13 +51,13 @@ export default function KeyFact() {
     >
       {/* Title */}
       <m.div variants={varFade().inUp}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
           <Box component="span" sx={{ color: 'primary.main' }}>
             Key Facts
           </Box>
         </Typography>
       </m.div>
-      <Grid container spacing={4} justifyContent="center">
+      <Grid container spacing={4} justifyContent="center" mt={4}>
         {FEATURES.map((item, index) => (
           <Grid xs={12} sm={6} md={4} key={item.title}>
             <m.div >
@@ -68,8 +68,6 @@ export default function KeyFact() {
                   height: '100%',
                   borderRadius: 1,
                   textAlign: 'center',
-                  mt: 6,
-                  width: 350,                 // size of circle
                   height: 170,
                 }}
               >

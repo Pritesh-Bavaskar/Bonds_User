@@ -10,7 +10,8 @@ export default function HomeExplore() {
     <Box
       component="section"
       sx={{
-        py: { xs: 8, md: 12 },
+        mt: { xs: 8, md: 15 },
+        // pt: { xs: 8, md: 15 },
         backgroundImage: 'url(/assets/images/home/explore/explore_background.svg)',
         backgroundRepeat: 'repeat',
         backgroundSize: 'auto',

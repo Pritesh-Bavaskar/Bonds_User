@@ -60,7 +60,7 @@ export const typography = {
     fontWeight: 400,
     lineHeight: '100%',
     fontSize: pxToRem(12),
-    ...responsiveFontSizes({ sm: 12, md: 14, lg: 20 }),
+    ...responsiveFontSizes({ sm: 16, md: 18, lg: 20 }),
   },
   h6: {
     fontWeight: 400,

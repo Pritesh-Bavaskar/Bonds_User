@@ -46,7 +46,7 @@ export const navConfig = [
           { title: 'News/Insight', path: paths.newsInsight },
           { title: 'Calculator', path: paths.calculator },
           { title: 'Refer and Earn', path: paths.maintenance },
-          { title: 'Issuers', path: paths.comingSoon },
+          { title: 'Issuers', path: paths.issuer },
         ],
       },
     ],

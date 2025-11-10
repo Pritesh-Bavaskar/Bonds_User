@@ -48,40 +48,38 @@ export default function GovSecurities() {
         textAlign: 'center',
       }}
     >
-
-      <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
-          <Box component="span" sx={{ color: 'primary.main' }}>
-            What Are
-          </Box>{' '}
-          <Box component="span" sx={{ color: 'orange' }}>
-            Government Securities?
-          </Box>
+      <Typography variant="h1" sx={{ fontWeight: 'bold' }}>
+        <Box component="span" sx={{ color: 'primary.main' }}>
+          What Are
+        </Box>{' '}
+        <Box component="span" sx={{ color: 'orange' }}>
+          Government Securities?
+        </Box>
       </Typography>
-
 
       {/* Description */}
       <m.div>
         <Typography
           sx={{
-            maxWidth: 1016,      // match the div width
+            variant: 'h5',
             mx: 'auto',
-            mt: 4,
-            fontFamily: "Public Sans",
+            my: 4,
+            fontFamily: 'Public Sans',
             color: theme.palette.text.secondary,
-            height: 120,          // optional, match div height
           }}
         >
-          Government Securities (G-Secs) are tradeable instruments issued by the central or state governments to meet their financing requirements. 
-          These debt instruments are backed by the sovereign guarantee of the Government of India, making them the safest investment option available.
+          Government Securities (G-Secs) are tradeable instruments issued by the central or state
+          governments to meet their financing requirements. These debt instruments are backed by the
+          sovereign guarantee of the Government of India, making them the safest investment option
+          available.
         </Typography>
       </m.div>
-
 
       {/* Features */}
       <Grid container spacing={4} justifyContent="center">
         {FEATURES.map((item, index) => (
           <Grid xs={12} sm={6} md={4} key={item.title}>
-            <m.div >
+            <m.div>
               <Paper
                 elevation={5}
                 sx={{
@@ -91,21 +89,21 @@ export default function GovSecurities() {
                   textAlign: 'center',
                 }}
               >
-              <Box
-                sx={{
-                    width: 36,                 // size of circle
+                <Box
+                  sx={{
+                    width: 36, // size of circle
                     height: 36,
                     borderRadius: '50%',
-                    backgroundColor: 'black',  // circle color
+                    backgroundColor: 'black', // circle color
                     display: 'flex',
-                    alignItems: 'center', 
+                    alignItems: 'center',
                     justifyContent: 'center',
-                    margin: '0 auto 16px',     // spacing below icon
+                    margin: '0 auto 16px', // spacing below icon
                   }}
                 >
                   <Iconify
                     icon={item.icon}
-                    width={30}                  // icon size
+                    width={30} // icon size
                     height={30}
                     color={item.color} // icon color
                   />

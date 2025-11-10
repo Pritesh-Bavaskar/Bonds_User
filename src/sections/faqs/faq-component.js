@@ -13,11 +13,11 @@ import { Box } from '@mui/material';
 
 export default function FaqsComponent() {
   return (
-    <>
+    <Box sx={{ py: { xs: 6, md: 15 } }}>
       <Box>
         <Typography
           variant="h1"
-          sx={{ color: '#00328A', display: 'flex', justifyContent: 'center', pt: { xs: 6, md: 12 }, }}
+          sx={{ color: '#00328A', display: 'flex', justifyContent: 'center'}}
         >
           Frequently Asked Questions
         </Typography>
@@ -31,14 +31,13 @@ export default function FaqsComponent() {
             textAlign: 'center',
             maxWidth: '893px',
             margin: '0 auto',
-            pt: '20px',
             pb: '50px',
           }}
         >
           Get answers to common questions about unlisted bond investments and private placements.
         </Typography>
       </Box>
-      <Box sx={{ maxWidth: '893px', margin: '0 auto', pb: '20px' }}>
+      <Box sx={{ maxWidth: '893px', margin: '0 auto', pt: '20px',pb: '20px' }}>
         {_faqs.map((accordion) => (
           <Accordion key={accordion.id}>
             <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
@@ -51,6 +50,6 @@ export default function FaqsComponent() {
           </Accordion>
         ))}
       </Box>
-    </>
+    </Box>
   );
 }

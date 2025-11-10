@@ -39,8 +39,8 @@ export default function BondLibraryQuestion() {
             Have Questions
           </Typography>
           <Typography
-            variant="h5"
             sx={{
+              variant: 'h5',
               maxWidth: 900,
               color: 'text.secondary',
               fontWeight: 'normal'

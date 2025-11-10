@@ -44,12 +44,33 @@ const Calculatesection = lazy(() => import('src/pages/CalculatorSection/Calculat
 //   import('src/sections/products/UnListed_Bonds/view/unLiBond-view')
 // );
 
+// KYC
+const KYCViewPage = lazy(() => import('src/pages/kyc/kyc'));
+const KYCBasicInfoPage = lazy(() => import('src/pages/kyc/kyc-basic-info'));
+const KycAddressInfoPage = lazy(() => import('src/pages/kyc/kyc-address-info'));
+const KYCCompanyDetailsPage = lazy(() => import('src/pages/kyc/kyc-company-details'));
+const KYCBankDetailsPage = lazy(() => import('src/pages/kyc/kyc-bank-details'));
+
+const KYCSignatoriesPage = lazy(() => import('src/pages/kyc/kyc-signatories'));
+const KYCReviewAndSubmitPage = lazy(() => import('src/pages/kyc/kyc-review-and-submit'));
+const KYCSuccessfulPage = lazy(() => import('src/pages/kyc/kyc-successful'));
+const KYCPendingPage = lazy(() => import('src/pages/kyc/kyc-pending'));
+
 // ----------------------------------------------------------------------
 
-const ProductGoBond = lazy(() =>import('src/sections/products/government_bonds/view/govBond-view'));
-const ProductCoBond = lazy(() =>import('src/sections/products/corporate_bonds/view/corporateBond-view'));
-const ProductLiBond = lazy(() =>import('src/sections/products/listed_bonds/view/listbond-view'));
-const ProductUnLiBond = lazy(() =>import('src/sections/products/unlisted_bonds/view/unlistbond-view'));
+const ProductGoBond = lazy(() =>
+  import('src/sections/products/government_bonds/view/govBond-view')
+);
+const ProductCoBond = lazy(() =>
+  import('src/sections/products/corporate_bonds/view/corporateBond-view')
+);
+const ProductLiBond = lazy(() => import('src/sections/products/listed_bonds/view/listbond-view'));
+const ProductUnLiBond = lazy(() =>
+  import('src/sections/products/unlisted_bonds/view/unlistbond-view')
+);
+
+const IssuerPage = lazy(() => import('src/pages/issuer'));
+
 export const mainRoutes = [
   {
     element: (
@@ -76,7 +97,7 @@ export const mainRoutes = [
           { path: 'checkout', element: <ProductCheckoutPage /> },
         ],
       },
-      { 
+      {
         path: 'products',
         children: [
           { path: 'corporate_bond', element: <ProductCoBond /> },
@@ -96,10 +117,19 @@ export const mainRoutes = [
       },
       {
         path: 'bond-details',
-        children: [
-          { path: ':id', element: <BondDetailsPage /> },
-        ],
+        children: [{ path: ':id', element: <BondDetailsPage /> }],
       },
+      { path: 'issuer', element: <IssuerPage /> },
+      { path: 'kyc', element: <KYCViewPage /> },
+      { path: 'kyc/basic-info', element: <KYCBasicInfoPage /> },
+      { path: 'kyc/address-info', element: <KycAddressInfoPage /> },
+      { path: 'kyc/company-details', element: <KYCCompanyDetailsPage /> },
+      { path: 'kyc/bank-details', element: <KYCBankDetailsPage /> },
+
+      { path: 'kyc/signatories', element: <KYCSignatoriesPage /> },
+      { path: 'kyc/review-and-submit', element: <KYCReviewAndSubmitPage /> },
+      { path: 'kyc/successful', element: <KYCSuccessfulPage /> },
+      { path: 'kyc/pending', element: <KYCPendingPage /> },
     ],
   },
   {
