@@ -19,6 +19,11 @@ import RHFTextField from 'src/components/hook-form/rhf-text-field';
 import { RHFUploadBox } from 'src/components/hook-form/rhf-upload';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
+// sections
+import KYCTitle from './kyc-title';
+import KYCFooter from './kyc-footer';
+import KYCStepper from './kyc-stepper';
+
 // ----------------------------------------------------------------------
 
 const StyledDropZone = styled('div')(({ theme }) => ({
@@ -143,7 +148,13 @@ export default function KycAddressInfo() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 0 }}>
+      <KYCStepper />
+
+      <KYCTitle
+        title="Fill Your Address Information"
+        subtitle={'Provide registered and correspondence addresses'}
+      />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Paper
@@ -275,7 +286,7 @@ export default function KycAddressInfo() {
                 <Grid container spacing={3}>
                   {/* Registered Address */}
                   <Grid xs={12} md={6}>
-                    <Typography variant="h4" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
+                    <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
                       Registered Address
                     </Typography>
                     <Stack spacing={2}>
@@ -311,7 +322,7 @@ export default function KycAddressInfo() {
                         mb: 2,
                       }}
                     >
-                      <Typography variant="h4" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                      <Typography variant="h5" sx={{ fontWeight: 600, color: 'primary.main' }}>
                         Correspondence Address
                       </Typography>
                       <FormControlLabel
@@ -401,6 +412,8 @@ export default function KycAddressInfo() {
           </Paper>
         </form>
       </FormProvider>
+
+      <KYCFooter />
     </Container>
   );
 }

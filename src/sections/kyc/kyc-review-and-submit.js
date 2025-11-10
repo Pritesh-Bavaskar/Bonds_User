@@ -21,18 +21,20 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Iconify from 'src/components/iconify';
 import KYCReviewAndSubmitCard from './kyc-review-and-submit-card';
+import KYCStepper from './kyc-stepper';
 // ----------------------------------------------------------------------
 
 export default function KYCReviewAndSubmit() {
   return (
     <>
       <Container>
+        <KYCStepper />
         <KYCTitle
           title="Review & Submit"
           subtitle={'Please review all information before submitting your application'}
         />
 
-        <Grid container spacing={3} sx={{ mt: 2, mb: 3 }}>
+        <Grid container spacing={3} sx={{ mt: 0, mb: 3 }}>
           <Grid xs={12} md={6}>
             {/* Company Information */}
             <KYCReviewAndSubmitCard

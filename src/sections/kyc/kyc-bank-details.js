@@ -23,6 +23,7 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Iconify from 'src/components/iconify';
+import KYCStepper from './kyc-stepper';
 
 // ----------------------------------------------------------------------
 
@@ -129,6 +130,7 @@ export default function KYCBankDetails() {
 
   return (
     <Container>
+      <KYCStepper />
       <KYCTitle
         title="Bank & Demat Details"
         subtitle={'Add your bank and demat account information'}

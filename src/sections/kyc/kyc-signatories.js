@@ -26,6 +26,7 @@ import { paths } from 'src/routes/paths';
 import KYCTitle from './kyc-title';
 import KYCFooter from './kyc-footer';
 import KYCAddSignatoriesForm from './kyc-add-signatories-form';
+import KYCStepper from './kyc-stepper';
 
 // ----------------------------------------------------------------------
 
@@ -75,6 +76,7 @@ export default function KYCSignatories() {
 
   return (
     <Container sx={{ position: 'relative', py: { xs: 6, sm: 8, md: 0 } }}>
+      <KYCStepper />
       <KYCTitle
         title="Authorized Signatories"
         subtitle={'Add director and authorized signatories for your company'}

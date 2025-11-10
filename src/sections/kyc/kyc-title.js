@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 export default function KYCTitle({ title, subtitle }) {
   return (
-    <Container sx={{ position: 'relative', py: { xs: 4, sm: 6 } }}>
+    <Container disableGutters sx={{ position: 'relative', py: { xs: 4, sm: 6 } }}>
       <Box
         sx={{
           mx: 'auto',

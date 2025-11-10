@@ -18,6 +18,8 @@ import RHFFileUploadBox from 'src/components/custom-file-upload/file-upload';
 import KYCTitle from './kyc-title';
 import KYCFooter from './kyc-footer';
 import { useForm } from 'react-hook-form';
+import KYCStepper from './kyc-stepper';
+
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +46,7 @@ export default function KYCCompanyDetails() {
 
   return (
     <Container>
+      <KYCStepper />
       <KYCTitle
         title="Company Details"
         subtitle={

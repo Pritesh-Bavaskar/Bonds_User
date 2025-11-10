@@ -25,7 +25,7 @@ import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField, RHFSelect, RHFAutocomplete } from 'src/components/hook-form';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-
+import KYCStepper from './kyc-stepper';
 
 // ----------------------------------------------------------------------
 
@@ -141,6 +141,7 @@ export default function KYCBasicInfo() {
 
   return (
     <Container>
+      <KYCStepper />
       <KYCTitle
         title="Welcome to Bond Issuer"
         subtitle={"Let's get you started please provide your details"}
