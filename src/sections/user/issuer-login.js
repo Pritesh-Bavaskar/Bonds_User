@@ -150,6 +150,13 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       if (data && data.message) {
         enqueueSnackbar(data.message, { variant: 'success' });
       }
+      const token = data?.data?.access_token || data?.access_token;
+      if (token) {
+        setSession(token);
+        onClose?.();
+        router.push(paths.KYCViewPage);
+        return;
+      }
       setStep('details');
     } catch (err) {
       enqueueSnackbar(err.message, { variant: 'error' });
