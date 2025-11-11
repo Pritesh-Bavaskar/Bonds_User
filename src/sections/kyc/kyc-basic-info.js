@@ -297,8 +297,8 @@ export default function KYCBasicInfo({ currentInfo }) {
         // Create new company info
         const response = await axiosInstance.post('/api/kyc/issuer_kyc/company-info/', formDataToSend, config);
         // Store the company ID in session storage for future updates
-        if (response.data?.data?.id) {
-          sessionStorage.setItem('company_information_id', response.data.data.id);
+        if (response.data?.data?.company_id) {
+          sessionStorage.setItem('company_information_id', response.data.data.company_id);
         }
       } else {
         // Update existing company info
