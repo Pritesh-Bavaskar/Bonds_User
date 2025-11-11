@@ -93,7 +93,7 @@ const AddressSchema = Yup.object().shape({
         .matches(/^[0-9]{10}$/, 'Must be a valid 10-digit phone number'),
   }),
 
-  addressProof: Yup.mixed().required('Address proof is required'),
+  addressProof: Yup.mixed().nullable(),
 });
 
 export default function KycAddressInfo() {
@@ -102,7 +102,7 @@ export default function KycAddressInfo() {
   const [addressExists, setAddressExists] = useState(false);
   const accessToken = sessionStorage.getItem('accessToken');
   const router = useRouter();
-  const companyId = '01981cf1-60da-43be-b0db-9159768ecc97';
+  const companyId = sessionStorage.getItem('company_information_id');
 
   const methods = useForm({
     resolver: yupResolver(AddressSchema),
@@ -161,8 +161,12 @@ export default function KycAddressInfo() {
         };
 
         // Registered mapping
-        setValue('registeredAddressLine1', toStr(registered.registered_office), { shouldValidate: true });
-        setValue('registeredAddressLine2', toStr(registered.registered_office_line2), { shouldValidate: true });
+        setValue('registeredAddressLine1', toStr(registered.registered_office), {
+          shouldValidate: true,
+        });
+        setValue('registeredAddressLine2', toStr(registered.registered_office_line2), {
+          shouldValidate: true,
+        });
         setValue('registeredCity', toStr(registered.city), { shouldValidate: true });
         setValue('registeredState', toStr(registered.state_ut), { shouldValidate: true });
         setValue('registeredPincode', toStr(registered.pin_code), { shouldValidate: true });
@@ -170,23 +174,58 @@ export default function KycAddressInfo() {
         setValue('registeredPhone', toTen(registered.contact_phone), { shouldValidate: true });
 
         // Correspondence mapping (note: API uses same key 'registered_office' for address line)
-        setValue('correspondenceAddressLine1', toStr(correspondence.registered_office ?? correspondence.correspondence_address), { shouldValidate: true });
-        setValue('correspondenceAddressLine2', toStr(correspondence.registered_office_line2 ?? correspondence.correspondence_address_line2), { shouldValidate: true });
-        setValue('correspondenceCity', toStr(correspondence.city ?? correspondence.correspondence_city), { shouldValidate: true });
-        setValue('correspondenceState', toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut), { shouldValidate: true });
-        setValue('correspondencePincode', toStr(correspondence.pin_code ?? correspondence.correspondence_pin_code), { shouldValidate: true });
-        setValue('correspondenceEmail', toStr(correspondence.contact_email ?? correspondence.correspondence_email), { shouldValidate: true });
-        setValue('correspondencePhone', toTen(correspondence.contact_phone ?? correspondence.correspondence_phone), { shouldValidate: true });
+        setValue(
+          'correspondenceAddressLine1',
+          toStr(correspondence.registered_office ?? correspondence.correspondence_address),
+          { shouldValidate: true }
+        );
+        setValue(
+          'correspondenceAddressLine2',
+          toStr(
+            correspondence.registered_office_line2 ?? correspondence.correspondence_address_line2
+          ),
+          { shouldValidate: true }
+        );
+        setValue(
+          'correspondenceCity',
+          toStr(correspondence.city ?? correspondence.correspondence_city),
+          { shouldValidate: true }
+        );
+        setValue(
+          'correspondenceState',
+          toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut),
+          { shouldValidate: true }
+        );
+        setValue(
+          'correspondencePincode',
+          toStr(correspondence.pin_code ?? correspondence.correspondence_pin_code),
+          { shouldValidate: true }
+        );
+        setValue(
+          'correspondenceEmail',
+          toStr(correspondence.contact_email ?? correspondence.correspondence_email),
+          { shouldValidate: true }
+        );
+        setValue(
+          'correspondencePhone',
+          toTen(correspondence.contact_phone ?? correspondence.correspondence_phone),
+          { shouldValidate: true }
+        );
 
         // Derive sameAsRegistered by comparing core fields
-        const same = (
-          toStr(registered.registered_office) === toStr(correspondence.registered_office ?? correspondence.correspondence_address) &&
-          toStr(registered.city) === toStr(correspondence.city ?? correspondence.correspondence_city) &&
-          toStr(registered.state_ut) === toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut) &&
-          toStr(registered.pin_code) === toStr(correspondence.pin_code ?? correspondence.correspondence_pin_code) &&
-          toStr(registered.contact_email) === toStr(correspondence.contact_email ?? correspondence.correspondence_email) &&
-          toTen(registered.contact_phone) === toTen(correspondence.contact_phone ?? correspondence.correspondence_phone)
-        );
+        const same =
+          toStr(registered.registered_office) ===
+            toStr(correspondence.registered_office ?? correspondence.correspondence_address) &&
+          toStr(registered.city) ===
+            toStr(correspondence.city ?? correspondence.correspondence_city) &&
+          toStr(registered.state_ut) ===
+            toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut) &&
+          toStr(registered.pin_code) ===
+            toStr(correspondence.pin_code ?? correspondence.correspondence_pin_code) &&
+          toStr(registered.contact_email) ===
+            toStr(correspondence.contact_email ?? correspondence.correspondence_email) &&
+          toTen(registered.contact_phone) ===
+            toTen(correspondence.contact_phone ?? correspondence.correspondence_phone);
         setValue('sameAsRegistered', same, { shouldValidate: true });
 
         // If server returned any address_id, mark as existing for PUT
@@ -214,7 +253,10 @@ export default function KycAddressInfo() {
     add('pin_code', form.registeredPincode);
     add('country', 'India');
     add('contact_email', form.registeredEmail);
-    add('contact_phone', form.registeredPhone?.startsWith('+') ? form.registeredPhone : `+91${form.registeredPhone}`);
+    add(
+      'contact_phone',
+      form.registeredPhone?.startsWith('+') ? form.registeredPhone : `+91${form.registeredPhone}`
+    );
 
     // Map Correspondence
     const corrSame = !!form.sameAsRegistered;
@@ -466,7 +508,10 @@ export default function KycAddressInfo() {
                 <Grid container spacing={3}>
                   {/* Registered Address */}
                   <Grid xs={12} md={6}>
-                    <Typography variant="h5" sx={{ mb: 3, mt: 1, fontWeight: 600, color: 'primary.main' }}>
+                    <Typography
+                      variant="h5"
+                      sx={{ mb: 3, mt: 1, fontWeight: 600, color: 'primary.main' }}
+                    >
                       Registered Address
                     </Typography>
                     <Stack spacing={2}>

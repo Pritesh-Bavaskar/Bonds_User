@@ -32,7 +32,7 @@ export default function KYCCompanyDetails() {
   const [docSummary, setDocSummary] = useState(null);
   const [loadingDocs, setLoadingDocs] = useState(false);
   const base = process.env.REACT_APP_HOST_API || '';
-  const companyId = '01981cf1-60da-43be-b0db-9159768ecc97';
+  const companyId = sessionStorage.getItem('company_information_id');
   useEffect(() => {
     const run = async () => {
       setLoadingDocs(true);
@@ -103,7 +103,7 @@ export default function KYCCompanyDetails() {
 
   const onSubmit = handleSubmit(async (form) => {
     const base = process.env.REACT_APP_HOST_API || '';
-    const companyId = '01981cf1-60da-43be-b0db-9159768ecc97';
+    const companyId = sessionStorage.getItem('company_information_id');
     const bulkUrl = `${base}/api/kyc/issuer_kyc/companies/${companyId}/documents/bulkupload/`;
 
     const accessToken = sessionStorage.getItem('accessToken');

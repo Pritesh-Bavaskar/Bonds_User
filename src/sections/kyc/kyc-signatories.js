@@ -14,6 +14,11 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Iconify from 'src/components/iconify';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -50,7 +55,7 @@ const StyledSearch = styled(TextField)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const COMPANY_ID = '01981cf1-60da-43be-b0db-9159768ecc97';
+const COMPANY_ID = sessionStorage.getItem('company_information_id');
 
 export default function KYCSignatories() {
   const [open, setOpen] = useState(false);
@@ -61,21 +66,34 @@ export default function KYCSignatories() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [isViewMode, setIsViewMode] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [signatoryToDelete, setSignatoryToDelete] = useState(null);
   // const confirm = useConfirm();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleOpen = () => {
+  const handleOpen = (signatory = null) => {
     setOpen(true);
-    setIsViewMode(false);
-    setViewSignatory(null);
+    if (signatory) {
+      setViewSignatory(signatory);
+      setIsViewMode(false);
+      setIsEditMode(true);
+      console.log('Signatory provided');
+    } else {
+      setViewSignatory(null);
+      setIsViewMode(false);
+      setIsEditMode(false);
+      console.log('Signatory not provided');
+    }
   };
-  
+
   const handleClose = () => {
     setOpen(false);
     setIsViewMode(false);
+    setIsEditMode(false);
     setViewSignatory(null);
   };
-  
+
   const handleViewSignatory = async (signatoryId) => {
     try {
       setLoading(true);
@@ -146,32 +164,39 @@ export default function KYCSignatories() {
   };
 
   const handleDeleteSignatory = async (signatoryId) => {
-    if (window.confirm('Are you sure you want to delete this signatory?')) {
-      try {
-        setLoading(true);
-        const token = sessionStorage.getItem('accessToken');
-        if (!token) throw new Error('No authentication token found');
+    setSignatoryToDelete(signatoryId);
+    setDeleteDialogOpen(true);
+  };
 
-        await axios.delete(
-          `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${signatoryId}/signatories/delete`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  const handleConfirmDelete = async () => {
+    if (!signatoryToDelete) return;
+    
+    try {
+      setLoading(true);
+      const token = sessionStorage.getItem('accessToken');
+      if (!token) throw new Error('No authentication token found');
 
-        // Refresh the list after successful deletion
-        fetchSignatories();
-        enqueueSnackbar('Signatory deleted successfully', { variant: 'success' });
-      } catch (err) {
-        console.error('Error deleting signatory:', err);
-        enqueueSnackbar(err.response?.data?.message || 'Failed to delete signatory', {
-          variant: 'error',
-        });
-      } finally {
-        setLoading(false);
-      }
+      await axios.delete(
+        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${signatoryToDelete}/signatories/delete`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Refresh the list after successful deletion
+      fetchSignatories();
+      enqueueSnackbar('Signatory deleted successfully', { variant: 'success' });
+    } catch (err) {
+      console.error('Error deleting signatory:', err);
+      enqueueSnackbar(err.response?.data?.message || 'Failed to delete signatory', {
+        variant: 'error',
+      });
+    } finally {
+      setLoading(false);
+      setDeleteDialogOpen(false);
+      setSignatoryToDelete(null);
     }
   };
 
@@ -230,7 +255,7 @@ export default function KYCSignatories() {
             <Button
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
-              onClick={handleOpen}
+              onClick={() => handleOpen()}
               sx={{
                 height: 40,
                 width: { xs: '100%', sm: 'auto' },
@@ -245,9 +270,41 @@ export default function KYCSignatories() {
               onClose={handleClose}
               onSuccess={handleSignatoryAdded}
               companyId={COMPANY_ID}
-              currentUser={isViewMode ? viewSignatory : null}
+              currentUser={viewSignatory}
               isViewMode={isViewMode}
+              isEditMode={isEditMode}
             />
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog
+              open={deleteDialogOpen}
+              onClose={() => setDeleteDialogOpen(false)}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                Delete Signatory
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure you want to delete this signatory? This action cannot be undone.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setDeleteDialogOpen(false)} color="primary">
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={handleConfirmDelete} 
+                  color="error" 
+                  variant="contained"
+                  autoFocus
+                  disabled={loading}
+                >
+                  {loading ? <CircularProgress size={24} /> : 'Delete'}
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Box>
         </Box>
         <TableContainer component={Paper} sx={{ mb: 5 }}>
@@ -330,7 +387,7 @@ export default function KYCSignatories() {
                         <IconButton
                           color="primary"
                           aria-label="edit"
-                          onClick={() => console.log('Edit signatory:', signatory.signatory_id)}
+                          onClick={() => handleOpen(signatory)}
                           disabled={loading}
                         >
                           <Iconify icon="eva:edit-outline" />

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useSnackbar } from 'src/components/snackbar';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -131,6 +131,49 @@ export default function KYCBasicInfo({ currentInfo }) {
     defaultValues,
   });
 
+  // Fetch company information when component mounts
+  useEffect(() => {
+    const fetchCompanyInfo = async () => {
+      try {
+        const companyId = sessionStorage.getItem('company_information_id');
+        if (!companyId) return;
+
+        const response = await axiosInstance.get(`/api/kyc/issuer_kyc/company-info/${companyId}/`);
+        const companyData = response.data?.data;
+
+        if (companyData) {
+          methods.reset({
+            cin: companyData.corporate_identification_number || '',
+            companyName: companyData.company_name || '',
+            gstin: companyData.gstin || '',
+            dateOfIncorporation: companyData.date_of_incorporation ? dayjs(companyData.date_of_incorporation).toDate() : null,
+            msmeUdyamRegistrationNo: companyData.msme_udyam_registration_no || '',
+            city: companyData.place_of_incorporation || '',
+            state: companyData.state_of_incorporation || '',
+            country: companyData.country || '',
+            entityType: companyData.entity_type?.toLowerCase() || '', // Ensure lowercase to match form values
+            sector: companyData.sector || '',
+            panNumber: companyData.company_pan_number || '',
+            dateOfBirth: companyData.date_of_birth ? dayjs(companyData.date_of_birth).toDate() : null,
+            panHoldersName: companyData.pan_holder_name || '',
+          });
+          
+          // If you need to handle the PAN file separately
+          if (companyData.company_or_individual_pan_card_file) {
+            // You might need to handle file download/display logic here
+            console.log('PAN card file available at:', companyData.company_or_individual_pan_card_file);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching company information:', error);
+        enqueueSnackbar('Failed to load company information', { variant: 'error' });
+      }
+    };
+
+    fetchCompanyInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [methods.reset]);
+
   const {
     handleSubmit,
     control,
@@ -167,7 +210,7 @@ export default function KYCBasicInfo({ currentInfo }) {
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      console.info('DATA', formData);
+      console.info('Form Data:', formData);
 
       // Get token from session storage
       const token = sessionStorage.getItem('accessToken');
@@ -176,34 +219,60 @@ export default function KYCBasicInfo({ currentInfo }) {
         return;
       }
 
-      const inputData = {
-        cin: formData.cin,
-        companyName: formData.companyName,
-        gstin: formData.gstin,
-        dateOfIncorporation: formData.dateOfIncorporation,
-        msmeUdyamRegistrationNo: formData.msmeUdyamRegistrationNo,
-        dob: formData.dob,
-        country: formData.country,
-        city: formData.city,
-        state: formData.state,
-        entityType: formData.entityType,
-        panNumber: formData.panNumber,
-        dateOfBirth: formData.dateOfBirth,
-        panHoldersName: formData.panHoldersName,
-      };
+      // Create FormData for file upload
+      const formDataToSend = new FormData();
+      
+      // Add all fields to FormData
+      formDataToSend.append('corporate_identification_number', formData.cin || '');
+      formDataToSend.append('company_name', formData.companyName || '');
+      formDataToSend.append('gstin', formData.gstin || '');
+      
+      // Format dates to YYYY-MM-DD
+      if (formData.dateOfIncorporation) {
+        formDataToSend.append('date_of_incorporation', dayjs(formData.dateOfIncorporation).format('YYYY-MM-DD'));
+      }
+      
+      formDataToSend.append('msme_udyam_registration_no', formData.msmeUdyamRegistrationNo || '');
+      
+      if (formData.dob) {
+        formDataToSend.append('dob', dayjs(formData.dob).format('YYYY-MM-DD'));
+      }
+      
+      formDataToSend.append('country', formData.country || '');
+      formDataToSend.append('place_of_incorporation', formData.city || '');
+      formDataToSend.append('state_of_incorporation', formData.state || '');
+      formDataToSend.append('entity_type', formData.entityType || '');
+      
+      // Handle PAN card file
+      if (formData.panFile) {
+        formDataToSend.append('company_or_individual_pan_card_file', formData.panFile);
+      }
+      
+      if (formData.dateOfBirth) {
+        formDataToSend.append('date_of_birth', dayjs(formData.dateOfBirth).format('YYYY-MM-DD'));
+      }
+      
+      formDataToSend.append('pan_holder_name', formData.panHoldersName || '');
 
+      console.log('Sending FormData:', Object.fromEntries(formDataToSend.entries()));
+      
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
       };
 
-      if (!currentInfo) {
-        await axiosInstance.post('/api/kyc/issuer_kyc/company-info/', inputData, config);
+      const companyId = sessionStorage.getItem('company_information_id');
+      
+      if (!companyId) {
+        // Create new company info
+        await axiosInstance.post('/api/kyc/issuer_kyc/company-info/', formDataToSend, config);
       } else {
+        // Update existing company info
         await axiosInstance.patch(
-          `/api/kyc/issuer_kyc/company-info/${currentInfo.id}`,
-          inputData,
+          `/api/kyc/issuer_kyc/company-info/${companyId}/update/`,
+          formDataToSend,
           config
         );
       }
@@ -281,7 +350,7 @@ export default function KYCBasicInfo({ currentInfo }) {
                       <DatePicker
                         value={field.value}
                         onChange={(newValue) => field.onChange(newValue)}
-                        format="dd-MM-yyyy"
+                        format="yyyy-MM-dd"
                         slotProps={{
                           textField: {
                             fullWidth: true,
@@ -362,7 +431,7 @@ export default function KYCBasicInfo({ currentInfo }) {
                       </Box>
                       <RHFSelect name="entityType" placeholder="Select Entity Type">
                         <MenuItem value="">Select Entity Type</MenuItem>
-                        <MenuItem value="Private Limited">Private Limited</MenuItem>
+                        <MenuItem value="private">Private Limited</MenuItem>
                         <MenuItem value="Public Limited">Public Limited</MenuItem>
                         <MenuItem value="LLP">LLP</MenuItem>
                         <MenuItem value="OPC">OPC</MenuItem>
@@ -476,7 +545,7 @@ export default function KYCBasicInfo({ currentInfo }) {
                       <DatePicker
                         value={field.value}
                         onChange={(newValue) => field.onChange(newValue)}
-                        format="dd-MM-yyyy"
+                        format="yyyy-MM-dd"
                         slotProps={{
                           textField: {
                             fullWidth: true,
