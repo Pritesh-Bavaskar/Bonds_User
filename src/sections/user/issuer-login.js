@@ -62,9 +62,16 @@ export default function MultiStepLoginDialog({ open, onClose }) {
         data = {};
       }
       const token = data?.data?.access_token || data?.access_token;
+      const companyInfoId = data?.data?.company_information_id || data?.company_information_id;
+      
       if (token) {
         setSession(token);
       }
+      
+      if (companyInfoId) {
+        sessionStorage.setItem('company_information_id', companyInfoId);
+      }
+      
       if (data && data.message) {
         enqueueSnackbar(data.message, { variant: 'success' });
       }
@@ -151,8 +158,15 @@ export default function MultiStepLoginDialog({ open, onClose }) {
         enqueueSnackbar(data.message, { variant: 'success' });
       }
       const token = data?.data?.access_token || data?.access_token;
+      const companyInfoId = data?.data?.company_information_id || data?.company_information_id;
+      
       if (token) {
         setSession(token);
+        
+        if (companyInfoId) {
+          sessionStorage.setItem('company_information_id', companyInfoId);
+        }
+        
         onClose?.();
         router.push(paths.KYCViewPage);
         return;
@@ -351,7 +365,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
                     ))}
                   </Grid>
 
-                  <Typography variant="caption">Resend OTP in 19 seconds</Typography>
+                  {/* <Typography variant="caption">Resend OTP in 19 seconds</Typography> */}
 
                   <Box sx={{ mt: 4 }}>
                     <Button onClick={handleBack} sx={{ mr: 2 }}>
@@ -448,9 +462,9 @@ export default function MultiStepLoginDialog({ open, onClose }) {
                   <Typography variant="caption">
                     If it hasn’t arrived, please check your spam folder
                   </Typography>
-                  <Typography variant="caption" display="block">
+                  {/* <Typography variant="caption" display="block">
                     Resend OTP in 15 seconds
-                  </Typography>
+                  </Typography> */}
 
                   <Box sx={{ mt: 4 }}>
                     <Button onClick={handleBack} sx={{ mr: 2 }}>
