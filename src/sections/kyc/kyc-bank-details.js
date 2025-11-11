@@ -24,6 +24,8 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Iconify from 'src/components/iconify';
 import KYCStepper from './kyc-stepper';
+import axiosInstance from 'src/utils/axios';
+import { useSnackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 
@@ -45,69 +47,98 @@ const StyledDropZone = styled('div')(({ theme }) => ({
   },
 }));
 
+const steps = ['Auto-Fill', 'Verify'];
+
 export default function KYCBankDetails() {
+  const { enqueueSnackbar } = useSnackbar();
   const [showDemat, setShowDemat] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [activeStep, setActiveStep] = useState(0);
 
-  const NewBankSchema = Yup.object().shape({
+  const NewSchema = Yup.object().shape({
+    documentType: Yup.string().required('Document Type is required'),
     bankName: Yup.string().required('Bank Name is required'),
     branchName: Yup.string().required('Branch Name is required'),
     accountNumber: Yup.string().required('Account Number is required'),
     ifscCode: Yup.string().required('IFSC Code is required'),
     accountType: Yup.string().required('Account Type is required'),
     addressProof: Yup.mixed().required('Address proof is required'),
+    dpId: Yup.string().required('DP ID is required'),
+    dpName: Yup.string().required('DP Name is required'),
+    beneficiaryClientId: Yup.string().required('Beneficiary/Client ID is required'),
+    dematAccountNumber: Yup.string().required('Demat Account Number is required'),
+    depository: Yup.string().required('Depository is required'),
   });
 
   const methods = useForm({
-    resolver: yupResolver(NewBankSchema),
+    resolver: yupResolver(NewSchema),
+    reValidateMode: 'onChange',
     defaultValues: {
+      documentType: 'passbook',
       bankName: '',
       branchName: '',
       accountNumber: '',
       ifscCode: '',
       accountType: '',
       addressProof: null,
-    },
-  });
-  const { setValue, control, watch } = methods;
-  const addressProof = useWatch({ control, name: 'addressProof' });
-
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
-
-  const onSubmit = handleSubmit(async (data) => {
-    // Replace with API integration
-    // eslint-disable-next-line no-console
-    console.info('Company Documents', data);
-  });
-
-  // Demat form schema and methods
-  const DematSchema = Yup.object().shape({
-    dpId: Yup.string().required('DP ID is required'),
-    boId: Yup.string().required('BO ID is required'),
-    beneficiaryClientId: Yup.string().required('Beneficiary/Client ID is required'),
-    dematAccountNumber: Yup.string().required('Demat Account Number is required'),
-    depository: Yup.string().required('Depository is required'),
-  });
-
-  const dematMethods = useForm({
-    resolver: yupResolver(DematSchema),
-    defaultValues: {
       dpId: '',
-      boId: '',
+      dpName: '',
       beneficiaryClientId: '',
       dematAccountNumber: '',
       depository: '',
     },
   });
+  const {
+    setValue,
+    control,
+    watch,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+  const values = watch();
+  const addressProof = useWatch({ control, name: 'addressProof' });
+  const documentType = useWatch({ control, name: 'documentType' });
+  const COMPANY_ID = sessionStorage.getItem('company_information_id');
 
-  const onSubmitDemat = dematMethods.handleSubmit(async (data) => {
-    // Replace with API integration
-    // eslint-disable-next-line no-console
-    console.info('Demat Details', data);
-  });
+  const verifyBankDetail = async () => {
+    console.log('Verifying bank details with values:');
+    try {
+      const data = methods.getValues();
+
+      const payload = {
+        account_number: data.accountNumber,
+        bank_name: data.bankName,
+        branch_name: data.branchName,
+        account_type: data.accountType,
+        ifsc_code: data.ifscCode,
+      };
+
+      const res = await axiosInstance.post(
+        `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/verify/`,
+        payload,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      enqueueSnackbar(res.data?.message || 'Bank details verified successfully ✅', {
+        variant: 'success',
+      });
+
+      // ✅ Open the Demat section on success
+      setShowDemat(true);
+    } catch (error) {
+      console.error('❌ Error verifying bank details:', error.response?.data || error);
+
+      const errMsg =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[Object.keys(error.response?.data?.errors || {})[0]]?.[0] ||
+        'Bank verification failed. Please check your details and try again.';
+
+      // ✅ Use snackbar for error message
+      enqueueSnackbar(errMsg, { variant: 'error' });
+    }
+  };
 
   const handleDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -120,6 +151,7 @@ export default function KYCBankDetails() {
       } else {
         setPreview(null);
       }
+      extractBankDetails(file);
     }
   };
 
@@ -127,6 +159,106 @@ export default function KYCBankDetails() {
     setValue('addressProof', null, { shouldValidate: true });
     setPreview(null);
   };
+
+  const extractBankDetails = async (file) => {
+    try {
+      
+
+      const formData = new FormData();
+      formData.append('document_type', documentType); // ✅ from form
+      formData.append('file', file); // ✅ backend expects 'document'
+
+      const res = await axiosInstance.post(
+        `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/extract/`,
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+
+      console.log('Extracted data:', res.data);
+
+      const extracted = res.data?.data?.extracted_data?.data;
+      if (!extracted) throw new Error('Invalid response structure');
+
+      // ✅ Auto-fill fields from extracted data
+      setValue('bankName', extracted.bank_name || '', { shouldValidate: true });
+      setValue('branchName', extracted.branch_name || '', { shouldValidate: true });
+      setValue('accountNumber', extracted.account_number || '', { shouldValidate: true });
+      setValue('ifscCode', extracted.ifsc_code || '', { shouldValidate: true });
+      setValue('accountType', extracted.account_type || '', {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    } catch (error) {
+      console.error('Error extracting bank details:', error);
+      alert(error.response?.data?.message || 'Failed to extract bank details. Please try again.');
+    }
+  };
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      // ✅ BANK PAYLOAD
+      const bankPayload = {
+        account_number: data.accountNumber,
+        bank_name: data.bankName,
+        branch_name: data.branchName,
+        account_type: data.accountType,
+        ifsc_code: data.ifscCode,
+      };
+
+      // ✅ DEMAT PAYLOAD
+      const dematPayload = {
+        dp_name: data.dpName,
+        depository_participant: data.depository, // NSDL/CDSL
+        dp_id: Number(data.dpId),
+        demat_account_number: Number(data.dematAccountNumber),
+        client_id_bo_id: Number(data.beneficiaryClientId),
+      };
+
+      console.log('📤 Submitting Bank Payload:', bankPayload);
+      console.log('📤 Submitting Demat Payload:', dematPayload);
+
+      // ✅ Parallel API Calls
+      const [bankRes, dematRes] = await Promise.all([
+        axiosInstance.post(
+          `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/submit/`,
+          bankPayload,
+          {
+            headers: { 'Content-Type': 'application/json' },
+          }
+        ),
+        axiosInstance.post(`/api/kyc/issuer_kyc/company/${COMPANY_ID}/demat/`, dematPayload, {
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ]);
+
+      // ✅ Handle Success
+      enqueueSnackbar(bankRes.data?.message || 'Bank details submitted successfully ✅', {
+        variant: 'success',
+      });
+      enqueueSnackbar(dematRes.data?.message || 'Demat details submitted successfully ✅', {
+        variant: 'success',
+      });
+
+      console.log('✅ Bank Response:', bankRes.data);
+      console.log('✅ Demat Response:', dematRes.data);
+
+      // Optional: Move to next page
+      // navigate(paths.KYCSignatories);
+    } catch (error) {
+      console.error('❌ Error in submitting bank or demat details:', error.response?.data || error);
+
+      const errMsg =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[Object.keys(error.response?.data?.errors || {})[0]]?.[0] ||
+        'Submission failed. Please check details and try again.';
+
+      enqueueSnackbar(errMsg, { variant: 'error' });
+    }
+  });
+
+  console.log('values', values);
 
   return (
     <Container>
@@ -137,17 +269,38 @@ export default function KYCBankDetails() {
       />
 
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
-          Auto-Fill Details
-        </Typography>
-        {/* Address Proof Section */}
-        <Stack spacing={4}>
-          <div>
+        <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
+          <Stack direction="column">
+            <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
+              Auto-Fill Details
+            </Typography>
             <Typography variant="h5" sx={{ mb: 1, color: 'text.primary' }}>
               Upload Passbook/cancel cheque/bank statement to fill the details automatically
             </Typography>
-          </div>
-
+          </Stack>
+          <Stack direction="column" spacing={2} sx={{ mb: 2, alignItems: 'end' }}>
+            <Typography variant="h6" sx={{ fontWeight: 500 }}>
+              Select Document Type:
+            </Typography>
+            <Box sx={{ width: 200 }}>
+              <RHFSelect
+                name="documentType"
+                placeholder="Select Document Type"
+                SelectProps={{
+                  displayEmpty: true,
+                  renderValue: (value) =>
+                    value || <Box sx={{ color: 'text.disabled' }}>Select Type</Box>,
+                }}
+              >
+                <MenuItem value="passbook">Passbook</MenuItem>
+                <MenuItem value="cheque">Cheque</MenuItem>
+                <MenuItem value="bank_statement">Bank Statement</MenuItem>
+              </RHFSelect>
+            </Box>
+          </Stack>
+        </Stack>
+        {/* Address Proof Section */}
+        <Stack spacing={4}>
           <Box sx={{ width: '100%' }}>
             {!addressProof ? (
               <RHFUploadBox
@@ -311,7 +464,7 @@ export default function KYCBankDetails() {
                     Enter your IFSC code to auto-detect your bank and branch details.
                   </Typography>
                   <Box sx={{ mt: 2 }}>
-                    <Button variant="contained" onClick={() => setShowDemat(true)}>
+                    <Button variant="contained" type="button" onClick={verifyBankDetail}>
                       Verify
                     </Button>
                   </Box>
@@ -325,18 +478,10 @@ export default function KYCBankDetails() {
                 {/* Account Type */}
                 <Box>
                   <Box sx={{ mb: 1, fontWeight: 600 }}>Account Type</Box>
-                  <RHFSelect
-                    name="accountType"
-                    placeholder="Select Account Type"
-                    SelectProps={{
-                      displayEmpty: true,
-                      renderValue: (value) =>
-                        value || <Box sx={{ color: 'text.disabled' }}>Select Account Type</Box>,
-                    }}
-                  >
+                  <RHFSelect name="accountType" placeholder="Select Account Type">
                     <MenuItem value="">Select Account Type</MenuItem>
-                    <MenuItem value="Savings">Savings</MenuItem>
-                    <MenuItem value="Current">Current</MenuItem>
+                    <MenuItem value="SAVINGS">Savings</MenuItem>
+                    <MenuItem value="CURRENT">Current</MenuItem>
                   </RHFSelect>
                   <Typography
                     variant="caption"
@@ -359,108 +504,111 @@ export default function KYCBankDetails() {
             </Grid>
           </Grid>
         </Box>
-      </FormProvider>
+        {/* </FormProvider> */}
 
-      {showDemat && (
-        <>
-          <Typography variant="h4" sx={{ fontWeight: 700, mt: 3 }}>
-            Demat Account Details
-          </Typography>
-          <Typography variant="h6" sx={{ fontWeight: 500, mb: 3 }}>
-            Required for bond transactions
-          </Typography>
-          <FormProvider methods={dematMethods} onSubmit={onSubmitDemat}>
-            <Box sx={{ py: 2 }}>
-              <Grid container spacing={3}>
-                {/* Left Section (9 columns) */}
-                <Grid xs={12} md={12}>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-                      <Button size="small" variant="contained">
-                        Fetch
-                      </Button>
+        {/* {showDemat && ( */}
+        {/* <> */}
+        <Typography variant="h4" sx={{ fontWeight: 700, mt: 3 }}>
+          Demat Account Details
+        </Typography>
+        <Typography variant="h6" sx={{ fontWeight: 500, mb: 3 }}>
+          Required for bond transactions
+        </Typography>
+        {/* <FormProvider methods={dematMethods} onSubmit={onSubmitDemat}> */}
+        <Box sx={{ py: 2 }}>
+          <Grid container spacing={3}>
+            {/* Left Section (9 columns) */}
+            <Grid xs={12} md={12}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                  <Button size="small" variant="contained">
+                    Fetch
+                  </Button>
+                </Box>
+
+                <Grid container spacing={3}>
+                  <Grid xs={12} md={6}>
+                    <Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>DP ID</Box>
+                      <RHFTextField name="dpId" placeholder="Enter DP ID (8 Digits)" />
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                      >
+                        Depository Participant Identification
+                      </Typography>
                     </Box>
+                  </Grid>
+                  <Grid xs={12} md={6}>
+                    <Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>DP Name</Box>
+                      <RHFTextField name="dpName" placeholder="zerodha broking ltd (fetch)" />
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                      >
+                        Beneficial Owner Identification
+                      </Typography>
+                    </Box>
+                  </Grid>
 
-                    <Grid container spacing={3}>
-                      <Grid xs={12} md={6}>
-                        <Box>
-                          <Box sx={{ mb: 1, fontWeight: 600 }}>DP ID</Box>
-                          <RHFTextField name="dpId" placeholder="Enter DP ID (8 Digits)" />
-                          <Typography
-                            variant="caption"
-                            sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                          >
-                            Depository Participant Identification
-                          </Typography>
-                        </Box>
-                      </Grid>
-                      <Grid xs={12} md={6}>
-                        <Box>
-                          <Box sx={{ mb: 1, fontWeight: 600 }}>BO ID</Box>
-                          <RHFTextField name="boId" placeholder="Enter DP ID (8 Digits)" />
-                          <Typography
-                            variant="caption"
-                            sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                          >
-                            Beneficial Owner Identification
-                          </Typography>
-                        </Box>
-                      </Grid>
+                  <Grid xs={12} md={6}>
+                    <Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>Client ID / BO iD</Box>
+                      <RHFTextField name="beneficiaryClientId" placeholder="123456678" />
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                      >
+                        Enter A Number of Client ID / BO iD
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid xs={12} md={6}>
+                    <Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>Demat ID</Box>
+                      <RHFTextField
+                        name="dematAccountNumber"
+                        placeholder="Enter 16 digit Number "
+                      />
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                      >
+                        Enter a Depository Participant Identification & Client ID
+                      </Typography>
+                    </Box>
+                  </Grid>
 
-                      <Grid xs={12} md={6}>
-                        <Box>
-                          <Box sx={{ mb: 1, fontWeight: 600 }}>Beneficiary/Client ID</Box>
-                          <RHFTextField name="beneficiaryClientId" placeholder="123456678" />
-                          <Typography
-                            variant="caption"
-                            sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                          >
-                            Enter A Number of Beneficiary/Client ID
-                          </Typography>
-                        </Box>
-                      </Grid>
-                      <Grid xs={12} md={6}>
-                        <Box>
-                          <Box sx={{ mb: 1, fontWeight: 600 }}>Demat Account Number</Box>
-                          <RHFTextField name="dematAccountNumber" placeholder="DP + Client ID" />
-                          <Typography
-                            variant="caption"
-                            sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                          >
-                            Enter a Depository Participant Identification & Client ID
-                          </Typography>
-                        </Box>
-                      </Grid>
-
-                      <Grid xs={12} md={6}>
-                        <Box>
-                          <Box sx={{ mb: 1, fontWeight: 600 }}>Depository</Box>
-                          <RHFSelect
-                            name="depository"
-                            placeholder="Select Depository"
-                            SelectProps={{
-                              displayEmpty: true,
-                              renderValue: (value) =>
-                                value || <Box sx={{ color: 'text.disabled' }}>CDSL</Box>,
-                            }}
-                          >
-                            <MenuItem value="CDSL">CDSL</MenuItem>
-                            <MenuItem value="NSDL">NSDL</MenuItem>
-                          </RHFSelect>
-                          <Typography
-                            variant="caption"
-                            sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                          >
-                            Depository Participant Identification
-                          </Typography>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
+                  <Grid xs={12} md={6}>
+                    <Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>Depository</Box>
+                      <RHFSelect
+                        name="depository"
+                        placeholder="Select Depository"
+                        SelectProps={{
+                          displayEmpty: true,
+                          renderValue: (value) =>
+                            value || <Box sx={{ color: 'text.disabled' }}>CDSL</Box>,
+                        }}
+                      >
+                        <MenuItem value="CDSL">CDSL</MenuItem>
+                        <MenuItem value="NSDL">NSDL</MenuItem>
+                      </RHFSelect>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                      >
+                        Depository Participant Identification
+                      </Typography>
+                    </Box>
+                  </Grid>
                 </Grid>
+              </Box>
+            </Grid>
 
-                {/* Right Section (3 columns) */}
-                {/* <Grid xs={12} md={3}>
+            {/* Right Section (3 columns) */}
+            {/* <Grid xs={12} md={3}>
                   <Box
                     sx={{
                       display: 'flex',
@@ -477,74 +625,67 @@ export default function KYCBankDetails() {
                     />
                   </Box>
                 </Grid> */}
-              </Grid>
-            </Box>
+          </Grid>
+        </Box>
 
-            {/* Demat Account Information Tip */}
-            <Box
-              sx={{
-                mt: 4,
-                p: 3,
-                border: '1px solid #0049C6',
-                borderRadius: 1,
-                backgroundColor: 'rgba(0, 111, 255, 0.05)',
-              }}
-            >
-              <Typography variant="subtitle1" sx={{ color: '#006FFF', fontWeight: 600, mb: 1 }}>
-                Demat Account Information
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Your DP ID and BO ID can be found on your demat account statement. These details are
-                required to facilitate bond transactions and settlements.
-              </Typography>
-            </Box>
-
-            {/* Account Verification Section */}
-            <Box
-              sx={{
-                mt: 3,
-                p: 3,
-                backgroundColor: '#FFF7EA',
-                borderRadius: 1,
-                border: '1px solid #FFEBD0',
-              }}
-            >
-              <Typography variant="subtitle1" sx={{ color: '#7B332B', fontWeight: 600, mb: 1 }}>
-                Account Verification
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#BE5149', mb: 2 }}>
-                Your bank and demat account details will be verified during the compliance review
-                process. Please ensure all information is accurate to avoid delays
-              </Typography>
-              <Box component="ul" sx={{ pl: 2, m: 0, '& li': { color: '#ED9B00', mb: 0.5 } }}>
-                <Typography component="li" variant="body2">
-                  Bank account should be in the company's name
-                </Typography>
-                <Typography component="li" variant="body2">
-                  Demat account should be linked to the same company
-                </Typography>
-                <Typography component="li" variant="body2">
-                  All details will be cross-verified with regulatory databases
-                </Typography>
-              </Box>
-            </Box>
-          </FormProvider>
-        </>
-      )}
-
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, mb: 2 }}>
-        <Button component={RouterLink} href={paths.KYCCompanyDetails} variant="outlined">
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          component={RouterLink}
-          to={paths.KYCSignatories}
-          loading={isSubmitting}
+        {/* Demat Account Information Tip */}
+        <Box
+          sx={{
+            mt: 4,
+            p: 3,
+            border: '1px solid #0049C6',
+            borderRadius: 1,
+            backgroundColor: 'rgba(0, 111, 255, 0.05)',
+          }}
         >
-          Next
-        </Button>
-      </Box>
+          <Typography variant="subtitle1" sx={{ color: '#006FFF', fontWeight: 600, mb: 1 }}>
+            Demat Account Information
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Your DP ID and BO ID can be found on your demat account statement. These details are
+            required to facilitate bond transactions and settlements.
+          </Typography>
+        </Box>
+
+        {/* Account Verification Section */}
+        <Box
+          sx={{
+            mt: 3,
+            p: 3,
+            backgroundColor: '#FFF7EA',
+            borderRadius: 1,
+            border: '1px solid #FFEBD0',
+          }}
+        >
+          <Typography variant="subtitle1" sx={{ color: '#7B332B', fontWeight: 600, mb: 1 }}>
+            Account Verification
+          </Typography>
+          <Typography variant="body2" sx={{ color: '#BE5149', mb: 2 }}>
+            Your bank and demat account details will be verified during the compliance review
+            process. Please ensure all information is accurate to avoid delays
+          </Typography>
+          <Box component="ul" sx={{ pl: 2, m: 0, '& li': { color: '#ED9B00', mb: 0.5 } }}>
+            <Typography component="li" variant="body2">
+              Bank account should be in the company's name
+            </Typography>
+            <Typography component="li" variant="body2">
+              Demat account should be linked to the same company
+            </Typography>
+            <Typography component="li" variant="body2">
+              All details will be cross-verified with regulatory databases
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, mb: 2 }}>
+          <Button component={RouterLink} href={paths.KYCCompanyDetails} variant="outlined">
+            Back
+          </Button>
+          <Button variant="contained" type="submit">
+            Next
+          </Button>
+        </Box>
+      </FormProvider>
 
       <KYCFooter />
     </Container>
