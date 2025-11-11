@@ -131,8 +131,8 @@ export default function KYCAddSignatoriesForm({
       formData.append('email_address', data.email);
       formData.append('din', data.din);
       formData.append('designation', data.role);
-      if (data.panCard) formData.append('pan_card', data.panCard);
-      if (data.aadhaarCard) formData.append('aadhaar_card', data.aadhaarCard);
+      if (data.panCard) formData.append('document_file_pan', data.panCard);
+      if (data.aadhaarCard) formData.append('document_file_aadhaar', data.aadhaarCard);
 
       const token = sessionStorage.getItem('accessToken');
       const headers = {
@@ -151,7 +151,7 @@ export default function KYCAddSignatoriesForm({
       } else {
         // Create new signatory
         response = await axios.post(
-          `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${companyId}/signatories/add`,
+          `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${companyId}/signatories/`,
           formData,
           { headers }
         );

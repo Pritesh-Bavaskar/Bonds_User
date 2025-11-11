@@ -186,9 +186,9 @@ export default function KYCBankDetails() {
       setValue('branchName', extracted.branch_name || '', { shouldValidate: true });
       setValue('accountNumber', extracted.account_number || '', { shouldValidate: true });
       setValue('ifscCode', extracted.ifsc_code || '', { shouldValidate: true });
-      setValue('accountType', extracted.account_type || '', {
+      setValue('accountType', extracted.account_type || 'savings', {
         shouldValidate: true,
-        shouldDirty: true,
+        // shouldDirty: true,
       });
     } catch (error) {
       console.error('Error extracting bank details:', error);
@@ -288,8 +288,18 @@ export default function KYCBankDetails() {
                 placeholder="Select Document Type"
                 SelectProps={{
                   displayEmpty: true,
-                  renderValue: (value) =>
-                    value || <Box sx={{ color: 'text.disabled' }}>Select Type</Box>,
+                  renderValue: (value) => {
+                    if (!value) {
+                      return <Box sx={{ color: 'text.disabled' }}>Select Type</Box>;
+                    }
+                    const options = [
+                      { value: 'passbook', label: 'Passbook' },
+                      { value: 'cheque', label: 'Cheque' },
+                      { value: 'bank_statement', label: 'Bank Statement' },
+                    ];
+                    const selectedOption = options.find(option => option.value === value);
+                    return selectedOption ? selectedOption.label : value;
+                  },
                 }}
               >
                 <MenuItem value="passbook">Passbook</MenuItem>

@@ -5,7 +5,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDropzone } from 'react-dropzone';
-
+import { useState } from 'react';
 // @mui
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -165,8 +165,8 @@ export default function KYCBasicInfo({ currentInfo }) {
           }
         }
       } catch (error) {
-        console.error('Error fetching company information:', error);
-        enqueueSnackbar('Failed to load company information', { variant: 'error' });
+        // console.error('Error fetching company information:', error);
+        // enqueueSnackbar('Failed to load company information', { variant: 'error' });
       }
     };
 
@@ -208,6 +208,25 @@ export default function KYCBasicInfo({ currentInfo }) {
     }
   };
 
+  const [hasExistingData, setHasExistingData] = useState(false);
+
+  // Check if we have existing data when component mounts
+  useEffect(() => {
+    const checkExistingData = async () => {
+      const companyId = sessionStorage.getItem('company_information_id');
+      if (companyId) {
+        try {
+          const response = await axiosInstance.get(`/api/kyc/issuer_kyc/company-info/${companyId}/`);
+          setHasExistingData(!!response.data?.data);
+        } catch (error) {
+          console.error('Error checking existing data:', error);
+          setHasExistingData(false);
+        }
+      }
+    };
+    checkExistingData();
+  }, []);
+
   const onSubmit = handleSubmit(async (formData) => {
     try {
       console.info('Form Data:', formData);
@@ -230,12 +249,16 @@ export default function KYCBasicInfo({ currentInfo }) {
       // Format dates to YYYY-MM-DD
       if (formData.dateOfIncorporation) {
         formDataToSend.append('date_of_incorporation', dayjs(formData.dateOfIncorporation).format('YYYY-MM-DD'));
+      } else {
+        formDataToSend.append('date_of_incorporation', '');
       }
       
       formDataToSend.append('msme_udyam_registration_no', formData.msmeUdyamRegistrationNo || '');
       
       if (formData.dob) {
         formDataToSend.append('dob', dayjs(formData.dob).format('YYYY-MM-DD'));
+      } else {
+        formDataToSend.append('dob', '');
       }
       
       formDataToSend.append('country', formData.country || '');
@@ -243,13 +266,18 @@ export default function KYCBasicInfo({ currentInfo }) {
       formDataToSend.append('state_of_incorporation', formData.state || '');
       formDataToSend.append('entity_type', formData.entityType || '');
       
-      // Handle PAN card file
+      // Handle PAN card file - only append if it's a new file
       if (formData.panFile) {
         formDataToSend.append('company_or_individual_pan_card_file', formData.panFile);
+      } else if (!formData.panFile && !hasExistingData) {
+        // If no file and no existing data, add empty file to trigger validation
+        formDataToSend.append('company_or_individual_pan_card_file', '');
       }
       
       if (formData.dateOfBirth) {
         formDataToSend.append('date_of_birth', dayjs(formData.dateOfBirth).format('YYYY-MM-DD'));
+      } else {
+        formDataToSend.append('date_of_birth', '');
       }
       
       formDataToSend.append('pan_holder_name', formData.panHoldersName || '');
@@ -265,9 +293,13 @@ export default function KYCBasicInfo({ currentInfo }) {
 
       const companyId = sessionStorage.getItem('company_information_id');
       
-      if (!companyId) {
+      if (!hasExistingData) {
         // Create new company info
-        await axiosInstance.post('/api/kyc/issuer_kyc/company-info/', formDataToSend, config);
+        const response = await axiosInstance.post('/api/kyc/issuer_kyc/company-info/', formDataToSend, config);
+        // Store the company ID in session storage for future updates
+        if (response.data?.data?.id) {
+          sessionStorage.setItem('company_information_id', response.data.data.id);
+        }
       } else {
         // Update existing company info
         await axiosInstance.patch(
