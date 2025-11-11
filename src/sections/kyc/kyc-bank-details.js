@@ -98,7 +98,7 @@ export default function KYCBankDetails() {
   const values = watch();
   const addressProof = useWatch({ control, name: 'addressProof' });
   const documentType = useWatch({ control, name: 'documentType' });
-  const companyId = '01981cf1-60da-43be-b0db-9159768ecc97';
+  const COMPANY_ID = sessionStorage.getItem('company_information_id');
 
   const verifyBankDetail = async () => {
     console.log('Verifying bank details with values:');
@@ -114,7 +114,7 @@ export default function KYCBankDetails() {
       };
 
       const res = await axiosInstance.post(
-        `/api/kyc/issuer_kyc/bank-details/${companyId}/verify/`,
+        `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/verify/`,
         payload,
         {
           headers: { 'Content-Type': 'application/json' },
@@ -169,7 +169,7 @@ export default function KYCBankDetails() {
       formData.append('file', file); // ✅ backend expects 'document'
 
       const res = await axiosInstance.post(
-        `/api/kyc/issuer_kyc/bank-details/${companyId}/extract/`,
+        `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/extract/`,
         formData,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -222,13 +222,13 @@ export default function KYCBankDetails() {
       // ✅ Parallel API Calls
       const [bankRes, dematRes] = await Promise.all([
         axiosInstance.post(
-          `/api/kyc/issuer_kyc/bank-details/${companyId}/submit/`,
+          `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/submit/`,
           bankPayload,
           {
             headers: { 'Content-Type': 'application/json' },
           }
         ),
-        axiosInstance.post(`/api/kyc/issuer_kyc/company/${companyId}/demat/`, dematPayload, {
+        axiosInstance.post(`/api/kyc/issuer_kyc/company/${COMPANY_ID}/demat/`, dematPayload, {
           headers: { 'Content-Type': 'application/json' },
         }),
       ]);
