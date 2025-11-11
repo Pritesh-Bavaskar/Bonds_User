@@ -1,62 +1,70 @@
 import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
-import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import MenuItem from '@mui/material/MenuItem';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-// _mock
-import { USER_STATUS_OPTIONS } from 'src/_mock';
-// assets
-import { countries } from 'src/assets/data';
 // components
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import RHFFileUploadBox from 'src/components/custom-file-upload/file-upload';
+import axios from 'axios';
+import { useAuthContext } from 'src/auth/hooks';
 
-// ----------------------------------------------------------------------
+const roles = ['Director', 'Signatory', 'Manager'];
 
-const roles = [
-    'Director',
-    'Authorized Signatory',
-]
-
-export default function KYCAddSignatoriesForm({ currentUser, open, onClose }) {
+export default function KYCAddSignatoriesForm({ currentUser, open, onClose, companyId, onSuccess, isViewMode = false }) {
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuthContext();
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    din: Yup.string().required('DIN is required'),
+    email: Yup.string()
+      .required('Email is required')
+      .email('Please enter a valid email address')
+      .matches(
+        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+        'Please enter a valid email address'
+      ),
+    din: Yup.string()
+      .required('DIN is required')
+      .matches(/^[0-9]+$/, 'DIN must contain only numbers')
+      .max(8, 'DIN must be exactly 8 digits')
+      .min(8, 'DIN must be exactly 8 digits'),
     role: Yup.string().required('Role is required'),
-    // company: Yup.string().required('Company is required'),
-    // state: Yup.string().required('State is required'),
-    // city: Yup.string().required('City is required'),
-    // role: Yup.string().required('Role is required'),
+    panCard: Yup.mixed()
+      .required('PAN card is required')
+      .test('fileSize', 'File size is too large', (value) => {
+        if (!value) return false;
+        return value.size <= 10 * 1024 * 1024; // 10MB
+      }),
+    aadhaarCard: Yup.mixed()
+      .required('Aadhaar card is required')
+      .test('fileSize', 'File size is too large', (value) => {
+        if (!value) return false;
+        return value.size <= 10 * 1024 * 1024; // 10MB
+      }),
   });
 
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
+      name: currentUser?.name_of_signatory || '',
+      email: currentUser?.email_address || '',
       din: currentUser?.din || '',
-      role: currentUser?.role || '',
-      // state: currentUser?.state || '',
-      // city: currentUser?.city || '',
-      // zipCode: currentUser?.zipCode || '',
-    //   status: currentUser?.status,
-    //   company: currentUser?.company || '',
-    //   role: currentUser?.role || '',
+      role: currentUser?.designation || '',
+      panNumber: currentUser?.pan_number || '',
+      aadhaarNumber: currentUser?.aadhaar_number || '',
+      panCard: null,
+      aadhaarCard: null,
     }),
     [currentUser]
   );
@@ -69,18 +77,79 @@ export default function KYCAddSignatoriesForm({ currentUser, open, onClose }) {
   const {
     reset,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
+
+  // Reset form when currentUser changes (for view mode)
+  useEffect(() => {
+    if (currentUser) {
+      methods.reset({
+        ...defaultValues,
+      });
+    }
+  }, [currentUser, defaultValues, methods]);
+
+    // Helper function to get error message for a field
+  const getErrorMessage = (fieldName) => {
+    if (!errors[fieldName]) return null;
+    return (
+      <Box component="span" sx={{ color: 'error.main', fontSize: '0.75rem', mt: 0.5, display: 'block' }}>
+        {errors[fieldName]?.message}
+      </Box>
+    );
+  };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const formData = new FormData();
+
+      // Add file data if exists
+      if (data.panCard) {
+        formData.append('document_file_pan', data.panCard);
+      }
+      if (data.aadhaarCard) {
+        formData.append('document_file_aadhaar', data.aadhaarCard);
+      }
+
+      // Add other form fields
+      formData.append('name_of_signatory', data.name);
+      formData.append('email_address', data.email);
+      formData.append('din', data.din);
+      formData.append('designation', data.role);
+
+      // Get token from sessionStorage
+      const token = sessionStorage.getItem('accessToken');
+
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${
+          companyId || '01981cf1-60da-43be-b0db-9159768ecc97'
+        }/signatories/`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       reset();
+      enqueueSnackbar('Signatory added successfully!');
+      console.info('API Response:', response.data);
+      if (onSuccess) {
+        onSuccess();
+      }
       onClose();
-      enqueueSnackbar('Update success!');
-      console.info('DATA', data);
     } catch (error) {
-      console.error(error);
+      console.error('Error adding signatory:', error);
+      enqueueSnackbar(
+        error.response?.data?.message || 'Failed to add signatory. Please try again.',
+        { variant: 'error' }
+      );
     }
   });
 
@@ -95,60 +164,118 @@ export default function KYCAddSignatoriesForm({ currentUser, open, onClose }) {
       }}
     >
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>Add Authorized Signatory</DialogTitle>
+        <DialogTitle>{isViewMode ? 'View' : 'Add'} Authorized Signatory</DialogTitle>
 
-        <DialogContent>
-          {/* <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Account is waiting for confirmation
-          </Alert> */}
+        <DialogContent
+          sx={{
+            '&::-webkit-scrollbar': {
+              display: 'none',
+            },
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+            overflowY: 'auto',
+            maxHeight: '70vh',
+            pr: 2,
+          }}
+        >
+          <Box rowGap={3} display="grid">
+            <RHFTextField
+              name="name"
+              label="Name"
+              InputLabelProps={{ shrink: true }}
+              disabled={isViewMode}
+            />
+            {getErrorMessage('name')}
 
-          <Box
-            rowGap={3}
-            columnGap={2}
-            display="grid"
-            // gridTemplateColumns={{
-            //   xs: 'repeat(1, 1fr)',
-            //   sm: 'repeat(2, 1fr)',
-            // }}
-          >
-            {/* <RHFSelect name="status" label="Status">
-              {USER_STATUS_OPTIONS.map((status) => (
-                <MenuItem key={status.value} value={status.value}>
-                  {status.label}
+            <RHFTextField
+              name="email"
+              label="Email"
+              type="email"
+              InputLabelProps={{ shrink: true }}
+              disabled={isViewMode}
+            />
+            {getErrorMessage('email')}
+
+            <RHFTextField
+              name="din"
+              label="DIN"
+              InputLabelProps={{ shrink: true }}
+              disabled={isViewMode}
+            />
+            {getErrorMessage('din')}
+
+            <RHFSelect
+              name="role"
+              label="Designation"
+              InputLabelProps={{ shrink: true }}
+              disabled={isViewMode}
+            >
+              {roles.map((role) => (
+                <MenuItem key={role} value={role}>
+                  {role}
                 </MenuItem>
               ))}
-            </RHFSelect> */}
+            </RHFSelect>
+            {getErrorMessage('role')}
 
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }} />
+            {isViewMode ? (
+              <>
+                <RHFTextField
+                  name="panNumber"
+                  label="PAN Number"
+                  InputLabelProps={{ shrink: true }}
+                  disabled
+                />
+                <RHFTextField
+                  name="aadhaarNumber"
+                  label="Aadhaar Number"
+                  InputLabelProps={{ shrink: true }}
+                  disabled
+                />
+              </>
+            ) : (
+              <>
+                <RHFFileUploadBox
+                  name="panCard"
+                  label="Upload PAN (Required)"
+                  accept="application/pdf,image/*"
+                  fileType="pan"
+                  required
+                  error={!!errors.panCard}
+                />
+                {getErrorMessage('panCard')}
 
-            <RHFTextField name="name" label="Full Name" />
-            <RHFTextField name="din" label="DIN Number" />
-            <RHFTextField name="email" label="Email Address" />
-            <RHFTextField name="phoneNumber" label="Phone Number" />
-
-            <RHFAutocomplete
-              name="role"
-              label="Role"
-              options={roles.map((role) => role)}
-              getOptionLabel={(option) => option}
-            />
-
-            {/* <RHFTextField name="state" label="State/Region" /> */}
-            {/* <RHFTextField name="city" label="City" /> */}
-            {/* <RHFTextField name="zipCode" label="Zip/Code" /> */}
-            {/* <RHFTextField name="company" label="Company" /> */}
-            {/* <RHFTextField name="role" label="Role" /> */}
+                <RHFFileUploadBox
+                  name="aadhaarCard"
+                  label="Upload Aadhaar (Required)"
+                  accept="application/pdf,image/*"
+                  fileType="aadhaar"
+                  required
+                  error={!!errors.aadhaarCard}
+                />
+                {getErrorMessage('aadhaarCard')}
+              </>
+            )}
           </Box>
         </DialogContent>
 
         <DialogActions>
-          <Button variant="outlined" onClick={onClose}>
-            Cancel
-          </Button>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2 }}>
+            <Button variant="outlined" onClick={onClose}>
+              {isViewMode ? 'Close' : 'Cancel'}
+            </Button>
 
-          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Save
-          </LoadingButton>
+            {!isViewMode && (
+              <LoadingButton
+                type="submit"
+                variant="contained"
+                loading={isSubmitting}
+                disabled={isViewMode}
+              >
+                Add Signatory
+              </LoadingButton>
+            )}
+          </Box>
         </DialogActions>
       </FormProvider>
     </Dialog>
@@ -157,6 +284,10 @@ export default function KYCAddSignatoriesForm({ currentUser, open, onClose }) {
 
 KYCAddSignatoriesForm.propTypes = {
   currentUser: PropTypes.object,
-  onClose: PropTypes.func,
-  open: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func,
+  open: PropTypes.bool.isRequired,
+  isViewMode: PropTypes.bool,
+  companyId: PropTypes.string,
 };
+

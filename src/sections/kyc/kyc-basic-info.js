@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useMemo } from 'react';
+import { useSnackbar } from 'src/components/snackbar';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDropzone } from 'react-dropzone';
+
 // @mui
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -26,6 +28,10 @@ import FormProvider, { RHFTextField, RHFSelect, RHFAutocomplete } from 'src/comp
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import KYCStepper from './kyc-stepper';
+
+import axiosInstance from 'src/utils/axios';
+import dayjs from 'dayjs';
+import { fDate } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -82,7 +88,9 @@ PANUploadArea.propTypes = {
 
 // ----------------------------------------------------------------------
 
-export default function KYCBasicInfo() {
+export default function KYCBasicInfo({ currentInfo }) {
+  const { enqueueSnackbar } = useSnackbar();
+
   const NewUserSchema = Yup.object().shape({
     cin: Yup.string().required('CIN is required'),
     companyName: Yup.string().required('Company Name is required'),
@@ -90,9 +98,9 @@ export default function KYCBasicInfo() {
     dateOfIncorporation: Yup.date().required('Date of Incorporation is required'),
     msmeUdyamRegistrationNo: Yup.string(),
     city: Yup.string().required('City is required'),
-    state: Yup.string().required('State is required'),
+    state: Yup.string(),
     country: Yup.string().required('Country is required'),
-    entityType: Yup.string().required('Entity Type is required'),
+    entityType: Yup.string(),
     panFile: Yup.mixed(),
     panNumber: Yup.string(),
     dateOfBirth: Yup.date(),
@@ -101,21 +109,21 @@ export default function KYCBasicInfo() {
 
   const defaultValues = useMemo(
     () => ({
-      cin: '',
-      companyName: '',
-      gstin: '',
-      dateOfIncorporation: null,
-      msmeUdyamRegistrationNo: '',
-      city: '',
-      state: '',
-      country: '',
-      entityType: '',
-      panFile: null,
-      panNumber: '',
-      dateOfBirth: null,
-      panHoldersName: '',
+      cin: currentInfo?.cin || '',
+      companyName: currentInfo?.companyName || '',
+      gstin: currentInfo?.gstin || '',
+      dateOfIncorporation: currentInfo?.dateOfIncorporation || null,
+      msmeUdyamRegistrationNo: currentInfo?.msmeUdyamRegistrationNo || '',
+      city: currentInfo?.city || '',
+      state: currentInfo?.state || '',
+      country: currentInfo?.country || '',
+      entityType: currentInfo?.entityType || '',
+      panFile: currentInfo?.panFile || null,
+      panNumber: currentInfo?.panNumber || '',
+      dateOfBirth: currentInfo?.dateOfBirth || null,
+      panHoldersName: currentInfo?.panHoldersName || '',
     }),
-    []
+    [currentInfo]
   );
 
   const methods = useForm({
@@ -126,18 +134,94 @@ export default function KYCBasicInfo() {
   const {
     handleSubmit,
     control,
+    reset,
     setValue,
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
+  // ----------------------------------------------------------------------
+
+  const handlePanUpload = async (file) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.info('DATA', data);
+      const formData = new FormData();
+      formData.append('pan_card_file', file);
+
+      const response = await axiosInstance.post('/api/kyc/issuer_kyc/pan-extraction/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      const data = response.data;
+      console.log('PAN extraction result:', data);
+
+      if (data) {
+        setValue('panNumber', data.pan_number || '');
+        setValue('panHoldersName', data.pan_holder_name || '');
+        setValue('dateOfBirth', data.date_of_birth ? new Date(data.date_of_birth) : null);
+        enqueueSnackbar('PAN details fetched successfully!', { variant: 'success' });
+      }
     } catch (error) {
       console.error(error);
+      enqueueSnackbar('Failed to extract PAN details', { variant: 'error' });
+    }
+  };
+
+  const onSubmit = handleSubmit(async (formData) => {
+    try {
+      console.info('DATA', formData);
+
+      // Get token from session storage
+      const token = sessionStorage.getItem('accessToken');
+      if (!token) {
+        enqueueSnackbar('Authentication token not found', { variant: 'error' });
+        return;
+      }
+
+      const inputData = {
+        cin: formData.cin,
+        companyName: formData.companyName,
+        gstin: formData.gstin,
+        dateOfIncorporation: formData.dateOfIncorporation,
+        msmeUdyamRegistrationNo: formData.msmeUdyamRegistrationNo,
+        dob: formData.dob,
+        country: formData.country,
+        city: formData.city,
+        state: formData.state,
+        entityType: formData.entityType,
+        panNumber: formData.panNumber,
+        dateOfBirth: formData.dateOfBirth,
+        panHoldersName: formData.panHoldersName,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      if (!currentInfo) {
+        await axiosInstance.post('/api/kyc/issuer_kyc/company-info/', inputData, config);
+      } else {
+        await axiosInstance.patch(
+          `/api/kyc/issuer_kyc/company-info/${currentInfo.id}`,
+          inputData,
+          config
+        );
+      }
+
+      reset();
+      enqueueSnackbar(currentInfo ? 'Update success!' : 'Create success!');
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar(
+        typeof error === 'string' ? error : error?.error?.message || 'Error occurred',
+        {
+          variant: 'error',
+        }
+      );
     }
   });
+
+  // ----------------------------------------------------------------------
 
   return (
     <Container>
@@ -152,13 +236,7 @@ export default function KYCBasicInfo() {
           <Grid container spacing={3}>
             {/* Left Section */}
             <Grid xs={12} md={6}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 3,
-                }}
-              >
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 <Box>
                   <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Iconify icon="solar:user-rounded-bold" width={24} />
@@ -202,10 +280,8 @@ export default function KYCBasicInfo() {
                     render={({ field, fieldState: { error } }) => (
                       <DatePicker
                         value={field.value}
-                        onChange={(newValue) => {
-                          field.onChange(newValue);
-                        }}
-                        format="DD-MM-YYYY"
+                        onChange={(newValue) => field.onChange(newValue)}
+                        format="dd-MM-yyyy"
                         slotProps={{
                           textField: {
                             fullWidth: true,
@@ -242,16 +318,12 @@ export default function KYCBasicInfo() {
                       sx={{ flex: 1 }}
                       SelectProps={{
                         displayEmpty: true,
-                        renderValue: (selected) => {
-                          if (!selected) {
-                            return <Box sx={{ color: 'text.disabled' }}>State</Box>;
-                          }
-                          return selected;
-                        },
+                        renderValue: (selected) =>
+                          selected ? selected : <Box sx={{ color: 'text.disabled' }}>State</Box>,
                       }}
                     >
-                      <MenuItem value="">State</MenuItem>
-                      {/* Add state options here */}
+                      {/* <MenuItem value="">State</MenuItem> */}
+                      <MenuItem value="Maharashtra">Maharashtra</MenuItem>
                     </RHFSelect>
                     <RHFAutocomplete
                       name="country"
@@ -260,14 +332,9 @@ export default function KYCBasicInfo() {
                       options={countries.map((country) => country.label)}
                       getOptionLabel={(option) => option}
                       renderOption={(props, option) => {
-                        const { code, label, phone } = countries.filter(
+                        const { code, label, phone } = countries.find(
                           (country) => country.label === option
-                        )[0];
-
-                        if (!label) {
-                          return null;
-                        }
-
+                        );
                         return (
                           <li {...props} key={label}>
                             <Iconify
@@ -285,33 +352,64 @@ export default function KYCBasicInfo() {
                 </Box>
 
                 <Box>
-                  <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Iconify icon="solar:buildings-2-bold" width={24} />
-                    <Box component="span" sx={{ fontWeight: 600 }}>
-                      Entity Type
+                  <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ gap: 2 }}>
+                    <Box sx={{ flex: 1 }}>
+                      <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Iconify icon="solar:buildings-2-bold" width={24} />
+                        <Box component="span" sx={{ fontWeight: 600 }}>
+                          Entity Type
+                        </Box>
+                      </Box>
+                      <RHFSelect name="entityType" placeholder="Select Entity Type">
+                        <MenuItem value="">Select Entity Type</MenuItem>
+                        <MenuItem value="Private Limited">Private Limited</MenuItem>
+                        <MenuItem value="Public Limited">Public Limited</MenuItem>
+                        <MenuItem value="LLP">LLP</MenuItem>
+                        <MenuItem value="OPC">OPC</MenuItem>
+                        <MenuItem value="Partnership Firm">Partnership Firm</MenuItem>
+                        <MenuItem value="Proprietorship Firm">Proprietorship Firm</MenuItem>
+                        <MenuItem value="Trust/Society/NGO">Trust/Society/NGO</MenuItem>
+                      </RHFSelect>
                     </Box>
-                  </Box>
-                  <RHFSelect name="entityType" placeholder="Select Entity Type">
-                    <MenuItem value="">Select Entity Type</MenuItem>
-                    {/* Add entity type options here */}
-                  </RHFSelect>
+                    <Box sx={{ flex: 1 }}>
+                      <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Iconify icon="solar:chart-2-bold" width={24} />
+                        <Box component="span" sx={{ fontWeight: 600 }}>
+                          Sector
+                        </Box>
+                      </Box>
+                      <RHFSelect name="sector" placeholder="Select Sector">
+                        <MenuItem value="">Select Sector</MenuItem>
+                        <MenuItem value="IT & ITES">IT & ITES</MenuItem>
+                        <MenuItem value="Banking & Financial Services">
+                          Banking & Financial Services
+                        </MenuItem>
+                        <MenuItem value="Infrastructure">Infrastructure</MenuItem>
+                        <MenuItem value="Pharmaceuticals">Pharmaceuticals</MenuItem>
+                        <MenuItem value="Automobile">Automobile</MenuItem>
+                        <MenuItem value="Chemicals">Chemicals</MenuItem>
+                        <MenuItem value="Consumer Durables">Consumer Durables</MenuItem>
+                        <MenuItem value="FMCG">FMCG</MenuItem>
+                        <MenuItem value="Metals & Mining">Metals & Mining</MenuItem>
+                        <MenuItem value="Oil & Gas">Oil & Gas</MenuItem>
+                        <MenuItem value="Power">Power</MenuItem>
+                        <MenuItem value="Real Estate">Real Estate</MenuItem>
+                        <MenuItem value="Telecom">Telecom</MenuItem>
+                        <MenuItem value="Textiles">Textiles</MenuItem>
+                        <MenuItem value="Other">Other</MenuItem>
+                      </RHFSelect>
+                    </Box>
+                  </Stack>
                 </Box>
               </Box>
             </Grid>
 
             {/* Right Section */}
             <Grid xs={12} md={6}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 3,
-                }}
-              >
-                {/* Image - takes up 3 textField areas */}
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 <Box
                   sx={{
-                    height: { xs: 'auto', md: 'calc(3.82 * (56px + 24px))' }, // Approximate height of 3 fields with gaps
+                    height: { xs: 'auto', md: 'calc(3.82 * (56px + 24px))' },
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -330,7 +428,6 @@ export default function KYCBasicInfo() {
                   />
                 </Box>
 
-                {/* Upload PAN Section */}
                 <Box>
                   <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Iconify icon="solar:calendar-bold" width={24} />
@@ -344,9 +441,10 @@ export default function KYCBasicInfo() {
                     render={({ field, fieldState: { error } }) => (
                       <PANUploadArea
                         value={field.value}
-                        onChange={(file) => {
+                        onChange={async (file) => {
                           field.onChange(file);
                           setValue('panFile', file, { shouldValidate: true });
+                          await handlePanUpload(file);
                         }}
                         error={!!error}
                       />
@@ -354,7 +452,6 @@ export default function KYCBasicInfo() {
                   />
                 </Box>
 
-                {/* PAN Number Field */}
                 <Box>
                   <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Iconify icon="solar:calendar-bold" width={24} />
@@ -365,7 +462,6 @@ export default function KYCBasicInfo() {
                   <RHFTextField name="panNumber" placeholder="Your PAN Number" />
                 </Box>
 
-                {/* Date of Birth Field */}
                 <Box>
                   <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Iconify icon="solar:calendar-bold" width={24} />
@@ -379,10 +475,8 @@ export default function KYCBasicInfo() {
                     render={({ field, fieldState: { error } }) => (
                       <DatePicker
                         value={field.value}
-                        onChange={(newValue) => {
-                          field.onChange(newValue);
-                        }}
-                        format="DD-MM-YYYY"
+                        onChange={(newValue) => field.onChange(newValue)}
+                        format="dd-MM-yyyy"
                         slotProps={{
                           textField: {
                             fullWidth: true,
@@ -396,7 +490,6 @@ export default function KYCBasicInfo() {
                   />
                 </Box>
 
-                {/* PAN Holder's Name Field */}
                 <Box>
                   <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Iconify icon="solar:calendar-bold" width={24} />
@@ -410,33 +503,32 @@ export default function KYCBasicInfo() {
             </Grid>
           </Grid>
         </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 4, mb: 4 }}>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            size="large"
+            loading={isSubmitting}
+            sx={{
+              bgcolor: 'grey.800',
+              color: 'common.white',
+              borderRadius: 1,
+              px: 4,
+              py: 1.5,
+              '&:hover': { bgcolor: 'grey.900' },
+            }}
+            endIcon={<Iconify icon="eva:arrow-forward-fill" />}
+          >
+            Save & Continue
+          </LoadingButton>
+        </Box>
       </FormProvider>
-
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 4, mb: 4 }}>
-        <LoadingButton
-          type="submit"
-          variant="contained"
-          component={RouterLink}
-          size="large"
-          loading={isSubmitting}
-          to={paths.KYCAddressInfo}
-          sx={{
-            bgcolor: 'grey.800',
-            color: 'common.white',
-            borderRadius: 1,
-            px: 4,
-            py: 1.5,
-            '&:hover': {
-              bgcolor: 'grey.900',
-            },
-          }}
-          endIcon={<Iconify icon="eva:arrow-forward-fill" />}
-        >
-          Save & Continue
-        </LoadingButton>
-      </Box>
-
       <KYCFooter />
     </Container>
   );
 }
+
+KYCBasicInfo.propTypes = {
+  currentInfo: PropTypes.object,
+};

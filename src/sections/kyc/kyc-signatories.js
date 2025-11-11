@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { m } from 'framer-motion';
+import axios from 'axios';
 // @mui
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -11,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
 import Iconify from 'src/components/iconify';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,6 +26,8 @@ import Paper from '@mui/material/Paper';
 import { RouterLink } from 'src/routes/components';
 import { MotionContainer, varFade } from 'src/components/animate';
 import { paths } from 'src/routes/paths';
+import { useSnackbar } from 'src/components/snackbar';
+// import { useConfirm } from 'src/components/confirm-dialog';
 import KYCTitle from './kyc-title';
 import KYCFooter from './kyc-footer';
 import KYCAddSignatoriesForm from './kyc-add-signatories-form';
@@ -45,34 +50,130 @@ const StyledSearch = styled(TextField)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-// Sample data for the table
-const createData = (name, din, email, phone, role) => {
-  return { name, din, email, phone, role };
-};
-
-const rows = [
-  createData('John Doe', '1234567890', 'john@example.com', '+1 234 567 8901', 'Director'),
-  createData(
-    'Jane Smith',
-    '0987654321',
-    'jane@example.com',
-    '+1 987 654 3210',
-    'Authorized Signatory'
-  ),
-];
+const COMPANY_ID = '01981cf1-60da-43be-b0db-9159768ecc97';
 
 export default function KYCSignatories() {
   const [open, setOpen] = useState(false);
+  const [viewSignatory, setViewSignatory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [signatories, setSignatories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [isViewMode, setIsViewMode] = useState(false);
+  // const confirm = useConfirm();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => {
+    setOpen(true);
+    setIsViewMode(false);
+    setViewSignatory(null);
+  };
+  
+  const handleClose = () => {
+    setOpen(false);
+    setIsViewMode(false);
+    setViewSignatory(null);
+  };
+  
+  const handleViewSignatory = async (signatoryId) => {
+    try {
+      setLoading(true);
+      const token = sessionStorage.getItem('accessToken');
+      if (!token) throw new Error('No authentication token found');
 
-  const filteredRows = rows.filter((row) =>
-    Object.values(row).some(
+      const response = await axios.get(
+        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${signatoryId}/signatories/get`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.status === 'success') {
+        setViewSignatory(response.data.data);
+        setIsViewMode(true);
+        setOpen(true);
+      }
+    } catch (err) {
+      console.error('Error fetching signatory details:', err);
+      enqueueSnackbar('Failed to fetch signatory details', { variant: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchSignatories = async () => {
+    try {
+      setLoading(true);
+      const token = sessionStorage.getItem('accessToken');
+      if (!token) throw new Error('No authentication token found');
+
+      const response = await axios.get(
+        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${COMPANY_ID}/signatories/list?page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.status === 'success') {
+        setSignatories(response.data.data);
+      }
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching signatories:', err);
+      setError(err.response?.data?.message || 'Failed to fetch signatories');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSignatories();
+  }, [page]);
+
+  const filteredSignatories = signatories.filter((signatory) =>
+    Object.values(signatory).some(
       (value) => value && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
+
+  const handleSignatoryAdded = () => {
+    fetchSignatories(); // Refresh the list after adding a new signatory
+  };
+
+  const handleDeleteSignatory = async (signatoryId) => {
+    if (window.confirm('Are you sure you want to delete this signatory?')) {
+      try {
+        setLoading(true);
+        const token = sessionStorage.getItem('accessToken');
+        if (!token) throw new Error('No authentication token found');
+
+        await axios.delete(
+          `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${signatoryId}/signatories/delete`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // Refresh the list after successful deletion
+        fetchSignatories();
+        enqueueSnackbar('Signatory deleted successfully', { variant: 'success' });
+      } catch (err) {
+        console.error('Error deleting signatory:', err);
+        enqueueSnackbar(err.response?.data?.message || 'Failed to delete signatory', {
+          variant: 'error',
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <Container sx={{ position: 'relative', py: { xs: 6, sm: 8, md: 0 } }}>
@@ -139,7 +240,14 @@ export default function KYCSignatories() {
               Add Signatory
             </Button>
 
-            <KYCAddSignatoriesForm open={open} onClose={handleClose} />
+            <KYCAddSignatoriesForm
+              open={open}
+              onClose={handleClose}
+              onSuccess={handleSignatoryAdded}
+              companyId={COMPANY_ID}
+              currentUser={isViewMode ? viewSignatory : null}
+              isViewMode={isViewMode}
+            />
           </Box>
         </Box>
         <TableContainer component={Paper} sx={{ mb: 5 }}>
@@ -148,34 +256,98 @@ export default function KYCSignatories() {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell align="left">DIN</TableCell>
-                <TableCell align="left">Role</TableCell>
+                <TableCell align="left">Designation</TableCell>
                 <TableCell align="left">Email</TableCell>
-                <TableCell align="left">Phone</TableCell>
-                <TableCell align="left">ID Proof</TableCell>
+                <TableCell align="left">PAN</TableCell>
+                <TableCell align="left">Aadhaar</TableCell>
                 <TableCell align="left">Status</TableCell>
-
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredRows.map((row) => (
-                <TableRow key={row.din} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="left">{row.din}</TableCell>
-                  <TableCell align="left">{row.role}</TableCell>
-                  <TableCell align="left">{row.email}</TableCell>
-                  <TableCell align="left">{row.phone}</TableCell>
-                  <TableCell align="left">{row.idProof}</TableCell>
-                  <TableCell align="left">{row.status}</TableCell>
-                  <TableCell align="right">
-                    <IconButton color="error" aria-label="delete">
-                      <Iconify icon="eva:trash-2-outline" />
-                    </IconButton>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={8} align="center" sx={{ py: 3 }}>
+                    <CircularProgress />
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : error ? (
+                <TableRow>
+                  <TableCell colSpan={8} align="center" sx={{ py: 3 }}>
+                    <Alert severity="error">{error}</Alert>
+                  </TableCell>
+                </TableRow>
+              ) : filteredSignatories.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} align="center" sx={{ py: 3 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      No signatories found
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredSignatories.map((signatory) => (
+                  <TableRow
+                    key={signatory.signatory_id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {signatory.name_of_signatory}
+                    </TableCell>
+                    <TableCell align="left">{signatory.din}</TableCell>
+                    <TableCell align="left">{signatory.designation}</TableCell>
+                    <TableCell align="left">{signatory.email_address}</TableCell>
+                    <TableCell align="left">{signatory.pan_number || '-'}</TableCell>
+                    <TableCell align="left">{signatory.aadhaar_number || '-'}</TableCell>
+                    <TableCell align="left">
+                      <Box
+                        component="span"
+                        sx={{
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          color: signatory.status === 'PENDING' ? 'warning.dark' : 'success.dark',
+                          bgcolor:
+                            signatory.status === 'PENDING' ? 'warning.lighter' : 'success.lighter',
+                          textTransform: 'capitalize',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {signatory.status.toLowerCase()}
+                      </Box>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Stack direction="row" spacing={1} justifyContent="flex-end">
+                        <IconButton
+                          color="info"
+                          aria-label="view"
+                          onClick={() => handleViewSignatory(signatory.signatory_id)}
+                          disabled={loading}
+                        >
+                          <Iconify icon="eva:eye-outline" />
+                        </IconButton>
+                        <IconButton
+                          color="primary"
+                          aria-label="edit"
+                          onClick={() => console.log('Edit signatory:', signatory.signatory_id)}
+                          disabled={loading}
+                        >
+                          <Iconify icon="eva:edit-outline" />
+                        </IconButton>
+                        <IconButton
+                          color="error"
+                          aria-label="delete"
+                          onClick={() => handleDeleteSignatory(signatory.signatory_id)}
+                          disabled={loading}
+                        >
+                          <Iconify icon="eva:trash-2-outline" />
+                        </IconButton>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
