@@ -1,22 +1,25 @@
-// src/components/BondsCalculatorHero.jsx
 import React, { useState } from 'react';
-import { Box, Grid, Typography, Slider, Button, useMediaQuery, useTheme } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
-// components
-import Iconify from 'src/components/iconify';
+import {
+  Box,
+  Grid,
+  Typography,
+  Slider,
+  Button,
+  TextField,
+  InputAdornment,
+  Container,
+  Card,
+  CardContent,
+  Stack,
+} from '@mui/material';
+import { Icon } from '@iconify/react';
 import OvalImg from 'src/images/oval.png';
-import { Container } from '@mui/material';
-// Chart.js imports
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function BondsCalculatorSection() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+export default function BondsCalculator() {
   const [investment, setInvestment] = useState(30000);
   const [rate, setRate] = useState(9);
   const [years, setYears] = useState(11);
@@ -25,337 +28,384 @@ export default function BondsCalculatorSection() {
   const maturity = principal * Math.pow(1 + rate / 100, years);
   const returns = maturity - principal;
 
-  // Chart data
   const chartData = {
     labels: ['Total Investment', 'Estimated Returns'],
     datasets: [
       {
         data: [principal, returns],
-        backgroundColor: ['#97C4FF', '#003289'], // dark + light blue
+        backgroundColor: ['#003289', '#1877F2'],
         borderWidth: 0,
       },
     ],
   };
 
   const chartOptions = {
-    cutout: '70%', // makes donut thick
+    cutout: '70%',
     plugins: {
       legend: {
-        position: 'bottom',
-        labels: {
-          boxWidth: 12,
-          padding: 15,
-        },
+        display: false, // ⬅️ Hide default Chart.js legend
       },
       tooltip: {
         callbacks: {
-          label: function (context) {
-            let value = context.raw || 0;
-            return `₹ ${value.toLocaleString()}`;
-          },
+          label: (ctx) => `₹ ${(+ctx.raw || 0).toLocaleString()}`,
         },
       },
     },
   };
 
   return (
-    <Container
-      maxWidth={false}
-      disableGutters
-      sx={{
-        py: 5,
-        maxWidth: '100%',
-        width: '100%',
-        px: 0,
-        // mx: "auto",
-        height: '800px',
-      }}
-    >
-      <Box sx={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50' }}>
+      {/* Header */}
+      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
         <Typography
+          variant="h3"
+          component="h1"
           sx={{
             fontSize: { xs: 28, md: 35 },
-            fontWeight: 600,
+            fontWeight: 700,
             color: 'primary.main',
-            textAlign: 'left',
-            pl: 10,
-            // pl: "91px",
           }}
         >
           Bonds Calculator
         </Typography>
+      </Container>
 
-        {/* Background Image */}
-        <Box
-          component="img"
-          src={OvalImg}
-          alt="Calculator"
-          sx={{
-            width: '70%',
-            height: { xs: 300, md: 800 },
-            objectFit: 'cover',
-            py: { xs: 3, md: 3 },
-            bgcolor: '#fff',
-          }}
-        />
-        {/* Small pill over image */}
-        <TextField
-          halfWidth
-          placeholder="ISIN Number"
-          variant="outlined"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Iconify icon="eva:search-fill" width={22} />
-              </InputAdornment>
-            ),
-          }}
-          sx={{
-            position: 'absolute',
-            top: { xs: '20%', md: '15%' },
-            left: '11%',
-            zIndex: 3,
-            paddingBottom: { xs: 3, sm: 4, md: 1 },
-            '& .MuiOutlinedInput-root': {
-              borderRadius: '10px',
-              bgcolor: 'background.paper',
-              boxShadow: (theme) => theme.customShadows?.z8 || '0 2px 12px rgba(0,0,0,0.08)',
-              '& fieldset': { borderColor: 'divider' },
-              '&:hover fieldset': { borderColor: 'text.disabled' },
-            },
-            '& input': { py: { xs: 1.25, sm: 1.5 } },
-            maxWidth: { xs: '100%', sm: 680, md: 800 },
-          }}
-        />
-
-        {/* Calculator Box */}
+      {/* Background Shape and Calculator Container */}
+      <Box sx={{ position: 'relative', width: '100%' }}>
         <Box
           sx={{
             position: 'absolute',
-            top: { xs: '20%', md: '25%' },
-            left: '48%',
-            transform: 'translateX(-50%)',
-            width: { xs: '90%', md: '1100px' },
-            bgcolor: '#f9f9f9',
-            py: { xs: 3, md: 6 },
-            pr: { xs: 3, md: 16 },
-            borderRadius: 3,
-            boxShadow: 3,
-            zIndex: 2,
+            inset: 0,
+            overflow: 'hidden',
+            zIndex: 0,
+            display: { xs: 'none', md: 'block' },
           }}
         >
-          <Grid container spacing={4} justifyContent="center" sx={{ maxWidth: 1200, mx: 'auto' }}>
-            {/* Left Side - Donut Chart */}
-            <Grid item xs={12} md={6} textAlign="center">
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 1,
-                  mt: 2,
+          <Box
+            component="img"
+            src={OvalImg}
+            alt="Calculator"
+            sx={{
+              width: '70%',
+              objectFit: 'cover',
+              py: { xs: 3, md: 3 },
+            }}
+          />
+        </Box>
+
+        {/* Calculator Card - Positioned Dynamically */}
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pb: { xs: 8, md: 16 } }}>
+          <Grid container spacing={3}>
+            {/* Search Bar */}
+            <Grid item xs={12} md={4}>
+              <TextField
+                fullWidth
+                placeholder="ISIN Number"
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon icon="eva:search-fill" width={22} height={22} />
+                    </InputAdornment>
+                  ),
                 }}
-              >
-                <Typography variant="h5" fontWeight={600}>
-                  Your Total Amount
-                </Typography>
-
-                <Typography variant="h6" fontWeight={600} color="primary">
-                  ₹{maturity.toLocaleString()}
-                </Typography>
-
-                <Typography variant="body2" color="text.secondary">
-                  9.00% interest rate per annum
-                </Typography>
-              </Box>
-
-              <Box sx={{ position: 'relative', width: isMobile ? 200 : 300, mx: ' auto', my: 2 }}>
-                <Doughnut data={chartData} options={chartOptions} />
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    display: 'flex',
-                    gap: 5,
-                    ml: 2,
-                    justifyContent: 'center',
-                  }}
-                >
-                  <span> ₹{principal.toLocaleString()}</span>
-                  <span>₹{returns.toLocaleString()}</span>
-                </Typography>
-
-                {/* Center Text */}
-                {/* <Box
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    textAlign: "center",
-                  }}
-                >
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Total Amount
-                  </Typography>
-                  <Typography variant="h6" fontWeight={600} color="primary">
-                    ₹ {maturity.toLocaleString()}
-                  </Typography>
-                </Box>  */}
-              </Box>
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    mt: { md: 5, xs: 0 },
+                    borderRadius: 2,
+                    bgcolor: 'background.paper',
+                    boxShadow: 3,
+                    '& fieldset': { borderColor: 'divider' },
+                    '&:hover fieldset': { borderColor: 'text.disabled' },
+                  },
+                }}
+              />
             </Grid>
 
-            {/* Right Side - Sliders */}
-            <Grid item xs={12} md={6}>
-              <Box margin={3}>
-                {/* Monthly Investment */}
-
-                <Box>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
-                    <Typography variant="h5" fontWeight="bold">
-                      Monthly Investment
-                    </Typography>
-                    <Typography
-                      sx={{
-                        border: '1px solid #ccc',
-                        px: 3,
-                        py: 0.3,
-                        borderRadius: 1,
-                        fontWeight: 500,
-                        minWidth: 80,
-                        textAlign: 'center',
-                        bgcolor: '#fff',
-                      }}
-                    >
-                      ₹{investment.toLocaleString()}
-                    </Typography>
-                  </Box>
-
-                  <Box sx={{ ml: 5 }}>
-                    <Slider
-                      value={investment}
-                      onChange={(_, val) => setInvestment(val)}
-                      min={10000}
-                      max={100000}
-                      step={1000}
-                    />
-                    <Box
+            {/* Main Calculator Card */}
+            <Grid item xs={12}>
+              <Card
+                elevation={6}
+                sx={{
+                  borderRadius: 3,
+                  overflow: 'visible',
+                }}
+              >
+                <CardContent sx={{ p: { xs: 3, md: 6 } }}>
+                  <Grid container spacing={4}>
+                    <Grid
+                      item
+                      xs={12}
+                      lg={6}
                       sx={{
                         display: 'flex',
-                        flexDirection: 'row ',
-                        justifyContent: 'space-between',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flex: 1,
+                        p: { xs: 3, md: 4 },
                       }}
                     >
-                      <Typography variant="caption">Min ₹10k</Typography>
-                      <Typography variant="caption">Max ₹1Lakh</Typography>
-                    </Box>
-                  </Box>
-                </Box>
+                      <Box sx={{ textAlign: 'center', mb: 4 }}>
+                        <Typography variant="h5" fontWeight={600} gutterBottom>
+                          Your Total Amount
+                        </Typography>
+                        <Typography variant="h4" fontWeight={700} color="primary.main" gutterBottom>
+                          ₹{Math.round(maturity).toLocaleString()}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          9.00% interest rate per annum
+                        </Typography>
+                      </Box>
 
-                {/* Expected Return */}
-                <Box>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
-                    <Typography variant="h5" fontWeight="bold">
-                      Expected Return (%)
-                    </Typography>
-                    <Typography
-                      sx={{
-                        border: '1px solid #ccc',
-                        px: 3,
-                        py: 0.3,
-                        borderRadius: 1,
-                        fontWeight: 500,
-                        minWidth: 60,
-                        textAlign: 'center',
-                        bgcolor: '#fff',
-                      }}
-                    >
-                      {rate}%
-                    </Typography>
-                  </Box>
-                  <Box sx={{ ml: 5 }}>
-                    <Slider
-                      value={rate}
-                      onChange={(_, val) => setRate(val)}
-                      min={8}
-                      max={15}
-                      step={0.5}
-                      sx={{ mt: 0 }}
-                    />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <Typography variant="caption">Min 8%</Typography>
-                      <Typography variant="caption">Max 15%</Typography>
-                    </Box>
-                  </Box>
-                </Box>
+                      <Box sx={{ width: { xs: 220, md: 280 }, mb: 2 }}>
+                        <Doughnut data={chartData} options={chartOptions} />
+                        <Stack
+                          direction="row"
+                          spacing={{ xs: 4, md: 6 }}
+                          justifyContent="center"
+                          alignItems="flex-start"
+                          sx={{ mt: 2 }}
+                        >
+                          {/* Total Investment */}
+                          <Stack direction="column" alignItems="center" spacing={0.5}>
+                            <Stack direction="row" alignItems="center" spacing={1}>
+                              <Box
+                                sx={{
+                                  width: 10,
+                                  height: 10,
+                                  borderRadius: '50px',
+                                  bgcolor: '#003289',
+                                }}
+                              />
+                              <Typography variant="caption" color="text.secondary">
+                                Total Investment
+                              </Typography>
+                            </Stack>
+                            <Typography variant="subtitle1" fontWeight={700}>
+                              ₹{principal.toLocaleString()}
+                            </Typography>
+                          </Stack>
 
-                {/* Time Period */}
-                <Box>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
-                    <Typography variant="h5" fontWeight="bold">
-                      Time Period
-                    </Typography>
-                    <Typography
-                      sx={{
-                        border: '1px solid #ccc',
-                        px: 3,
-                        py: 0.3,
-                        borderRadius: 1,
-                        fontWeight: 500,
-                        minWidth: 70,
-                        textAlign: 'center',
-                        bgcolor: '#fff',
-                      }}
-                    >
-                      {years} Years
-                    </Typography>
-                  </Box>
-                  <Box sx={{ ml: 5 }}>
-                    <Slider
-                      value={years}
-                      onChange={(_, val) => setYears(val)}
-                      min={1}
-                      max={15}
-                      step={1}
-                      sx={{ mt: 0 }}
-                    />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <Typography variant="caption">Min 1 year</Typography>
-                      <Typography variant="caption">Max 15 Years</Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
+                          {/* Estimated Returns */}
+                          <Stack direction="column" alignItems="center" spacing={0.5}>
+                            <Stack direction="row" alignItems="center" spacing={1}>
+                              <Box
+                                sx={{
+                                  width: 10,
+                                  height: 10,
+                                  borderRadius: '50px',
+                                  bgcolor: '#1877F2',
+                                }}
+                              />
+                              <Typography variant="caption" color="text.secondary">
+                                Estimated Returns
+                              </Typography>
+                            </Stack>
+                            <Typography variant="subtitle1" fontWeight={700}>
+                              ₹{Math.round(returns).toLocaleString()}
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                      </Box>
+                    </Grid>
 
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
-                <Button
-                  size="230px"
-                  sx={{
-                    mt: 2,
-                    py: 2,
-                    px: 5,
-                    borderRadius: 0,
-                    bgcolor: 'primary.main',
-                    color: '#fff',
-                    '&:hover': { bgcolor: 'primary.dark' },
-                  }}
-                >
-                  Invest Now
-                </Button>
-              </Box>
+                    {/* Right Column - Controls */}
+                    <Grid item xs={12} lg={6}>
+                      <Grid container spacing={3}>
+                        {/* Monthly Investment Card */}
+                        <Grid item xs={12}>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              mb: 2,
+                            }}
+                          >
+                            <Typography variant="h6" fontWeight={600}>
+                              Monthly Investment
+                            </Typography>
+                            <Box
+                              sx={{
+                                border: '1px solid',
+                                borderColor: 'divider',
+                                px: 2,
+                                py: 0.5,
+                                borderRadius: 1,
+                                minWidth: 100,
+                                textAlign: 'center',
+                                bgcolor: 'background.paper',
+                              }}
+                            >
+                              <Typography fontWeight={500}>
+                                ₹{investment.toLocaleString()}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Slider
+                            value={investment}
+                            onChange={(_, val) => setInvestment(val)}
+                            min={10000}
+                            max={100000}
+                            step={1000}
+                            sx={{ mt: 1 }}
+                          />
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              mt: 0.5,
+                            }}
+                          >
+                            <Typography variant="caption" color="text.secondary">
+                              Min ₹10k
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              Max ₹1Lakh
+                            </Typography>
+                          </Box>
+                        </Grid>
+
+                        {/* Expected Return Card */}
+                        <Grid item xs={12}>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              mb: 2,
+                            }}
+                          >
+                            <Typography variant="h6" fontWeight={600}>
+                              Expected Return (%)
+                            </Typography>
+                            <Box
+                              sx={{
+                                border: '1px solid',
+                                borderColor: 'divider',
+                                px: 2,
+                                py: 0.5,
+                                borderRadius: 1,
+                                minWidth: 80,
+                                textAlign: 'center',
+                                bgcolor: 'background.paper',
+                              }}
+                            >
+                              <Typography fontWeight={500}>{rate}%</Typography>
+                            </Box>
+                          </Box>
+                          <Slider
+                            value={rate}
+                            onChange={(_, val) => setRate(val)}
+                            min={8}
+                            max={15}
+                            step={0.5}
+                            sx={{ mt: 1 }}
+                          />
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              mt: 0.5,
+                            }}
+                          >
+                            <Typography variant="caption" color="text.secondary">
+                              Min 8%
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              Max 15%
+                            </Typography>
+                          </Box>
+                        </Grid>
+
+                        {/* Time Period Card */}
+                        <Grid item xs={12}>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              mb: 2,
+                            }}
+                          >
+                            <Typography variant="h6" fontWeight={600}>
+                              Time Period
+                            </Typography>
+                            <Box
+                              sx={{
+                                border: '1px solid',
+                                borderColor: 'divider',
+                                px: 2,
+                                py: 0.5,
+                                borderRadius: 1,
+                                minWidth: 90,
+                                textAlign: 'center',
+                                bgcolor: 'background.paper',
+                              }}
+                            >
+                              <Typography fontWeight={500}>{years} Years</Typography>
+                            </Box>
+                          </Box>
+                          <Slider
+                            value={years}
+                            onChange={(_, val) => setYears(val)}
+                            min={1}
+                            max={15}
+                            step={1}
+                            sx={{ mt: 1 }}
+                          />
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              mt: 0.5,
+                            }}
+                          >
+                            <Typography variant="caption" color="text.secondary">
+                              Min 1 year
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              Max 15 Years
+                            </Typography>
+                          </Box>
+                        </Grid>
+
+                        <Grid
+                          item
+                          xs={12}
+                          md={6}
+                          sx={{
+                            mx: 'auto', // ✅ centers the grid itself
+                          }}
+                        >
+                          <Button
+                            variant="contained"
+                            size="large"
+                            fullWidth
+                            sx={{
+                              py: 1.5,
+                              borderRadius: 1,
+                              textTransform: 'none',
+                              fontSize: '1rem',
+                              fontWeight: 600,
+                              display: 'flex',
+                              justifyContent: 'center',
+                              bgcolor: '#00328A',
+                            }}
+                          >
+                            Invest Now
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
             </Grid>
           </Grid>
-        </Box>
+        </Container>
       </Box>
-    </Container>
+    </Box>
   );
 }
