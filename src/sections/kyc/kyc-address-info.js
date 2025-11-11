@@ -1,5 +1,6 @@
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'src/utils/axios';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -19,6 +20,7 @@ import RHFTextField from 'src/components/hook-form/rhf-text-field';
 import { RHFUploadBox } from 'src/components/hook-form/rhf-upload';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
+import { useRouter } from 'src/routes/hook';
 // sections
 import KYCTitle from './kyc-title';
 import KYCFooter from './kyc-footer';
@@ -96,6 +98,11 @@ const AddressSchema = Yup.object().shape({
 
 export default function KycAddressInfo() {
   const [preview, setPreview] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [addressExists, setAddressExists] = useState(false);
+  const accessToken = sessionStorage.getItem('accessToken');
+  const router = useRouter();
+  const companyId = '01981cf1-60da-43be-b0db-9159768ecc97';
 
   const methods = useForm({
     resolver: yupResolver(AddressSchema),
@@ -123,12 +130,135 @@ export default function KycAddressInfo() {
   const addressProof = useWatch({ control, name: 'addressProof' });
   const sameAsRegistered = useWatch({ control, name: 'sameAsRegistered' });
 
-  const onSubmit = (data) => {
-    console.log('Form submitted with data:', data);
-    // Handle form submission here
+  useEffect(() => {
+    const fetchAddress = async () => {
+      const base = process.env.REACT_APP_HOST_API || '';
+      try {
+        const res = await fetch(`${base}/api/kyc/issuer_kyc/company/${companyId}/address/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          },
+        });
+        if (!res.ok) return;
+        let json = {};
+        try {
+          json = await res.json();
+        } catch (e) {
+          json = {};
+        }
+
+        console.log(json);
+        const root = json?.addresses ?? json ?? {};
+        const registered = root?.registered ?? {};
+        const correspondence = root?.correspondence ?? {};
+
+        const toStr = (v) => (typeof v === 'string' ? v : v == null ? '' : String(v));
+        const toTen = (v) => {
+          const digits = String(v ?? '').replace(/\D/g, '');
+          return digits.slice(-10);
+        };
+
+        // Registered mapping
+        setValue('registeredAddressLine1', toStr(registered.registered_office), { shouldValidate: true });
+        setValue('registeredAddressLine2', toStr(registered.registered_office_line2), { shouldValidate: true });
+        setValue('registeredCity', toStr(registered.city), { shouldValidate: true });
+        setValue('registeredState', toStr(registered.state_ut), { shouldValidate: true });
+        setValue('registeredPincode', toStr(registered.pin_code), { shouldValidate: true });
+        setValue('registeredEmail', toStr(registered.contact_email), { shouldValidate: true });
+        setValue('registeredPhone', toTen(registered.contact_phone), { shouldValidate: true });
+
+        // Correspondence mapping (note: API uses same key 'registered_office' for address line)
+        setValue('correspondenceAddressLine1', toStr(correspondence.registered_office ?? correspondence.correspondence_address), { shouldValidate: true });
+        setValue('correspondenceAddressLine2', toStr(correspondence.registered_office_line2 ?? correspondence.correspondence_address_line2), { shouldValidate: true });
+        setValue('correspondenceCity', toStr(correspondence.city ?? correspondence.correspondence_city), { shouldValidate: true });
+        setValue('correspondenceState', toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut), { shouldValidate: true });
+        setValue('correspondencePincode', toStr(correspondence.pin_code ?? correspondence.correspondence_pin_code), { shouldValidate: true });
+        setValue('correspondenceEmail', toStr(correspondence.contact_email ?? correspondence.correspondence_email), { shouldValidate: true });
+        setValue('correspondencePhone', toTen(correspondence.contact_phone ?? correspondence.correspondence_phone), { shouldValidate: true });
+
+        // Derive sameAsRegistered by comparing core fields
+        const same = (
+          toStr(registered.registered_office) === toStr(correspondence.registered_office ?? correspondence.correspondence_address) &&
+          toStr(registered.city) === toStr(correspondence.city ?? correspondence.correspondence_city) &&
+          toStr(registered.state_ut) === toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut) &&
+          toStr(registered.pin_code) === toStr(correspondence.pin_code ?? correspondence.correspondence_pin_code) &&
+          toStr(registered.contact_email) === toStr(correspondence.contact_email ?? correspondence.correspondence_email) &&
+          toTen(registered.contact_phone) === toTen(correspondence.contact_phone ?? correspondence.correspondence_phone)
+        );
+        setValue('sameAsRegistered', same, { shouldValidate: true });
+
+        // If server returned any address_id, mark as existing for PUT
+        setAddressExists(Boolean(registered.address_id || correspondence.address_id));
+      } catch (e) {
+        // silent
+      }
+    };
+    fetchAddress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [companyId]);
+
+  const onSubmit = async (form) => {
+    const base = process.env.REACT_APP_HOST_API || '';
+    const payload = {};
+    const add = (k, v) => {
+      payload[k] = v ?? '';
+    };
+
+    // Map Registered (screenshot keys)
+    add('is_same_address', String(!!form.sameAsRegistered));
+    add('registered_office', form.registeredAddressLine1);
+    add('city', form.registeredCity);
+    add('state_ut', form.registeredState);
+    add('pin_code', form.registeredPincode);
+    add('country', 'India');
+    add('contact_email', form.registeredEmail);
+    add('contact_phone', form.registeredPhone?.startsWith('+') ? form.registeredPhone : `+91${form.registeredPhone}`);
+
+    // Map Correspondence
+    const corrSame = !!form.sameAsRegistered;
+    const corrAddr1 = corrSame ? form.registeredAddressLine1 : form.correspondenceAddressLine1;
+    const corrCity = corrSame ? form.registeredCity : form.correspondenceCity;
+    const corrState = corrSame ? form.registeredState : form.correspondenceState;
+    const corrPin = corrSame ? form.registeredPincode : form.correspondencePincode;
+    const corrEmail = corrSame ? form.registeredEmail : form.correspondenceEmail;
+    const corrPhoneRaw = corrSame ? form.registeredPhone : form.correspondencePhone;
+    const corrPhone = corrPhoneRaw?.startsWith('+') ? corrPhoneRaw : `+91${corrPhoneRaw || ''}`;
+
+    add('correspondence_address', corrAddr1);
+    add('correspondence_city', corrCity);
+    add('correspondence_state_ut', corrState);
+    add('correspondence_pin_code', corrPin);
+    add('correspondence_country', 'India');
+    add('correspondence_email', corrEmail);
+    add('correspondence_phone', corrPhone);
+
+    try {
+      setIsUploading(true);
+      const method = addressExists ? 'PUT' : 'POST';
+      const res = await fetch(`${base}/api/kyc/issuer_kyc/company/${companyId}/address/`, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || 'Failed to save address');
+      }
+      // Navigate on success
+      router.push(paths.KYCCompanyDetails);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
-  const handleDrop = (acceptedFiles) => {
+  const handleDrop = async (acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file) {
       setValue('addressProof', file, { shouldValidate: true });
@@ -138,6 +268,56 @@ export default function KycAddressInfo() {
         reader.readAsDataURL(file);
       } else {
         setPreview(null);
+      }
+      const base = process.env.REACT_APP_HOST_API || '';
+      const formData = new FormData();
+      formData.append('document', file);
+      try {
+        setIsUploading(true);
+        const res = await fetch(`${base}/api/kyc/issuer_kyc/doc-extraction/`, {
+          method: 'POST',
+          headers: {
+            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          },
+          body: formData,
+        });
+        if (!res.ok) {
+          throw new Error('Document upload failed');
+        }
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (e) {
+          data = {};
+        }
+        const extracted = data?.data || {};
+        const toStr = (v) => (typeof v === 'string' ? v : v == null ? '' : String(v));
+        // Prefill Registered Address fields; inputs remain editable
+        setValue('registeredAddressLine1', toStr(extracted.address_line1), {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+        setValue('registeredAddressLine2', toStr(extracted.address_line2), {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+        setValue('registeredCity', toStr(extracted.city), {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+        setValue('registeredState', toStr(extracted.state), {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+        setValue('registeredPincode', toStr(extracted.pin), {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+        console.log('Doc extraction response:', data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsUploading(false);
       }
     }
   };
@@ -398,11 +578,10 @@ export default function KycAddressInfo() {
               {/* Submit Button */}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                 <Button
-                  // type="submit"
-                  component={RouterLink}
-                  to={paths.KYCCompanyDetails}
+                  type="submit"
                   variant="contained"
                   size="large"
+                  disabled={isUploading}
                   sx={{ minWidth: 120 }}
                 >
                   Next
