@@ -26,6 +26,7 @@ function UploadBox({
   helperText,
   multiple = false,
   existing,
+  onDrop,
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -60,7 +61,6 @@ function UploadBox({
     if (!file) return;
     if (!validateFile(file)) return;
 
-    // Simulate upload progress
     setProgress(0);
     const interval = setInterval(() => {
       setProgress((old) => {
@@ -73,14 +73,19 @@ function UploadBox({
     }, 150);
 
     onChange(file);
+    if (onDrop) {
+      console.log('🪶 Triggering parent onDrop with:', file);
+      onDrop([file]);
+    }
   };
 
   const processMultipleFiles = (files) => {
-    const list = Array.from(files || []);
-    const valid = list.filter((f) => validateFile(f));
-    // For multiple, we won't simulate per-file progress; mark complete
+    const list = Array.from(files || []).filter((f) => validateFile(f));
     setProgress(100);
-    onChange(valid);
+    onChange(list);
+    if (onDrop) {
+      onDrop(list);
+    }
   };
 
   const handleFileSelect = (event) => {
@@ -153,7 +158,9 @@ function UploadBox({
               fontWeight={500}
               sx={{ cursor: 'pointer', textDecoration: 'underline' }}
             >
-              {multiple ? 'Select files / Drop files here to upload' : 'Select file / Drop file here to upload'}
+              {multiple
+                ? 'Select files / Drop files here to upload'
+                : 'Select file / Drop file here to upload'}
             </Typography>{' '}
             <Typography
               variant="caption"
@@ -179,12 +186,24 @@ function UploadBox({
                 </Grid>
                 <Grid xs={12} md={8}>
                   {existing ? (
-                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} alignItems={{ xs: 'flex-start', md: 'center' }}>
+                    <Stack
+                      direction={{ xs: 'column', md: 'row' }}
+                      spacing={1}
+                      alignItems={{ xs: 'flex-start', md: 'center' }}
+                    >
                       <Typography variant="body2" fontWeight={500}>
                         {existing.name}
                       </Typography>
                       {existing.status && (
-                        <Typography variant="body2" sx={{ color: existing.status?.toLowerCase() === 'pending' ? 'warning.main' : 'text.secondary' }}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color:
+                              existing.status?.toLowerCase() === 'pending'
+                                ? 'warning.main'
+                                : 'text.secondary',
+                          }}
+                        >
                           • {existing.status}
                         </Typography>
                       )}
@@ -212,7 +231,13 @@ function UploadBox({
                 <LinearProgress variant="determinate" value={100} fullWidth />
                 <Typography
                   variant="caption"
-                  sx={{ color: 'primary.main', display: 'flex', mt: 0.5, fontStyle: 'italic', justifyContent: 'start' }}
+                  sx={{
+                    color: 'primary.main',
+                    display: 'flex',
+                    mt: 0.5,
+                    fontStyle: 'italic',
+                    justifyContent: 'start',
+                  }}
                 >
                   Existing file on server
                 </Typography>
@@ -222,7 +247,13 @@ function UploadBox({
                 <LinearProgress variant="determinate" value={progress} fullWidth />
                 <Typography
                   variant="caption"
-                  sx={{ color: 'primary.main', display: 'flex', mt: 0.5, fontStyle: 'italic', justifyContent: 'start' }}
+                  sx={{
+                    color: 'primary.main',
+                    display: 'flex',
+                    mt: 0.5,
+                    fontStyle: 'italic',
+                    justifyContent: 'start',
+                  }}
                 >
                   {progress < 100 ? `${progress}% Uploading...` : 'Upload Complete (100%)'}
                 </Typography>
@@ -346,6 +377,7 @@ UploadBox.propTypes = {
   helperText: PropTypes.string,
   multiple: PropTypes.bool,
   existing: PropTypes.shape({ name: PropTypes.string, status: PropTypes.string }),
+  onDrop: PropTypes.func,
 };
 
 // --- Hook Form Integrated Wrapper ---
