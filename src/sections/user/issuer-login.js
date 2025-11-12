@@ -159,6 +159,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       }
       const token = data?.data?.access_token || data?.access_token;
       const companyInfoId = data?.data?.company_information_id || data?.company_information_id;
+      const emailVerified = data?.data?.email_verified || data?.email_verified;
       
       if (token) {
         setSession(token);
@@ -167,6 +168,13 @@ export default function MultiStepLoginDialog({ open, onClose }) {
           sessionStorage.setItem('company_information_id', companyInfoId);
         }
         
+        // If email is not verified, go to email verification step
+        if (!emailVerified) {
+          setStep('details');
+          return;
+        }
+        
+        // If email is verified or no email exists, proceed to KYC
         onClose?.();
         router.push(paths.KYCViewPage);
         return;
