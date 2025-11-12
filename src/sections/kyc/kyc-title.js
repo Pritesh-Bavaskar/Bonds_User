@@ -20,7 +20,7 @@ export default function KYCTitle({ title, subtitle }) {
           bgcolor: 'background.paper',
         }}
       >
-        <Stack spacing={0.5} alignItems="flex-start">
+        <Stack spacing={2} alignItems="flex-start">
           <Typography
             variant="h3"
             sx={{
