@@ -26,6 +26,8 @@ import Iconify from 'src/components/iconify';
 import KYCStepper from './kyc-stepper';
 import axiosInstance from 'src/utils/axios';
 import { useSnackbar } from 'src/components/snackbar';
+import YupErrorMessage from 'src/components/error-field/yup-error-messages';
+import RHFFileUploadBox from 'src/components/custom-file-upload/file-upload';
 
 // ----------------------------------------------------------------------
 
@@ -74,7 +76,7 @@ export default function KYCBankDetails() {
     resolver: yupResolver(NewSchema),
     reValidateMode: 'onChange',
     defaultValues: {
-      documentType: 'passbook',
+      documentType: '',
       bankName: '',
       branchName: '',
       accountNumber: '',
@@ -141,6 +143,7 @@ export default function KYCBankDetails() {
   };
 
   const handleDrop = (acceptedFiles) => {
+    console.log('📂 Dropped Files:', acceptedFiles);
     const file = acceptedFiles[0];
     if (file) {
       setValue('addressProof', file, { shouldValidate: true });
@@ -162,8 +165,6 @@ export default function KYCBankDetails() {
 
   const extractBankDetails = async (file) => {
     try {
-      
-
       const formData = new FormData();
       formData.append('document_type', documentType); // ✅ from form
       formData.append('file', file); // ✅ backend expects 'document'
@@ -221,13 +222,9 @@ export default function KYCBankDetails() {
 
       // ✅ Parallel API Calls
       const [bankRes, dematRes] = await Promise.all([
-        axiosInstance.post(
-          `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/submit/`,
-          bankPayload,
-          {
-            headers: { 'Content-Type': 'application/json' },
-          }
-        ),
+        axiosInstance.post(`/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/submit/`, bankPayload, {
+          headers: { 'Content-Type': 'application/json' },
+        }),
         axiosInstance.post(`/api/kyc/issuer_kyc/company/${COMPANY_ID}/demat/`, dematPayload, {
           headers: { 'Content-Type': 'application/json' },
         }),
@@ -278,40 +275,40 @@ export default function KYCBankDetails() {
               Upload Passbook/cancel cheque/bank statement to fill the details automatically
             </Typography>
           </Stack>
-          <Stack direction="column" spacing={2} sx={{ mb: 2, alignItems: 'end' }}>
-            <Typography variant="h6" sx={{ fontWeight: 500 }}>
-              Select Document Type:
-            </Typography>
-            <Box sx={{ width: 200 }}>
-              <RHFSelect
-                name="documentType"
-                placeholder="Select Document Type"
-                SelectProps={{
-                  displayEmpty: true,
-                  renderValue: (value) => {
-                    if (!value) {
-                      return <Box sx={{ color: 'text.disabled' }}>Select Type</Box>;
-                    }
-                    const options = [
-                      { value: 'passbook', label: 'Passbook' },
-                      { value: 'cheque', label: 'Cheque' },
-                      { value: 'bank_statement', label: 'Bank Statement' },
-                    ];
-                    const selectedOption = options.find(option => option.value === value);
-                    return selectedOption ? selectedOption.label : value;
-                  },
-                }}
-              >
-                <MenuItem value="passbook">Passbook</MenuItem>
-                <MenuItem value="cheque">Cheque</MenuItem>
-                <MenuItem value="bank_statement">Bank Statement</MenuItem>
-              </RHFSelect>
-            </Box>
-          </Stack>
+        </Stack>
+        <Stack direction="column" spacing={2} sx={{ my: 2, alignItems: 'start' }}>
+          <Typography variant="h6" sx={{ fontWeight: 500 }}>
+            Select Document Type:
+          </Typography>
+          <Box sx={{ width: 200 }}>
+            <RHFSelect
+              name="documentType"
+              placeholder="Select Document Type"
+              SelectProps={{
+                displayEmpty: true,
+                renderValue: (value) => {
+                  if (!value) {
+                    return <Box sx={{ color: 'text.disabled' }}>Select Type</Box>;
+                  }
+                  const options = [
+                    { value: 'passbook', label: 'Passbook' },
+                    { value: 'cheque', label: 'Cheque' },
+                    { value: 'bank_statement', label: 'Bank Statement' },
+                  ];
+                  const selectedOption = options.find((option) => option.value === value);
+                  return selectedOption ? selectedOption.label : value;
+                },
+              }}
+            >
+              <MenuItem value="passbook">Passbook</MenuItem>
+              <MenuItem value="cheque">Cheque</MenuItem>
+              <MenuItem value="bank_statement">Bank Statement</MenuItem>
+            </RHFSelect>
+          </Box>
         </Stack>
         {/* Address Proof Section */}
         <Stack spacing={4}>
-          <Box sx={{ width: '100%' }}>
+          {/* <Box sx={{ width: '100%' }}>
             {!addressProof ? (
               <RHFUploadBox
                 name="addressProof"
@@ -409,12 +406,24 @@ export default function KYCBankDetails() {
                 </Button>
               </Box>
             )}
-          </Box>
+          </Box> */}
+          {watch('documentType') && (
+            <RHFFileUploadBox
+              name="addressProof"
+              label="Upload address proof"
+              icon="mdi:file-document-outline"
+              color="#1e88e5"
+              acceptedTypes="pdf,xls,docx,jpeg"
+              maxSizeMB={10}
+              onDrop={(acceptedFiles) => handleDrop(acceptedFiles)}
+            />
+          )}
+          <YupErrorMessage name="addressProof" />
         </Stack>
         <Box sx={{ py: 4 }}>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} >
             {/* Left Section (9 columns) */}
-            <Grid xs={12} md={9}>
+            <Grid xs={12} md={9} order={{ xs: 2, md: 1 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {/* Bank Name */}
                 <Box>
@@ -483,7 +492,7 @@ export default function KYCBankDetails() {
             </Grid>
 
             {/* Right Section (3 columns) */}
-            <Grid xs={12} md={3}>
+            <Grid xs={12} md={3} order={{ xs: 1, md: 2 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {/* Account Type */}
                 <Box>
@@ -502,7 +511,7 @@ export default function KYCBankDetails() {
                 </Box>
 
                 {/* Illustration */}
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center', }}>
                   <Box
                     component="img"
                     src="/assets/images/kyc/kyc-basic-info/kyc-autofill.svg"
@@ -518,10 +527,10 @@ export default function KYCBankDetails() {
 
         {/* {showDemat && ( */}
         {/* <> */}
-        <Typography variant="h4" sx={{ fontWeight: 700, mt: 3 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, mt: 3 , mb: 2}}>
           Demat Account Details
         </Typography>
-        <Typography variant="h6" sx={{ fontWeight: 500, mb: 3 }}>
+        <Typography variant="h6" sx={{ fontWeight: 500, mb: 2 }}>
           Required for bond transactions
         </Typography>
         {/* <FormProvider methods={dematMethods} onSubmit={onSubmitDemat}> */}
@@ -531,7 +540,7 @@ export default function KYCBankDetails() {
             <Grid xs={12} md={12}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-                  <Button size="small" variant="contained">
+                  <Button variant="contained">
                     Fetch
                   </Button>
                 </Box>
