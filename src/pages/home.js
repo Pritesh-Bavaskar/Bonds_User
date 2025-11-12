@@ -8,7 +8,7 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title> My name is bond</title>
+        <title> My name is bond: Home page</title>
       </Helmet>
 
       <HomeView />

@@ -58,7 +58,7 @@ export const typography = {
   },
   h5: {
     fontWeight: 400,
-    lineHeight: '100%',
+    lineHeight: '1.4',
     fontSize: pxToRem(12),
     ...responsiveFontSizes({ sm: 16, md: 18, lg: 20 }),
   },

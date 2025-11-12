@@ -10,11 +10,13 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 export default function LoginButton({ sx }) {
   return (
-    <Button component={RouterLink} href={PATH_AFTER_LOGIN} variant="outlined" sx={{ mr: 1, ...sx }}>
+    <Button  variant="outlined" sx={{ mr: 1, ...sx }}>
       Login
     </Button>
   );
 }
+
+// component={RouterLink} href={PATH_AFTER_LOGIN}
 
 LoginButton.propTypes = {
   sx: PropTypes.object,
