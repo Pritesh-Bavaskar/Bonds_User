@@ -564,13 +564,13 @@ export default function KYCBankDetails() {
 
                   <Grid xs={12} md={6}>
                     <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>Client ID / BO iD</Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>Client ID / BO ID</Box>
                       <RHFTextField name="beneficiaryClientId" placeholder="123456678" />
                       <Typography
                         variant="caption"
                         sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
                       >
-                        Enter A Number of Client ID / BO iD
+                        Enter A Number of Client ID / BO ID
                       </Typography>
                     </Box>
                   </Grid>
