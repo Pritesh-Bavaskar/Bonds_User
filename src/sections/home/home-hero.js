@@ -76,7 +76,7 @@ export default function HomeHero() {
     <Box sx={{ py: { xs: 14, sm: 6, md: 20 }, pb: { xs: 14, sm: 6, md: 11 },px: 0 }}>
       <Container maxWidth="lg">
         <Stack
-          spacing={{ xs: 3, sm: 4 }}
+            spacing={{ xs: 1, sm: 1.5 }}
           display="flex"
           alignItems="center"
           sx={{
@@ -195,9 +195,7 @@ export default function HomeHero() {
                       width: '100%',
                       height: { xs: 480, sm: 440, md: 400 },
                       objectFit: 'cover',
-                      borderRadius: { xs: 2, sm: 2.5, md: 3 },
-                      boxShadow: (theme) =>
-                        theme.customShadows?.z24 || '0 8px 24px rgba(0,0,0,0.18)',
+                      borderRadius: { xs: 2, sm: 2.5, md: 3 },                    
                     }}
                   />
                 </Box>
