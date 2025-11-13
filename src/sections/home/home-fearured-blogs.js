@@ -10,7 +10,7 @@ const MOCK_FEATURED = [
   {
     id: 'f1',
     title: 'The Future of Corporate Bond Investing: Trends Shaping 2025',
-    coverUrl: '/assets/background/overlay_2.jpg',
+    coverUrl: '/assets/background/overlay_3.jpg',
     description:
       'Explore the emerging trends in corporate bond markets, from ESG integration to digital trading platforms, and how they’re reshaping investment strategies for the coming year.',
     author: { name: 'Priya Sharma', avatarUrl: '/assets/icons/components/ic_avatar.svg' },
@@ -28,7 +28,7 @@ const MOCK_FEATURED = [
   {
     id: 'f3',
     title: 'Understanding Yield vs. Coupon: A Beginner’s Guide',
-    coverUrl: '/assets/background/overlay_4.jpg',
+    coverUrl: '/assets/background/overlay_3.jpg',
     description:
       'Learn the key differences between yield and coupon, why they diverge, and how each impacts your bond’s total return.',
     author: { name: 'Anita Kulkarni', avatarUrl: '/assets/icons/components/ic_avatar.svg' },
