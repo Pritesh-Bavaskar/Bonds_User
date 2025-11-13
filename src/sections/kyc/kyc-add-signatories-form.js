@@ -43,6 +43,12 @@ export default function KYCAddSignatoriesForm({
         /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
         'Please enter a valid email address'
       ),
+    phoneNumber: Yup.string()
+      .required('Phone number is required')
+      .matches(
+        /^[0-9]{10}$/,
+        'Please enter a valid 10-digit phone number'
+      ),
     din: Yup.string()
       .required('DIN is required')
       .matches(/^[0-9]+$/, 'DIN must contain only numbers')
@@ -72,6 +78,7 @@ export default function KYCAddSignatoriesForm({
     () => ({
       name: currentUser?.name_of_signatory || '',
       email: currentUser?.email_address || '',
+      phoneNumber: currentUser?.phone_number || '',
       din: currentUser?.din || '',
       role: currentUser?.designation || '',
       panCard: '',
@@ -93,6 +100,7 @@ export default function KYCAddSignatoriesForm({
       methods.reset({
         name: currentUser.name_of_signatory || '',
         email: currentUser.email_address || '',
+        phoneNumber: currentUser.phone_number || '',
         din: currentUser.din || '',
         role: currentUser.designation || '',
         panCard: '',
@@ -129,6 +137,7 @@ export default function KYCAddSignatoriesForm({
       const formData = new FormData();
       formData.append('name_of_signatory', data.name);
       formData.append('email_address', data.email);
+      formData.append('phone_number', data.phoneNumber);
       formData.append('din', data.din);
       formData.append('designation', data.role);
       if (data.panCard) formData.append('document_file_pan', data.panCard);
@@ -218,6 +227,16 @@ export default function KYCAddSignatoriesForm({
               disabled={isViewMode}
             />
             {/* {getErrorMessage('email')} */}
+
+            <RHFTextField
+              name="phoneNumber"
+              label="Phone Number"
+              type="number"
+              InputLabelProps={{ shrink: true }}
+              disabled={isViewMode}
+              sx={{ mt: 2 }}
+            />
+            {/* {getErrorMessage('phoneNumber')} */}
 
             <RHFTextField
               name="din"
