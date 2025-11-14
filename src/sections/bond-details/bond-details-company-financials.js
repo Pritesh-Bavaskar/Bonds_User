@@ -185,9 +185,7 @@ export default function BondDetailsCompanyFinancials() {
         >
           <Box
             sx={{
-              // height: 400,
               borderRadius: 2,
-              // border: `1px solid ${theme.palette.divider}`,
               p: 2,
               display: 'flex',
               flexDirection: 'column',
@@ -198,21 +196,6 @@ export default function BondDetailsCompanyFinancials() {
               onChange={handleTabChange}
               variant="scrollable"
               scrollButtons="auto"
-              // sx={{
-              //   mb: 3,
-              //   '& .MuiTab-root': {
-              //     textTransform: 'none',
-              //     fontWeight: 600,
-              //     minWidth: 'auto',
-              //     px: 3,
-              //     '&.Mui-selected': {
-              //       color: theme.palette.warning.main,
-              //     },
-              //   },
-              //   '& .MuiTabs-indicator': {
-              //     backgroundColor: theme.palette.warning.main,
-              //   },
-              // }}
               sx={{
                 mb: 3,
                 '& .MuiTabs-flexContainer': {
