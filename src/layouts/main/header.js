@@ -95,7 +95,7 @@ export default function Header() {
               variant="contained"
               target="_blank"
               rel="noopener"
-              href={paths.minimalUI}
+              // href={paths.minimalUI}
               sx={{
                 paddingX: '24px',
                 paddingY: '4px',

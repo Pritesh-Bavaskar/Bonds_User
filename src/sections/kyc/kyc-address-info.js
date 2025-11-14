@@ -25,6 +25,10 @@ import { useRouter } from 'src/routes/hook';
 import KYCTitle from './kyc-title';
 import KYCFooter from './kyc-footer';
 import KYCStepper from './kyc-stepper';
+import RHFFileUploadBox from 'src/components/custom-file-upload/file-upload';
+import { IconButton, MenuItem, Tooltip } from '@mui/material';
+import { RHFSelect } from 'src/components/hook-form';
+import YupErrorMessage from 'src/components/error-field/yup-error-messages';
 
 // ----------------------------------------------------------------------
 
@@ -46,56 +50,6 @@ const StyledDropZone = styled('div')(({ theme }) => ({
   },
 }));
 
-const AddressSchema = Yup.object().shape({
-  registeredAddressLine1: Yup.string().required('Address Line 1 is required'),
-  registeredAddressLine2: Yup.string(),
-  registeredCity: Yup.string().required('City is required'),
-  registeredState: Yup.string().required('State is required'),
-  registeredPincode: Yup.string()
-    .required('Pincode is required')
-    .matches(/^[0-9]{6}$/, 'Must be a valid 6-digit pincode'),
-  registeredEmail: Yup.string().email('Invalid email').required('Email is required'),
-  registeredPhone: Yup.string()
-    .required('Phone number is required')
-    .matches(/^[0-9]{10}$/, 'Must be a valid 10-digit phone number'),
-
-  sameAsRegistered: Yup.boolean(),
-
-  correspondenceAddressLine1: Yup.string().when('sameAsRegistered', {
-    is: false,
-    then: (schema) => schema.required('Address Line 1 is required'),
-  }),
-  correspondenceAddressLine2: Yup.string(),
-  correspondenceCity: Yup.string().when('sameAsRegistered', {
-    is: false,
-    then: (schema) => schema.required('City is required'),
-  }),
-  correspondenceState: Yup.string().when('sameAsRegistered', {
-    is: false,
-    then: (schema) => schema.required('State is required'),
-  }),
-  correspondencePincode: Yup.string().when('sameAsRegistered', {
-    is: false,
-    then: (schema) =>
-      schema
-        .required('Pincode is required')
-        .matches(/^[0-9]{6}$/, 'Must be a valid 6-digit pincode'),
-  }),
-  correspondenceEmail: Yup.string().when('sameAsRegistered', {
-    is: false,
-    then: (schema) => schema.email('Invalid email').required('Email is required'),
-  }),
-  correspondencePhone: Yup.string().when('sameAsRegistered', {
-    is: false,
-    then: (schema) =>
-      schema
-        .required('Phone number is required')
-        .matches(/^[0-9]{10}$/, 'Must be a valid 10-digit phone number'),
-  }),
-
-  addressProof: Yup.mixed().nullable(),
-});
-
 export default function KycAddressInfo() {
   const [preview, setPreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -104,11 +58,64 @@ export default function KycAddressInfo() {
   const router = useRouter();
   const companyId = sessionStorage.getItem('company_information_id');
 
+  const AddressSchema = Yup.object().shape({
+    documentType: Yup.string().required('Please select document type'),
+    registeredAddressLine1: Yup.string().required('Address Line 1 is required'),
+    registeredAddressLine2: Yup.string(),
+    registeredCountry: Yup.string().required('Country is required'),
+    registeredCity: Yup.string().required('City is required'),
+    registeredState: Yup.string().required('State is required'),
+    registeredPincode: Yup.string()
+      .required('Pincode is required')
+      .matches(/^[0-9]{6}$/, 'Must be a valid 6-digit pincode'),
+    registeredEmail: Yup.string().email('Invalid email').required('Email is required'),
+    registeredPhone: Yup.string()
+      .required('Phone number is required')
+      .matches(/^[0-9]{10}$/, 'Must be a valid 10-digit phone number'),
+
+    sameAsRegistered: Yup.boolean(),
+
+    correspondenceAddressLine1: Yup.string().when('sameAsRegistered', {
+      is: false,
+      then: (schema) => schema.required('Address Line 1 is required'),
+    }),
+    correspondenceAddressLine2: Yup.string(),
+    correspondenceCity: Yup.string().when('sameAsRegistered', {
+      is: false,
+      then: (schema) => schema.required('City is required'),
+    }),
+    correspondenceState: Yup.string().when('sameAsRegistered', {
+      is: false,
+      then: (schema) => schema.required('State is required'),
+    }),
+    correspondencePincode: Yup.string().when('sameAsRegistered', {
+      is: false,
+      then: (schema) =>
+        schema
+          .required('Pincode is required')
+          .matches(/^[0-9]{6}$/, 'Must be a valid 6-digit pincode'),
+    }),
+    correspondenceEmail: Yup.string().when('sameAsRegistered', {
+      is: false,
+      then: (schema) => schema.email('Invalid email').required('Email is required'),
+    }),
+    correspondencePhone: Yup.string().when('sameAsRegistered', {
+      is: false,
+      then: (schema) =>
+        schema
+          .required('Phone number is required')
+          .matches(/^[0-9]{10}$/, 'Must be a valid 10-digit phone number'),
+    }),
+
+    addressProof: Yup.mixed().required('Address Proof is required'),
+  });
+
   const methods = useForm({
     resolver: yupResolver(AddressSchema),
     defaultValues: {
       registeredAddressLine1: '',
       registeredAddressLine2: '',
+      registeredCountry: '',
       registeredCity: '',
       registeredState: '',
       registeredPincode: '',
@@ -123,6 +130,7 @@ export default function KycAddressInfo() {
       correspondenceEmail: '',
       correspondencePhone: '',
       addressProof: null,
+      documentType: '',
     },
   });
 
@@ -167,6 +175,7 @@ export default function KycAddressInfo() {
         setValue('registeredAddressLine2', toStr(registered.registered_office_line2), {
           shouldValidate: true,
         });
+        setValue('registeredCountry', toStr(registered.Country), { shouldValidate: true });
         setValue('registeredCity', toStr(registered.city), { shouldValidate: true });
         setValue('registeredState', toStr(registered.state_ut), { shouldValidate: true });
         setValue('registeredPincode', toStr(registered.pin_code), { shouldValidate: true });
@@ -248,6 +257,7 @@ export default function KycAddressInfo() {
     // Map Registered (screenshot keys)
     add('is_same_address', String(!!form.sameAsRegistered));
     add('registered_office', form.registeredAddressLine1);
+    add('country', form.registeredCountry);
     add('city', form.registeredCity);
     add('state_ut', form.registeredState);
     add('pin_code', form.registeredPincode);
@@ -261,6 +271,7 @@ export default function KycAddressInfo() {
     // Map Correspondence
     const corrSame = !!form.sameAsRegistered;
     const corrAddr1 = corrSame ? form.registeredAddressLine1 : form.correspondenceAddressLine1;
+    const corrCountry = corrSame ? form.registeredCountry : form.correspondenceCountry;
     const corrCity = corrSame ? form.registeredCity : form.correspondenceCity;
     const corrState = corrSame ? form.registeredState : form.correspondenceState;
     const corrPin = corrSame ? form.registeredPincode : form.correspondencePincode;
@@ -269,6 +280,7 @@ export default function KycAddressInfo() {
     const corrPhone = corrPhoneRaw?.startsWith('+') ? corrPhoneRaw : `+91${corrPhoneRaw || ''}`;
 
     add('correspondence_address', corrAddr1);
+    add('correspondence_city', corrCountry);
     add('correspondence_city', corrCity);
     add('correspondence_state_ut', corrState);
     add('correspondence_pin_code', corrPin);
@@ -301,6 +313,7 @@ export default function KycAddressInfo() {
   };
 
   const handleDrop = async (acceptedFiles) => {
+    console.log('📂 Dropped Files:', acceptedFiles);
     const file = acceptedFiles[0];
     if (file) {
       setValue('addressProof', file, { shouldValidate: true });
@@ -340,6 +353,10 @@ export default function KycAddressInfo() {
           shouldValidate: true,
         });
         setValue('registeredAddressLine2', toStr(extracted.address_line2), {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+        setValue('registeredCountry', toStr(extracted.country), {
           shouldDirty: true,
           shouldValidate: true,
         });
@@ -388,21 +405,59 @@ export default function KycAddressInfo() {
           >
             {/* Address Proof Section */}
             <Stack spacing={4}>
-              <div>
-                <Typography variant="h4" sx={{ mb: 1, color: 'text.primary' }}>
-                  Upload Address Proof
+              <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
+                <Stack direction="column">
+                  <Typography variant="h4" sx={{ mb: 1, color: 'text.primary' }}>
+                    Upload Address Proof
+                    <Tooltip
+                      title={
+                        <>
+                          Upload a document to confirm your address and fetch the details
+                          automatically (e.g., utility bill, registered address and correspondence).
+                          <br />
+                          <strong>Maximum file size:</strong> 5 MB
+                        </>
+                      }
+                      arrow
+                      placement="right"
+                    >
+                      <IconButton size="small" sx={{ color: 'text.secondary', mt: -0.5 }}>
+                        <Iconify icon="mdi:information-outline" width={20} />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                </Stack>
+              </Stack>
+              <Stack direction="column" spacing={2} sx={{ mb: 2, alignItems: 'start' }}>
+                <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                  Select Document Type:
                 </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ color: 'text.secondary', bgcolor: '#F0F7FF', p: 2, borderRadius: 1 }}
-                >
-                  Upload a document to confirm your address and fetch the details automatically
-                  (e.g., utility bill, registered address and correspondence). Maximum file size: 5
-                  MB
-                </Typography>
-              </div>
+                <Box sx={{ width: 200 }}>
+                  <RHFSelect
+                    name="documentType"
+                    placeholder="Select Document Type"
+                    SelectProps={{
+                      displayEmpty: true,
+                      renderValue: (value) => {
+                        if (!value) {
+                          return <Box sx={{ color: 'text.disabled' }}>Select Type</Box>;
+                        }
+                        const options = [
+                          { value: 'electricityBill', label: 'Electricity Bill' },
+                          { value: 'leaseAgreement', label: 'Lease Agreement' },
+                        ];
+                        const selectedOption = options.find((option) => option.value === value);
+                        return selectedOption ? selectedOption.label : value;
+                      },
+                    }}
+                  >
+                    <MenuItem value="electricityBill">Electricity Bill</MenuItem>
+                    <MenuItem value="leaseAgreement">Lease Agreement</MenuItem>
+                  </RHFSelect>
+                </Box>
+              </Stack>
 
-              <Box sx={{ width: '100%' }}>
+              {/* <Box sx={{ width: '100%' }}>
                 {!addressProof ? (
                   <RHFUploadBox
                     name="addressProof"
@@ -500,7 +555,25 @@ export default function KycAddressInfo() {
                     </Button>
                   </Box>
                 )}
-              </Box>
+              </Box> */}
+              {watch('documentType') && (
+                <RHFFileUploadBox
+                  name="addressProof"
+                  label="Upload address proof"
+                  icon="mdi:file-document-outline"
+                  color="#1e88e5"
+                  acceptedTypes="pdf,xls,docx,jpeg"
+                  maxSizeMB={10}
+                  onDrop={async (acceptedFiles) => {
+                    const file = acceptedFiles[0];
+                    if (file) {
+                      setValue('panFile', file, { shouldValidate: true });
+                      await handleDrop(file);
+                    }
+                  }}
+                />
+              )}
+              <YupErrorMessage name="addressProof" />
             </Stack>
             <Stack spacing={4} pt={2}>
               {/* Address Section */}
@@ -526,6 +599,7 @@ export default function KycAddressInfo() {
                         fullWidth
                       />
                       <Box sx={{ display: 'flex', gap: 2 }}>
+                        <RHFTextField name="registeredCountry" label="Country *" fullWidth />
                         <RHFTextField name="registeredCity" label="City *" fullWidth />
                         <RHFTextField name="registeredState" label="State *" fullWidth />
                       </Box>
@@ -581,6 +655,13 @@ export default function KycAddressInfo() {
                         disabled={sameAsRegistered}
                       />
                       <Box sx={{ display: 'flex', gap: 2 }}>
+                        <RHFTextField
+                          name="correspondenceCountry"
+                          label="Country *"
+                          fullWidth
+                          disabled={sameAsRegistered}
+                        />
+
                         <RHFTextField
                           name="correspondenceCity"
                           label="City *"

@@ -78,50 +78,80 @@ export default function BondLibraryList({ bonds, onSearchChange, onFilterChange 
           spacing={2.5}
           sx={{ mb: { md: 4, xs: 0 } }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', width: { xs: 1, sm: 400 } }}>
-            <TextField
-              placeholder="Search Issuer, ISIN, Security Name"
-              variant="outlined"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              sx={{
-                flexGrow: 1,
-                '& .MuiOutlinedInput-root': {
-                  bgcolor: 'background.paper',
-                  '& fieldset': {
-                    borderColor: 'primary.main',
-                    borderRadius: 999,
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'primary.main',
-                  },
-                },
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-                  </InputAdornment>
-                ),
-              }}
-            />
-
-            {/* 🔹 Filter Icon — Only for Mobile */}
-            {isMobile && (
-              <IconButton
-                onClick={handleToggleFilter}
+          <Box sx={{ width: { xs: 1, sm: 400 } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <TextField
+                placeholder="Search Issuer, ISIN, Security Name"
+                variant="outlined"
+                value={searchTerm}
+                onChange={handleSearchChange}
                 sx={{
-                  ml: 1,
-                  bgcolor: 'primary.main',
-                  color: '#fff',
-                  '&:hover': { bgcolor: 'primary.dark' },
-                  flexShrink: 0,
+                  flexGrow: 1,
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: 'background.paper',
+                    '& fieldset': {
+                      borderColor: 'primary.main',
+                      borderRadius: 999,
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                  },
                 }}
-              >
-                <Icon icon="mdi:funnel-outline" width={24} height={24} />
-              </IconButton>
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+
+              {isMobile && (
+                <IconButton
+                  onClick={handleToggleFilter}
+                  sx={{
+                    ml: 1,
+                    bgcolor: 'primary.main',
+                    color: '#fff',
+                    '&:hover': { bgcolor: 'primary.dark' },
+                    flexShrink: 0,
+                  }}
+                >
+                  <Icon icon="mdi:funnel-outline" width={24} height={24} />
+                </IconButton>
+              )}
+            </Box>
+
+
+            {isMobile && (
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
+                  <Select
+                    value={sortBy}
+                    onChange={handleSortBy}
+                    displayEmpty
+                    inputProps={{ 'aria-label': 'Sort by' }}
+                    sx={{
+                      '& .MuiSelect-select': {
+                        py: 0.5,
+                        pr: 3,
+                        pl: 1.5,
+                      },
+                    }}
+                  >
+                    {SORT_OPTIONS.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
             )}
           </Box>
+
 
           <Stack
             direction={{ xs: 'column', md: 'row' }}

@@ -58,7 +58,7 @@ export default function HomeExplore() {
 
         {/* Row 2: Text on left, money-bag gif on right */}
         <Grid container spacing={{ xs: 4, md: 6 }} alignItems="center">
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
             <Box sx={{ textAlign: { xs: 'center', md: 'center' }, px: { md: 4 } }}>
               <Typography
                 variant="body1"
@@ -73,7 +73,7 @@ export default function HomeExplore() {
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
             <Box
               component="img"
               src="/assets/images/home/explore/money-bag.gif"

@@ -114,7 +114,7 @@ export default function BondLibraryView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-      <BondLibraryHero />
+      {/* <BondLibraryHero /> */}
       <BondLibraryList
         bonds={Bonds}
         onSearchChange={handleSearchChange}

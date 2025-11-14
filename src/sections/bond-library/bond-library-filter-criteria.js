@@ -50,8 +50,8 @@ const FACE_VALUE = [
 ];
 
 const ISSUER_TYPE = [
-  { id: 'central_government', label: 'CENTRAL GOVERNMENT' },
-  { id: 'state_government', label: 'STATE GOVERNMENT' },
+  { id: 'central_gov', label: 'CENTRAL GOVERNMENT' },
+  { id: 'state_gov', label: 'STATE GOVERNMENT' },
   { id: 'psu', label: 'PSU' },
   { id: 'corporate', label: 'CORPORATE' },
   { id: 'slu', label: 'SLU' },

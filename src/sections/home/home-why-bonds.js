@@ -145,31 +145,35 @@ export default function HomeWhyBonds({ isDetails, bonds }) {
 
         {/* Carousel */}
         <Box sx={{ position: 'relative', mt: { xs: 4, md: 8 } }}>
-          <CarouselArrows
-            onNext={carousel.onNext}
-            onPrev={carousel.onPrev}
-            leftButtonProps={{
-              sx: {
-                left: -32,
-                display: { xs: 'none', md: 'inline-flex' },
-              },
-            }}
-            rightButtonProps={{
-              sx: {
-                right: -32,
-                display: { xs: 'none', md: 'inline-flex' },
-              },
-            }}
-            spacing={4}
-          >
-            <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
-              {bonds?.map((item) => (
-                <Box key={item.isin_code} sx={{ px: 1 }}>
-                  <BondLibraryCardGrid item={item} />
-                </Box>
-              ))}
-            </Carousel>
-          </CarouselArrows>
+          {Array.isArray(bonds) && bonds.length > 0 ? (
+            <CarouselArrows
+              onNext={carousel.onNext}
+              onPrev={carousel.onPrev}
+              leftButtonProps={{ sx: { left: -32, display: { xs: 'none', md: 'inline-flex' } } }}
+              rightButtonProps={{ sx: { right: -32, display: { xs: 'none', md: 'inline-flex' } } }}
+              spacing={4}
+            >
+              <Carousel ref={carousel.carouselRef} {...carousel.carouselSettings}>
+                {bonds.map((item) => (
+                  <Box key={item.isin_code || item.id} sx={{ px: 1, width: '100%' }}>
+                    <BondLibraryCardGrid item={item} />
+                  </Box>
+                ))}
+              </Carousel>
+            </CarouselArrows>
+          ) : (
+            <Box
+              sx={{
+                minHeight: 250,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: 'text.secondary',
+              }}
+            >
+              Loading featured bonds...
+            </Box>
+          )}
         </Box>
 
         {/* View all Button */}

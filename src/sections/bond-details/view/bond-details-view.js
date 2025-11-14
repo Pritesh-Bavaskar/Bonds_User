@@ -17,15 +17,17 @@ export default function BondDetailsView() {
   console.log('Bond', Bond);
   console.log('SimilarBonds', SimilarBonds);
   return (
-    <Container maxWidth="lg" sx={{ py: 5 }}>
-      <BondDetailsHero bond={Bond} />
-      <BondDetailsCalculateReturns bond={Bond}/>
-      <BondDetailsCompanyFinancials />
-      <BondDetailsRatioAnalysis />
-      <BondDetailsAboutCompany bond={Bond} />
-      <BondDetailsFinancialRating />
-      <HomeWhyBonds isDetails bonds={SimilarBonds} />
-      <FaqsComponent />
-    </Container>
+    <>
+      <BondDetailsHero bondHero={Bond} />
+      <Container sx={{ py: 5 }}>
+        <BondDetailsCalculateReturns bond={Bond} />
+        <BondDetailsCompanyFinancials />
+        <BondDetailsRatioAnalysis />
+        {/* <BondDetailsAboutCompany bond={Bond} /> */}
+        {/* <BondDetailsFinancialRating /> */}
+        <HomeWhyBonds isDetails bonds={SimilarBonds} />
+        <FaqsComponent />
+      </Container>
+    </>
   );
 }
