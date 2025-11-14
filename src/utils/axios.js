@@ -55,7 +55,7 @@ export const endpoints = {
     list: '/api/bonds/bonds',
     filterList: (filter) => `/api/bonds/bonds?${filter}`,
     featured: '/api/bonds/bonds/featured',
-    search: (id) => `/api/bonds/bonds/search?isin=${id}`,
+    search: (id) => `/api/bonds/bonds/search/?isin=${id}`,
     details: (id) => `/api/bonds/bond/?isin=${id}`,
     similar: (id) => `/api/bonds/similar-bonds/?isin=${id}`,
   },

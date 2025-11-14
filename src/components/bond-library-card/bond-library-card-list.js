@@ -37,27 +37,49 @@ export default function BondLibraryCardList({ item }) {
       <Box sx={{ p: 2 }}>
         {/* Trending Label */}
         <Box
-          component="img"
-          src="/assets/icons/bond-library/trending.svg"
-          alt="Trending"
           sx={{
+            position: 'relative',
             width: 90,
             height: 30,
-            top: -28,
-            position: 'relative',
+            top: -31,
+            right: 30                 // keep EXACTLY as you had it
           }}
-        />
+        >
+          <Box
+            component="img"
+            src="/assets/icons/bond-library/trending-list.svg"
+            alt="Trending"
+            sx={{
+              width: '100%',
+              height: '100%',
+              display: 'block',
+            }}
+          />
+
+          <Typography
+            variant="caption"
+            sx={{
+              position: 'absolute',
+              top: '48%',
+              left: '45%',
+              transform: 'translate(-50%, -50%)',
+              color: '#fff',
+              fontWeight: 600,
+              fontSize: '11px',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {item?.status || 'Trending'}
+          </Typography>
+        </Box>
+
 
         {/* ASAPL */}
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle2" sx={{ mt: 0, fontWeight: 700 }}>
-            {item?.asapl || 'N.A.'} ASAPL
+            {item?.issuer_name || 'N.A.'}
           </Typography>
 
-          {/* Company Logo (optional) */}
-          <Typography variant="subtitle2" sx={{ mt: 0, fontWeight: 700 }}>
-            {item?.issue_date || 'N.A.'}
-          </Typography>
           {/* ISN */}
           <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
             <span sx={{ fontWeight: 700, color: 'text.secondary' }}>ISN</span>{' '}
@@ -66,7 +88,7 @@ export default function BondLibraryCardList({ item }) {
 
           <Box
             component="img"
-            src={item.brandLogo || '/assets/icons/bond-library/company.svg'}
+            src={item.brandLogo || '/assets/icons/bond-library/company.png'}
             alt="logo"
             sx={{ height: 22 }}
           />
@@ -128,17 +150,25 @@ export default function BondLibraryCardList({ item }) {
           {/* <Stack spacing={2} sx={{ flex: 1 }}> */}
           <Box
             sx={{
-              width: 60,
-              height: 60,
-              borderRadius: '50%',
-              bgcolor: alpha('#fff', 0.6),
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              mb: 1,
+              width: 45,
+              height: 45,
+              borderRadius: "50%",
+              border: "2px solid #00A76F",
+              bgcolor: "#ffffff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
             }}
           >
-            <Typography variant="h6" fontWeight={700}>
+            <Typography 
+              sx={{
+                fontSize: "14px",
+                color: "#00A76F",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                padding: "4px",
+              }} >
               {item?.ratings[0]?.rating || 'N.A.'}
             </Typography>
           </Box>
