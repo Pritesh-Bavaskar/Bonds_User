@@ -57,14 +57,14 @@ export default function BondDetailsCompanyFinancials() {
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: '30%',
+        columnWidth: '50%',
         borderRadius: 4,
         dataLabels: {
           position: 'top',
         },
       },
     },
-    colors: [theme.palette.warning.main],
+    colors: ['#00328A'],
     dataLabels: {
       enabled: true,
       formatter: function (val) {
@@ -176,42 +176,81 @@ export default function BondDetailsCompanyFinancials() {
           Detailed financial metrics including Revenue, PAT, Debt, and Net Worth
         </Typography>
 
-        <Paper sx={{ borderRadius: 2 }}>
-          <Tabs
-            value={activeTab}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{
-              mb: 3,
-              '& .MuiTab-root': {
-                textTransform: 'none',
-                fontWeight: 600,
-                minWidth: 'auto',
-                px: 3,
-                '&.Mui-selected': {
-                  color: theme.palette.warning.main,
-                },
-              },
-              '& .MuiTabs-indicator': {
-                backgroundColor: theme.palette.warning.main,
-              },
-            }}
-          >
-            {Object.keys(financialData).map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
-            ))}
-          </Tabs>
-
+        <Paper
+          sx={{
+            borderRadius: 2,
+            border: `1px solid ${theme.palette.divider}`,
+            overflow: 'hidden',
+          }}
+        >
           <Box
             sx={{
-              height: 400,
+              // height: 400,
               borderRadius: 2,
-              border: `1px solid ${theme.palette.divider}`,
+              // border: `1px solid ${theme.palette.divider}`,
               p: 2,
+              display: 'flex',
+              flexDirection: 'column',
             }}
           >
-            <Chart options={chartOptions} series={chartSeries} type="bar" height="100%" />
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              // sx={{
+              //   mb: 3,
+              //   '& .MuiTab-root': {
+              //     textTransform: 'none',
+              //     fontWeight: 600,
+              //     minWidth: 'auto',
+              //     px: 3,
+              //     '&.Mui-selected': {
+              //       color: theme.palette.warning.main,
+              //     },
+              //   },
+              //   '& .MuiTabs-indicator': {
+              //     backgroundColor: theme.palette.warning.main,
+              //   },
+              // }}
+              sx={{
+                mb: 3,
+                '& .MuiTabs-flexContainer': {
+                  gap: 1, // spacing between tabs
+                },
+                '& .MuiTab-root': {
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  minWidth: 'auto',
+                  px: 3,
+                  py: 1,
+                  border: '1px solid',
+                  borderColor: '#000',
+                  borderRadius: '50px', // ✅ fully rounded tabs
+                  transition: 'all 0.3s ease',
+                  color: '#000',
+                  backgroundColor: 'transparent',
+                  '&:hover': {
+                    backgroundColor: '#fff',
+                  },
+                  '&.Mui-selected': {
+                    color: '#fff',
+                    borderColor: '#00328A',
+                    backgroundColor: '#00328A',
+                  },
+                },
+                '& .MuiTabs-indicator': {
+                  display: 'none', // ✅ remove underline indicator
+                },
+              }}
+            >
+              {Object.keys(financialData).map((tab) => (
+                <Tab key={tab} label={tab} value={tab} />
+              ))}
+            </Tabs>
+            <Box sx={{ height: 450, position: 'relative' }}>
+              <Chart options={chartOptions} series={chartSeries} type="bar" height="100%" />
+            </Box>
           </Box>
         </Paper>
       </Box>

@@ -9,6 +9,8 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
+  Card,
+  Stack,
 } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import AddIcon from '@mui/icons-material/Add';
@@ -18,31 +20,46 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 export default function BondDetailsCalculateReturns({ bond }) {
+  console.log('Bond calculate data', bond);
   const settings = useSettingsContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [unitCount, setUnitCount] = useState(1);
 
   const handleAddUnit = () => {
-    setUnitCount(prev => prev + 1);
+    setUnitCount((prev) => prev + 1);
   };
 
   const handleRemoveUnit = () => {
     if (unitCount > 1) {
-      setUnitCount(prev => prev - 1);
+      setUnitCount((prev) => prev - 1);
     }
   };
 
   // Top 4 and Bottom 4 mock data
   const topCards = [
-    { title: 'Returns (YTM)', value: `${bond?.bond?.ytm_percent || 'N.A.'}%`, icon: '/icons/return.svg' },
-    { title: 'Payment Terms', value: bond?.bond?.payment_terms || 'N.A.', icon: '/icons/payment.svg' },
-    { 
-      title: 'Remaining Tenure', 
-      value: `${bond?.bond?.tenure?.years || 0} years ${bond?.bond?.tenure?.months || 0} months ${bond?.bond?.tenure?.days || 0} days`, 
-      icon: '/icons/tenure.svg' 
+    {
+      title: 'Returns (YTM)',
+      value: `${bond?.bond?.ytm_percent || 'N.A.'}%`,
+      icon: '/icons/return.svg',
     },
-    { title: 'Min. investment', value: `₹${bond?.bond?.minimum_investment_rs || 'N.A.'}`, icon: '/icons/investment.svg' },
+    {
+      title: 'Payment Terms',
+      value: bond?.bond?.payment_terms || 'N.A.',
+      icon: '/icons/payment.svg',
+    },
+    {
+      title: 'Remaining Tenure',
+      value: `${bond?.bond?.tenure?.years || 0} years ${bond?.bond?.tenure?.months || 0} months ${
+        bond?.bond?.tenure?.days || 0
+      } days`,
+      icon: '/icons/tenure.svg',
+    },
+    {
+      title: 'Min. investment',
+      value: `₹${bond?.bond?.minimum_investment_rs || 'N.A.'}`,
+      icon: '/icons/investment.svg',
+    },
   ];
 
   const bottomCards = [
@@ -56,8 +73,267 @@ export default function BondDetailsCalculateReturns({ bond }) {
     <Box>
       <Grid container spacing={3}>
         {/* ===================== LEFT SECTION ===================== */}
-        <Grid item xs={12} md={6} lg={7}>
-          <Box
+        <Grid item xs={12} md={6} lg={8}>
+          <Grid container spacing={2}>
+            {/* Pricing Details Card */}
+            <Grid item xs={12} md={5}>
+              <Card sx={{ p: 3 }}>
+                <Typography
+                  variant="h6"
+                  sx={{ mb: 2, fontWeight: 600, fontStyle: 'bold', color: '#306CD3' }}
+                >
+                  Pricing Details
+                </Typography>
+
+                <Grid container spacing={2} direction="row">
+                  <Grid item xs={6} md={6}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Face Value
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      ₹{bond?.bond?.face_value_rs || 'NA'}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={6}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Current Yield
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      ₹{bond?.bond?.current_yield || 'NA'}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Card>
+            </Grid>
+
+            {/* Risk Assessment Card */}
+            <Grid item xs={12} md={7}>
+              <Card sx={{ p: 3 }}>
+                <Typography
+                  variant="h6"
+                  sx={{ mb: 2, fontWeight: 600, fontStyle: 'bold', color: '#306CD3' }}
+                >
+                  Risk Assessment
+                </Typography>
+
+                <Grid container spacing={2} direction="row">
+                  <Grid item xs={7} md={7}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Rating
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {bond?.bond?.ratings[0].rating || 'NA'}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={5} md={5}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Date of Rating
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {bond?.bond?.ratings[0]?.rating_date || 'NA'}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <Card sx={{ p: 3 }}>
+                <Typography
+                  variant="h6"
+                  sx={{ mb: 2, fontWeight: 600, fontStyle: 'bold', color: '#306CD3' }}
+                >
+                  Key Attributes
+                </Typography>
+
+                <Grid container spacing={2} direction="row" sx={{ mb: 2 }}>
+                  <Grid item xs={6} md={4}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Interest Frequency
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {bond?.bond?.interest_payment_frequency || 'NA'}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Tax Status
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">{bond?.bond?.tax_free || 'NA'}</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Mode of Issue
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {bond?.bond?.mode_of_issuance || 'NA'}
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} direction="row">
+                  <Grid item xs={6} md={4}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Nature of Instrument
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {bond?.bond?.listed_unlisted || 'NA'}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Collateral Security
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {bond?.bond?.secured === true
+                        ? 'Secured'
+                        : bond?.bond?.secured === false
+                        ? 'Not Secured'
+                        : 'NA'}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Seniority
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">{bond?.bond?.seniority || 'NA'}</Typography>
+                  </Grid>
+                </Grid>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <Card sx={{ p: 3 }}>
+                <Typography
+                  variant="h6"
+                  sx={{ mb: 2, fontWeight: 600, fontStyle: 'bold', color: '#306CD3' }}
+                >
+                  Bond Details
+                </Typography>
+
+                <Grid container spacing={2} direction="row" sx={{ mb: 2 }}>
+                  <Grid item xs={6} md={3}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Security Type
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {bond?.bond?.secured === true
+                        ? 'Secured'
+                        : bond?.bond?.secured === false
+                        ? 'Not Secured'
+                        : 'NA'}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={3}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Principal Frequency
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">Need to check</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={3}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Coupon Type
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">Need to check</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={3}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Tenure
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {bond?.bond?.tenure
+                        ? [
+                            bond.bond.tenure.years ? `${bond.bond.tenure.years} Year` : '',
+                            bond.bond.tenure.months ? `${bond.bond.tenure.months} Month` : '',
+                            bond.bond.tenure.days ? `${bond.bond.tenure.days} Day` : '',
+                          ]
+                            .filter(Boolean)
+                            .join(' ') || 'NA'
+                        : 'NA'}
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} direction="row">
+                  <Grid item xs={6} md={3}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Sector
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">{bond?.company?.company?.sector || 'NA'}</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={3}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Total Issue Size
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">{bond?.bond?.issue_size_lakhs || 'NA'}L</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={3}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Date of Issue
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">{bond?.bond?.issue_date || 'NA'}</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={3}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Settlement Date
+                      <IconButton size="small" sx={{ pl: 1 }}>
+                        <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                      </IconButton>
+                    </Typography>
+                    <Typography variant="subtitle1">Need to check</Typography>
+                  </Grid>
+                </Grid>
+              </Card>
+            </Grid>
+          </Grid>
+          {/* <Box
             sx={{
               display: 'flex',
               flexDirection: { xs: 'column', md: 'column' },
@@ -66,7 +342,6 @@ export default function BondDetailsCalculateReturns({ bond }) {
               height: '100%',
             }}
           >
-            {/* Top Cards Section */}
             <Box
               sx={{
                 p: { xs: 2, sm: 3 },
@@ -135,7 +410,6 @@ export default function BondDetailsCalculateReturns({ bond }) {
               </Grid>
             </Box>
 
-            {/* Bottom Cards Section */}
             <Box
               sx={{
                 p: { xs: 2, sm: 3 },
@@ -209,11 +483,11 @@ export default function BondDetailsCalculateReturns({ bond }) {
                 ))}
               </Grid>
             </Box>
-          </Box>
+          </Box> */}
         </Grid>
 
         {/* ===================== RIGHT SECTION ===================== */}
-        <Grid item xs={12} md={6} lg={5}>
+        <Grid item xs={12} md={6} lg={4}>
           <Paper
             elevation={0}
             sx={{
@@ -263,6 +537,9 @@ export default function BondDetailsCalculateReturns({ bond }) {
             <Box sx={{ mt: 3 }}>
               <Typography variant="body2" color="text.secondary">
                 Total Receivable
+                <IconButton size="small" sx={{ pl: 1 }}>
+                  <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                </IconButton>
               </Typography>
               <TextField
                 fullWidth
@@ -273,6 +550,9 @@ export default function BondDetailsCalculateReturns({ bond }) {
 
               <Typography variant="body2" color="text.secondary">
                 Total Returns
+                <IconButton size="small" sx={{ pl: 1 }}>
+                  <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
+                </IconButton>
               </Typography>
               <TextField
                 fullWidth
@@ -294,7 +574,7 @@ export default function BondDetailsCalculateReturns({ bond }) {
 
             {/* Unit Selector */}
             <Box display="flex" alignItems="center" justifyContent="center" sx={{ mt: 2, mb: 2 }}>
-              <IconButton 
+              <IconButton
                 onClick={handleRemoveUnit}
                 disabled={unitCount <= 1}
                 aria-label="remove unit"
@@ -307,10 +587,7 @@ export default function BondDetailsCalculateReturns({ bond }) {
               >
                 {unitCount} {unitCount === 1 ? 'Unit' : 'Units'}
               </Typography>
-              <IconButton 
-                onClick={handleAddUnit}
-                aria-label="add unit"
-              >
+              <IconButton onClick={handleAddUnit} aria-label="add unit">
                 <AddIcon />
               </IconButton>
             </Box>
