@@ -31,6 +31,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
   const otpRefs = useRef([]);
   const router = useRouter();
+  const [token, setToken] = useState('');
 
   const handleVerifyEmailOtp = async () => {
     if (isVerifying) return;
@@ -42,7 +43,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       const base = process.env.REACT_APP_HOST_API || '';
       const res = await fetch(`${base}/api/auth/v1/verify-email-otp/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ user_id: '1', email, otp_code: code }),
       });
       if (!res.ok) {
@@ -61,11 +62,11 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       } catch (e) {
         data = {};
       }
-      const token = data?.data?.access_token || data?.access_token;
+      const tokens = data?.data?.access_token || data?.access_token;
       const companyInfoId = data?.data?.company_information_id || data?.company_information_id;
       
-      if (token) {
-        setSession(token);
+      if (tokens) {
+        setSession(tokens);
       }
       
       if (companyInfoId) {
@@ -94,7 +95,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       const base = process.env.REACT_APP_HOST_API || '';
       const res = await fetch(`${base}/api/auth/v1/send-email-otp/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ user_id: '1', name: trimmedName, email }),
       });
       if (!res.ok) {
@@ -157,12 +158,13 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       if (data && data.message) {
         enqueueSnackbar(data.message, { variant: 'success' });
       }
-      const token = data?.data?.access_token || data?.access_token;
+      const tokens = data?.data?.access_token || data?.access_token;
       const companyInfoId = data?.data?.company_information_id || data?.company_information_id;
       const emailVerified = data?.data?.email_verified || data?.email_verified;
       
-      if (token) {
-        setSession(token);
+      if (tokens) {
+        setSession(tokens);
+        setToken(tokens);
         
         if (companyInfoId) {
           sessionStorage.setItem('company_information_id', companyInfoId);
