@@ -12,110 +12,71 @@ import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import { Icon } from '@iconify/react';
 import { useTheme, alpha } from '@mui/material/styles';
+import { Button, Card, CardContent } from '@mui/material';
+import TimelineView from '../_examples/mui/timeline-view';
+import {
+  Timeline,
+  TimelineConnector,
+  TimelineContent,
+  TimelineDot,
+  TimelineItem,
+  TimelineOppositeContent,
+  TimelineSeparator,
+} from '@mui/lab';
+import Iconify from 'src/components/iconify';
+import ComponentBlock from '../_examples/component-block';
+import Carousel, { CarouselDots, useCarousel } from 'src/components/carousel';
 
 // ----------------------------------------------------------------------
-
-const PillTabs = styled(Tabs)(({ theme }) => ({
-  minHeight: 40,
-  '& .MuiTabs-flexContainer': {
-    gap: 0,
+const timelineSteps = [
+  {
+    icon: <Iconify icon="eva:folder-add-fill" width={24} />,
+    title: 'Sign Up',
+    description: 'Create the First Investor Metadata',
+    position: 'left',
+    color: '#f5f5f5',
   },
-  '& .MuiTab-root': {
-    textTransform: 'uppercase',
-    minHeight: 40,
-    borderRadius: 999,
-    padding: theme.spacing(0.75, 2),
-    color: theme.palette.text.primary,
-    fontWeight: 700,
-    fontSize: 14,
-    transition: theme.transitions.create(['background-color', 'color']),
-    '&:not(.Mui-selected)': {
-      backgroundColor: 'transparent',
-    },
-    '&.Mui-selected': {
-      color: theme.palette.text.primary,
-      backgroundColor: '#E1F0FF',
-    },
+  {
+    icon: <Iconify icon="eva:folder-add-fill" width={24} />,
+    title: 'Upload Documents',
+    description: 'Pan Card, Aadhaar Card and Cancelled Cheque',
+    position: 'right',
+    color: '#f5f5f5',
   },
-  [theme.breakpoints.up('sm')]: {
-    '& .MuiTab-root:not(:last-of-type)': {
-      marginRight: '-20px',
-    },
+  {
+    icon: <Iconify icon="eva:folder-add-fill" width={24} />,
+    title: 'Verify Identity',
+    description: 'Complete KYC & eSign, Change PAN to Valid PAN',
+    position: 'left',
+    color: '#f5f5f5',
   },
-  '& .MuiTabs-indicator': { display: 'none' },
-}));
+  {
+    icon: <Iconify icon="eva:folder-add-fill" width={24} />,
+    title: 'Search & Filter Bonds',
+    description: 'Sort and view the latest bonds on the My Bigacorns',
+    position: 'right',
+    color: '#f5f5f5',
+  },
+  {
+    icon: <Iconify icon="eva:folder-add-fill" width={24} />,
+    title: 'Start Listing Bonds',
+    description: 'Does discover To a Listed plan, My bigacorns india May Change',
+    position: 'left',
+    color: '#f5f5f5',
+  },
+];
 
-const StepCard = styled(Paper)(({ theme }) => ({
-  position: 'relative',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  textAlign: 'center',
-  gap: theme.spacing(1.5),
-  padding: theme.spacing(3),
-  borderRadius: 999,
-  boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-}));
-
-const StepBadge = styled(Avatar)(({ theme }) => ({
-  width: 64,
-  height: 64,
-  background: '#E1F0FF',
-  color: theme.palette.text.primary,
-  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-  fontWeight: 800,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-function StepItem({ index, title, subtitle }) {
-  return (
-    <StepCard>
-      <Box
-        sx={{
-          position: 'absolute',
-          left: { xs: -24, sm: -28 },
-          top: '50%',
-          transform: 'translateY(-50%)',
-          textAlign: 'center',
-        }}
-      >
-        <StepBadge variant="circular">
-          <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1, fontSize: 10 }}>
-            Step
-          </Typography>
-          <Typography component="span" sx={{ lineHeight: 1, fontSize: 22, fontWeight: 800 }}>
-            {index}
-          </Typography>
-        </StepBadge>
-      </Box>
-
-      <Avatar sx={{ bgcolor: '#E1F0FF', width: 36, height: 36 }}>
-        <Icon icon="mdi:shield-outline" style={{ color: '#1E293B' }} />
-      </Avatar>
-
-      <Stack spacing={0.5} sx={{ maxWidth: 500 }}>
-        <Typography>{title}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          {subtitle}
-        </Typography>
-      </Stack>
-    </StepCard>
-  );
-}
-
-export default function HomeGetStartedKYC() {
+export default function HomeGetStartedKYC({ numberShow }) {
   const [tab, setTab] = React.useState('issuer');
   const theme = useTheme();
 
-  const handleChange = (_e, newValue) => setTab(newValue);
-
-  const isCustomer = tab === 'customer';
-  const preferredCustomerSrc = '/assets/images/home/kyc/kyc_customer.svg';
-  const fallbackCustomerSrc = '/assets/images/home/kyc/kyc_custormer.svg';
-  const imageSrc = isCustomer ? preferredCustomerSrc : '/assets/images/home/kyc/kyc_issuer.svg';
+  const mobileCarousel = useCarousel({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    ...CarouselDots({
+      sx: { mt: 2 },
+    }),
+  });
 
   return (
     <Box component="section" sx={{ pt: { xs: 6, md: 15 } }}>
@@ -150,113 +111,211 @@ export default function HomeGetStartedKYC() {
             platform. Our process is 100% paperless, quick, and compliant with SEBI regulations.
           </Typography>
         </Stack>
-        <Box
-          sx={{
-            display: 'flex',
-            pt: { xs: 2, md: 4 },
-            pb: { xs: 2, md: 6 },
-            justifyContent: { xs: 'center', md: 'start' },
-          }}
-        >
-          <Box
-            sx={{
-              borderRadius: 999,
-              px: 0,
-              py: 0,
-              border: (theme) => `1px solid ${theme.palette.divider}`,
-              bgcolor: 'background.paper',
-              display: 'inline-block',
-              width: '100%',
-              maxWidth: 350,
-              minWidth: 320,
-            }}
-          >
-            <PillTabs
-              value={tab}
-              onChange={handleChange}
-              aria-label="KYC type tabs"
-              variant="fullWidth"
-            >
-              <Tab value="issuer" label="Issuer KYC" />
-              <Tab value="customer" label="Customer KYC" />
-            </PillTabs>
-          </Box>
-        </Box>
-        <Box sx={{ position: 'relative' }}>
-          <Grid container spacing={4} alignItems="stretch">
-            <Grid item xs={12} md={4.5} sx={{ position: 'relative', zIndex: 2 }}>
-              <Stack spacing={2.5} sx={{ paddingLeft: 2 }}>
-                <StepItem
-                  index={1}
-                  title="Sign Up"
-                  subtitle="Create your free account in minutes."
-                />
-                <StepItem
-                  index={2}
-                  title="Upload Documents"
-                  subtitle="Provide your PAN, Aadhaar, and a valid bank account."
-                />
-                <StepItem
-                  index={3}
-                  title="Verify Identity"
-                  subtitle="Complete instant verification through OTP or DigiLocker."
-                />
-                <StepItem
-                  index={4}
-                  title={isCustomer ? 'Start Buying' : 'Start Listing Bonds'}
-                  subtitle="Once approved, you can explore the opportunities right away."
-                />
-              </Stack>
-            </Grid>
-          </Grid>
 
-          <Box
-            sx={{
-              display: { xs: 'none', md: 'block' },
-              position: { md: 'absolute' },
-              top: 0,
-              right: 0,
-              bottom: 0,
-              width: { xs: '100%', md: '75%' },
-              py: { md: 5 },
-              pt: { md: 8 },
-              zIndex: 1,
-              pointerEvents: 'none',
-            }}
-          >
+        <Container maxWidth="md" sx={{ py: 6 }}>
+          <Box sx={{ position: 'relative', display: { xs: 'none', md: 'block' } }}>
+            {/* Background image at center */}
             <Box
               sx={{
-                height: '100%',
-                position: 'relative',
-                overflow: 'hidden',
-                ml: { md: -3 },
+                position: 'absolute',
+                left: '50%',
+                top: 0,
+                bottom: 0,
+                width: '900px',
+                transform: 'translateX(-50%)',
+                backgroundImage: "url('/assets/icons/home/timeline_bg.png')",
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                opacity: 1,
+                zIndex: 0,
               }}
-            >
+            />
+            {/* Vertical line */}
+            <Box
+              sx={{
+                position: 'absolute',
+                left: '50%',
+                top: 0,
+                bottom: 100,
+                width: 2,
+                bgcolor: '#e0e0e0',
+                transform: 'translateX(-50%)',
+                zIndex: 0,
+              }}
+            />
+
+            {/* Timeline items */}
+            {timelineSteps.map((step, index) => (
               <Box
-                component="img"
-                alt="KYC Illustration"
-                src={imageSrc}
-                onError={
-                  isCustomer
-                    ? (e) => {
-                        if (e?.currentTarget?.src?.includes('kyc_customer.svg')) {
-                          e.currentTarget.src = fallbackCustomerSrc;
-                        }
-                      }
-                    : undefined
-                }
+                key={index}
                 sx={{
-                  position: 'absolute',
-                  inset: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: '20% center',
+                  display: 'flex',
+                  justifyContent: step.position === 'left' ? 'flex-start' : 'flex-end',
+                  mb: 6,
+                  position: 'relative',
                 }}
-              />
+              >
+                <Card
+                  sx={{
+                    width: { xs: '80%', md: '35%' },
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+
+                    '&:hover': {
+                      bgcolor: '#003289',
+                      color: 'white', // makes children inherit
+                    },
+
+                    '&:hover .title': {
+                      color: 'white',
+                    },
+
+                    '&:hover .desc': {
+                      color: 'rgba(255,255,255,0.9)',
+                    },
+
+                    '&:hover .avatar': {
+                      bgcolor: 'white',
+                      color: '#003289',
+                    },
+                  }}
+                >
+                  <CardContent sx={{ textAlign: 'center', py: 3 }}>
+                    <Avatar
+                      className="avatar"
+                      sx={{
+                        bgcolor: step.color,
+                        color: 'text.secondary',
+                        width: 48,
+                        height: 48,
+                        mx: 'auto',
+                        mb: 2,
+                        transition: 'all 0.3s ease',
+                      }}
+                    >
+                      {step.icon}
+                    </Avatar>
+
+                    <Typography
+                      variant="h6"
+                      className="title"
+                      sx={{
+                        fontWeight: 600,
+                        mb: 1,
+                        transition: 'color 0.3s ease',
+                      }}
+                    >
+                      {step.title}
+                    </Typography>
+
+                    <Typography
+                      variant="body2"
+                      className="desc"
+                      sx={{
+                        color: 'text.secondary',
+                        fontSize: '0.875rem',
+                        transition: 'color 0.3s ease',
+                      }}
+                    >
+                      {step.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    borderBottom: '2px dotted #b0b0b0',
+                    height: 0,
+                    zIndex: 0,
+
+                    ...(step.position === 'left'
+                      ? {
+                          left: 'calc(33% + 20px)', // card width + spacing
+                          right: '50%',
+                        }
+                      : {
+                          left: '50%',
+                          right: 'calc(33% + 20px)',
+                        }),
+                  }}
+                />
+                {/* Center dot */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 16,
+                    height: 16,
+                    borderRadius: '50%',
+                    bgcolor: '#90caf9',
+                    border: '3px solid white',
+                    zIndex: 2,
+                    boxShadow: 1,
+                  }}
+                />
+              </Box>
+            ))}
+
+            {/* Start button */}
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button
+                variant="contained"
+                size="large"
+                sx={{
+                  bgcolor: '#003289',
+                  px: 6,
+                  py: 1.5,
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  '&:hover': {
+                    bgcolor: '#003289',
+                  },
+                }}
+              >
+                Start Investing
+              </Button>
             </Box>
           </Box>
-        </Box>
+          {/* Mobile View Carousel */}
+          <Box sx={{ display: { xs: 'block', md: 'none' }, px: 2, mt: 4 }}>
+            <Carousel ref={mobileCarousel.carouselRef} {...mobileCarousel.carouselSettings}>
+              {timelineSteps.map((step, index) => (
+                <Box key={index} sx={{ px: 1 }}>
+                  <Card sx={{ width: '100%' }}>
+                    <CardContent sx={{ textAlign: 'center', py: 3 }}>
+                      <Avatar
+                        sx={{
+                          bgcolor: step.color,
+                          color: 'white',
+                          width: 48,
+                          height: 48,
+                          mx: 'auto',
+                          mb: 2,
+                        }}
+                      >
+                        {step.icon}
+                      </Avatar>
+
+                      <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                        {step.title}
+                      </Typography>
+
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        {step.description}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Box>
+              ))}
+            </Carousel>
+          </Box>
+        </Container>
       </Container>
     </Box>
   );

@@ -28,23 +28,26 @@ export default function HomeStats() {
     >
       <Box sx={{ width: '100%' }}>
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 4 }}>
+          <Typography variant="h3" align="center" color="#003289" gutterBottom sx={{ fontWeight: 700, }}>
+            Our Growing Investment Community
+          </Typography>
           <Typography variant="h5" align="center" color="#18191B" gutterBottom>
             Find government and corporate bonds with detailed coupon rates, yields, and maturity
             schedules. Our interactive bond timeline helps you identify opportunities at the right
             time.
           </Typography>
         </Container>
+        <Container maxWidth='lg'>
         <Grid
           container
           spacing={0}
           justifyContent="center"
           sx={{
-            borderTop: '1px solid #FFAB00',
-            borderBottom: '1px solid #FFAB00',
+            border: '1px solid #FFAB00',
             borderRadius: 0,
             overflow: 'hidden',
             aspectRatio: { xs: '1', md: 'auto' },
-            bgcolor: '#E8F3FF',
+            bgcolor: '#003289',
           }}
         >
           {defaultStats.map((stat, idx) => (
@@ -70,7 +73,7 @@ export default function HomeStats() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                py: { xs: 1, md: 5 },
+                py: { xs: 1, md: 2 },
                 px: { xs: 1, md: 0 },
                 bgcolor: 'inherit',
               }}
@@ -81,7 +84,7 @@ export default function HomeStats() {
                 <Typography
                   variant="h2"
                   sx={{
-                    color: '#FFAB00',
+                    color: '#ffffff',
                     fontWeight: 500,
                   }}
                 >
@@ -90,7 +93,7 @@ export default function HomeStats() {
                 <Typography
                   variant="h2"
                   sx={{
-                    color: '#FFAB00',
+                    color: '#ffffff',
                     fontWeight: 200,
                     lineHeight: 1,
                     ml: 0,
@@ -103,6 +106,7 @@ export default function HomeStats() {
               <Typography
                 variant="h6"
                 sx={{
+                  color: '#ffffff',
                   fontWeight: 500,
                   pt: 1,
                 }}
@@ -112,6 +116,7 @@ export default function HomeStats() {
             </Grid>
           ))}
         </Grid>
+        </Container>
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 4 }}>
           <Typography variant="h5" align="center" color="#18191B" gutterBottom>
             We are committed to breaking down the barriers of traditional finance by offering clear

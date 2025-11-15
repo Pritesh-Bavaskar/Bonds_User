@@ -133,7 +133,8 @@ export default function HomeWhyBonds({ isDetails, bonds }) {
           sx={{
             mt: 2,
             mx: 'auto',
-            maxWidth: 900,
+            px:'20px',
+            maxWidth: 'lg',
             fontWeight: 300,
             display: isDetails ? 'none' : 'block',
           }}

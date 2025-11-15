@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, Container } from '@mui/material';
+import { Box, Typography, Grid, Container, Card } from '@mui/material';
 import { useTheme, alpha } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
 
@@ -69,54 +69,56 @@ export default function HomeWhatBonds() {
             const isHighlighted = Boolean(item.highlighted);
             return (
               <Grid key={item.key} item xs={12} sm={6} md={3}>
-                <Box
-                  sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    px: { xs: 3, md: 3 },
-                    py: { xs: 5, md: 8 },
-                    borderRadius: 2,
-                    // Use transparent border so layout doesn't shift; appears on hover
-                    border: '1px solid',
-                    borderColor: isHighlighted ? theme.palette.warning.main : 'transparent',
-                    bgcolor: isHighlighted
-                      ? alpha(theme.palette.grey[500], 0.06)
-                      : 'background.paper',
-                    boxShadow: isHighlighted
-                      ? `0 8px 22px ${alpha(theme.palette.primary.main, 0.18)}`
-                      : 'none',
-                    transition: 'all 200ms ease',
-                    '&:hover': {
-                      borderColor: theme.palette.warning.main,
-                      bgcolor: alpha(theme.palette.primary.main, 0.06),
-                      boxShadow: `0 8px 22px ${alpha(theme.palette.primary.main, 0.18)}`,
-                    },
-                  }}
-                >
+                <Card>
                   <Box
                     sx={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: 1.5,
-                      display: 'grid',
-                      placeItems: 'center',
-                      color: theme.palette.primary.main,
-                      mb: 2.5,
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      px: { xs: 3, md: 3 },
+                      py: { xs: 5, md: 8 },
+                      borderRadius: 2,
+                      border: '1px solid',
+                      borderColor: isHighlighted ? 'transparent' : 'transparent',
+                      bgcolor: isHighlighted ? alpha('#003289', 0.06) : 'background.paper',
+                      transition: 'all 200ms ease',
+                      '&:hover': {
+                        borderColor: 'transparent',
+                        bgcolor: '#003289', 
+                        color: '#fff', 
+                      },
+
+                      '&:hover .hover-text': {
+                        color: '#fff !important',
+                      },
+                      '&:hover .hover-icon': {
+                        color: '#fff !important',
+                      },
                     }}
                   >
-                    <Icon icon={item.icon} width={36} height={36} />
-                  </Box>
+                    <Box
+                      sx={{
+                        width: 56,
+                        height: 56,
+                        borderRadius: 1.5,
+                        display: 'grid',
+                        placeItems: 'center',
+                        mb: 2.5,
+                      }}
+                    >
+                      <Icon icon={item.icon} width={36} height={36} />
+                    </Box>
 
-                  <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                    {item.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1.2 }}>
-                    {item.description}
-                  </Typography>
-                </Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 1.2 }}>
+                      {item.description}
+                    </Typography>
+                  </Box>
+                </Card>
               </Grid>
             );
           })}
