@@ -26,6 +26,7 @@ export const paths = {
   KYCSuccessful: '/kyc/successful',
   KYCSignatories: '/kyc/signatories',
   KYCPending: '/kyc/pending',
+  KYCAuditedFinancial: '/kyc/audited-financial',
 
   issuer: '/issuer',
   calculator: '/calculator',
