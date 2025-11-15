@@ -17,7 +17,7 @@ import KYCFooter from './kyc-footer';
 import { countries } from 'src/assets/data';
 // components
 import Iconify from 'src/components/iconify';
-import { RHFTextField } from 'src/components/hook-form';
+import { RHFTextField, RHFSelect } from 'src/components/hook-form';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 import KYCStepper from './kyc-stepper';
@@ -26,8 +26,6 @@ import axiosInstance from 'src/utils/axios';
 import dayjs from 'dayjs';
 import { fDate } from 'src/utils/format-time';
 import { RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, Button } from '@mui/material';
-
-// ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
@@ -48,61 +46,55 @@ const StyledDropZone = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function KYCAuditedFinancial() {
+export default function KYCAuditedGST3B() {
   const [auditorName, setAuditorName] = useState('');
-  const [documents, setDocuments] = useState([
-    {
-      id: 'fs-1',
-      year: '2022-23',
-      file: null,
-      status: 'Pending',
-      reportDate: null,
-      statementType: 'Audited',
-      documentType: 'financialStatement', // Add document type identifier
-    },
-    {
-      id: 'fs-2',
-      year: '2023-24',
-      file: null,
-      status: 'Pending',
-      reportDate: null,
-      statementType: 'Audited',
-      documentType: 'financialStatement',
-    },
-    {
-      id: 'fs-3',
-      year: '2024-25',
-      file: null,
-      status: 'Pending',
-      reportDate: null,
-      statementType: 'Audited',
-      documentType: 'financialStatement',
-    },
-  ]);
+  const [selectedMonth, setSelectedMonth] = useState('');
+
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  const handleAddMonth = () => {
+    if (selectedMonth) {
+      const newDocument = {
+        id: `month-${Date.now()}`,
+        month: selectedMonth,
+        file: null,
+        status: 'Pending',
+        reportDate: null,
+        documentType: 'gst3b',
+      };
+
+      setDocuments((prev) => [...prev, newDocument]);
+      setSelectedMonth('');
+    }
+  };
 
   const handleFileUpload = (event, id) => {
     const file = event.target.files[0];
     if (file) {
-      setDocuments((docs) =>
-        docs.map((doc) =>
-          doc.id === id ? { ...doc, file: file, status: 'Uploaded', reportDate: new Date() } : doc
+      setDocuments((prevDocs) =>
+        prevDocs.map((doc) =>
+          doc.id === id ? { ...doc, file, status: 'Uploaded', reportDate: new Date() } : doc
         )
       );
-      // Reset the file input to allow re-uploading the same file
       event.target.value = null;
     }
   };
 
-  const handleDateChange = (date, id) => {
-    setDocuments((docs) => docs.map((doc) => (doc.id === id ? { ...doc, reportDate: date } : doc)));
-  };
-
   const handleDelete = (id) => {
-    setDocuments((docs) =>
-      docs.map((doc) =>
-        doc.id === id ? { ...doc, file: null, status: 'Pending', reportDate: null } : doc
-      )
-    );
+    setDocuments((prevDocs) => prevDocs.filter((doc) => doc.id !== id));
   };
 
   const getStatusColor = (status) => {
@@ -114,6 +106,48 @@ export default function KYCAuditedFinancial() {
       default:
         return 'warning';
     }
+  };
+
+  const [documents, setDocuments] = useState([]);
+
+  // const handleFileUpload = (event, id) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setDocuments((docs) =>
+  //       docs.map((doc) =>
+  //         doc.id === id ? { ...doc, file: file, status: 'Uploaded', reportDate: new Date() } : doc
+  //       )
+  //     );
+  //     // Reset the file input to allow re-uploading the same file
+  //     event.target.value = null;
+  //   }
+  // };
+
+  // const handleDateChange = (date, id) => {
+  //   setDocuments((docs) => docs.map((doc) => (doc.id === id ? { ...doc, reportDate: date } : doc)));
+  // };
+
+  // const handleDelete = (id) => {
+  //   setDocuments((docs) =>
+  //     docs.map((doc) =>
+  //       doc.id === id ? { ...doc, file: null, status: 'Pending', reportDate: null } : doc
+  //     )
+  //   );
+  // };
+
+  // const getStatusColor = (status) => {
+  //   switch (status) {
+  //     case 'Uploaded':
+  //       return 'success';
+  //     case 'Invalid':
+  //       return 'error';
+  //     default:
+  //       return 'warning';
+  //   }
+  // };
+
+  const handleDateChange = (date, id) => {
+    setDocuments((docs) => docs.map((doc) => (doc.id === id ? { ...doc, reportDate: date } : doc)));
   };
 
   return (
@@ -130,10 +164,10 @@ export default function KYCAuditedFinancial() {
       >
         <Grid xs={12}>
           <Typography variant="h6" sx={{ mb: 1.5 }}>
-            Audited Financial Statements (Last 3 Years)
+            GST-3B Monthly Returns (Last 3 Years)
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
-            Upload your company's audited balance sheets, P&L statements and reports.
+            Upload your GST-3B monthly returns.
           </Typography>
 
           <Box sx={{ mb: 4 }}>
@@ -147,6 +181,48 @@ export default function KYCAuditedFinancial() {
               value={auditorName}
               onChange={(e) => setAuditorName(e.target.value)}
             />
+          </Box>
+
+          <Box
+            sx={{ mb: 4, display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'column' } }}
+          >
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="h6" gutterBottom>
+                Year 2024-2025
+              </Typography>
+            </Box>
+
+            <Box sx={{ maxWidth: { xs: '100%', sm: '40%' } }}>
+              <Typography variant="subtitle2" gutterBottom>
+                Select Month
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <RHFSelect
+                  name="month"
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  native
+                  fullWidth
+                >
+                  <option value="">Select Month</option>
+                  {months
+                    .filter((month) => !documents.some((doc) => doc.month === month))
+                    .map((month) => (
+                      <option key={month} value={month}>
+                        {month}
+                      </option>
+                    ))}
+                </RHFSelect>
+                <Button
+                  variant="contained"
+                  onClick={handleAddMonth}
+                  disabled={!selectedMonth}
+                  sx={{ whiteSpace: 'nowrap' }}
+                >
+                  Add
+                </Button>
+              </Box>
+            </Box>
           </Box>
 
           <Box sx={{ width: '100%', overflow: 'hidden' }}>
@@ -166,20 +242,15 @@ export default function KYCAuditedFinancial() {
                   p: 1.5,
                   borderRight: '1px solid',
                   borderColor: 'divider',
-                  '&:last-child': {
-                    borderRight: 'none',
-                  },
                 },
               }}
             >
-              <Typography variant="subtitle2">Year</Typography>
+              <Typography variant="subtitle2">Month</Typography>
               <Typography variant="subtitle2">Type</Typography>
               <Typography variant="subtitle2">Upload File</Typography>
               <Typography variant="subtitle2">Status</Typography>
               <Typography variant="subtitle2">Report Date</Typography>
-              <Typography variant="subtitle2" align="center">
-                Actions
-              </Typography>
+              <Typography variant="subtitle2">Actions</Typography>
             </Box>
 
             {/* Desktop/Tablet View */}
@@ -212,7 +283,7 @@ export default function KYCAuditedFinancial() {
                   },
                 }}
               >
-                <Typography variant="body2">{doc.year}</Typography>
+                <Typography variant="body2">{doc.month || '-'}</Typography>
 
                 <Box>
                   <RadioGroup
@@ -349,8 +420,8 @@ export default function KYCAuditedFinancial() {
                 }}
               >
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
-                  <Typography variant="subtitle2">Year:</Typography>
-                  <Typography variant="body2">{doc.year}</Typography>
+                  <Typography variant="subtitle2">Month:</Typography>
+                  <Typography variant="body2">{doc.month || '-'}</Typography>
                 </Box>
 
                 <Box

@@ -39,6 +39,7 @@ import { fDate } from 'src/utils/format-time';
 import KYCAuditedFinancialStatement from './kyc-audited-financial-statement';
 import KYCAuditedIncomeTaxReturn from './kyc-audited-income-tax-return';
 import KYCAuditedGSTR9 from './kyc-audited-gstr9';
+import KYCAuditedGST3B from './kyc-audited-gst3b';
 // ----------------------------------------------------------------------
 
 export default function KYCAuditedFinancial() {
@@ -114,7 +115,7 @@ export default function KYCAuditedFinancial() {
       <KYCAuditedFinancialStatement />
       <KYCAuditedIncomeTaxReturn />
       <KYCAuditedGSTR9 />
-      
+      <KYCAuditedGST3B />
     </FormProvider>
   );
 }

@@ -76,7 +76,7 @@ export default function KYCAuditedFinancial() {
         }
       />
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <Grid
+        {/* <Grid
           container
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
@@ -179,7 +179,7 @@ export default function KYCAuditedFinancial() {
               </Grid>
             </RadioGroup>
           </FormControl>
-        </Grid>
+        </Grid> */}
         <KYCAuditedDocuments />
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, mb: 2 }}>
         <Button component={RouterLink} href={paths.KYCBankDetails} variant="outlined">

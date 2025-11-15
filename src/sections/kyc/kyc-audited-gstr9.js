@@ -25,8 +25,7 @@ import KYCAuditedDocuments from './kyc-audited-documents';
 import axiosInstance from 'src/utils/axios';
 import dayjs from 'dayjs';
 import { fDate } from 'src/utils/format-time';
-
-// ----------------------------------------------------------------------
+import { RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -51,25 +50,31 @@ export default function KYCAuditedGSTR9() {
   const [auditorName, setAuditorName] = useState('');
   const [documents, setDocuments] = useState([
     {
-      id: 1,
+      id: 'gstr9-1',
       year: '2022-23',
       file: null,
       status: 'Pending',
       reportDate: null,
+      statementType: 'Audited',
+      documentType: 'gstr9', // Document type identifier for GSTR9
     },
     {
-      id: 2,
+      id: 'gstr9-2',
       year: '2023-24',
       file: null,
-      status: 'Uploaded',
-      reportDate: new Date('2024-03-31'),
+      status: 'Pending',
+      reportDate: null,
+      statementType: 'Audited',
+      documentType: 'gstr9',
     },
     {
-      id: 3,
+      id: 'gstr9-3',
       year: '2024-25',
       file: null,
-      status: 'Invalid',
-      reportDate: new Date('2025-03-31'),
+      status: 'Pending',
+      reportDate: null,
+      statementType: 'Audited',
+      documentType: 'gstr9',
     },
   ]);
 
@@ -81,6 +86,8 @@ export default function KYCAuditedGSTR9() {
           doc.id === id ? { ...doc, file: file, status: 'Uploaded', reportDate: new Date() } : doc
         )
       );
+      // Reset the file input to allow re-uploading the same file
+      event.target.value = null;
     }
   };
 
@@ -124,7 +131,7 @@ export default function KYCAuditedGSTR9() {
             Audited GSTR-9 Annual Returns (Last 3 Years)
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
-            Upload your company's audited balance sheets, P&L statements and reports.
+            Upload your GSTR-9 annual returns filed for the previous 3 finacial years.
           </Typography>
 
           <Box sx={{ mb: 4 }}>
@@ -143,8 +150,11 @@ export default function KYCAuditedGSTR9() {
           <Box sx={{ width: '100%', overflow: 'hidden' }}>
             <Box
               sx={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 2fr 1fr 1.5fr 120px',
+                display: { xs: 'none', md: 'grid' },
+                gridTemplateColumns: {
+                  md: '1fr 2fr 2fr 1fr 1.5fr 120px',
+                  lg: '1fr 2fr 1.5fr 1.2fr 1.8fr 120px',
+                },
                 border: '1px solid',
                 borderColor: 'divider',
                 borderTopLeftRadius: 8,
@@ -161,6 +171,7 @@ export default function KYCAuditedGSTR9() {
               }}
             >
               <Typography variant="subtitle2">Year</Typography>
+              <Typography variant="subtitle2">Type</Typography>
               <Typography variant="subtitle2">Upload File</Typography>
               <Typography variant="subtitle2">Status</Typography>
               <Typography variant="subtitle2">Report Date</Typography>
@@ -169,12 +180,16 @@ export default function KYCAuditedGSTR9() {
               </Typography>
             </Box>
 
+            {/* Desktop/Tablet View */}
             {documents.map((doc) => (
               <Box
                 key={doc.id}
                 sx={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 2fr 1fr 1.5fr 120px',
+                  display: { xs: 'none', md: 'grid' },
+                  gridTemplateColumns: {
+                    md: '1fr 2fr 2fr 1fr 1.5fr 120px',
+                    lg: '1fr 2fr 1.5fr 1.2fr 1.8fr 120px',
+                  },
                   border: '1px solid',
                   borderTop: 'none',
                   borderColor: 'divider',
@@ -196,83 +211,295 @@ export default function KYCAuditedGSTR9() {
                 }}
               >
                 <Typography variant="body2">{doc.year}</Typography>
+
+                <Box>
+                  <RadioGroup
+                    row
+                    value={doc.statementType}
+                    onChange={(e) => {
+                      const newDocuments = documents.map((d) =>
+                        d.id === doc.id ? { ...d, statementType: e.target.value } : d
+                      );
+                      setDocuments(newDocuments);
+                    }}
+                  >
+                    <FormControlLabel
+                      value="Audited"
+                      control={<Radio size="small" />}
+                      label="Audited"
+                      sx={{ '& .MuiFormControlLabel-label': { fontSize: '0.875rem' } }}
+                    />
+                    <FormControlLabel
+                      value="Provisional"
+                      control={<Radio size="small" />}
+                      label="Provisional"
+                      sx={{ '& .MuiFormControlLabel-label': { fontSize: '0.875rem' } }}
+                    />
+                  </RadioGroup>
+                </Box>
                 <Box>
                   {!doc.file ? (
-                    <label htmlFor={`file-upload-${doc.id}`}>
-                      <StyledDropZone>
-                        <Iconify icon="solar:upload-minimalistic-bold" width={16} />
-                        <Typography variant="caption">Click to upload</Typography>
-                      </StyledDropZone>
-                      <input
-                        id={`file-upload-${doc.id}`}
-                        type="file"
-                        style={{ display: 'none' }}
-                        onChange={(e) => handleFileUpload(e, doc.id)}
-                      />
-                    </label>
+                    <Typography variant="body2" sx={{ color: 'text.disabled' }}>
+                      Not Uploaded
+                    </Typography>
                   ) : (
                     <Typography variant="body2">{doc.file.name}</Typography>
                   )}
                 </Box>
+
                 <Box>
                   <Box
+                    component="span"
                     sx={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      px: 1.5,
+                      px: 1,
                       py: 0.5,
                       borderRadius: 1,
+                      typography: 'caption',
+                      color: (theme) => theme.palette[getStatusColor(doc.status)].darker,
                       bgcolor: (theme) =>
                         alpha(theme.palette[getStatusColor(doc.status)].main, 0.16),
-                      color: (theme) => theme.palette[getStatusColor(doc.status)].dark,
                     }}
                   >
-                    <Box
-                      sx={{
-                        width: 6,
-                        height: 6,
-                        borderRadius: '50%',
-                        bgcolor: (theme) => theme.palette[getStatusColor(doc.status)].main,
-                        mr: 1,
-                      }}
-                    />
-                    <Typography variant="caption">{doc.status}</Typography>
+                    {doc.status}
                   </Box>
                 </Box>
                 <Box>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       value={doc.reportDate}
-                      onChange={(date) => handleDateChange(date, doc.id)}
-                      format="dd MMM yyyy"
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
-                          variant: 'outlined',
-                          placeholder: 'Select date',
-                        },
-                      }}
+                      onChange={(newValue) => handleDateChange(newValue, doc.id)}
+                      renderInput={({ inputRef, inputProps, InputProps }) => (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            '& .MuiSvgIcon-root': {
+                              color: 'text.disabled',
+                              width: 20,
+                              height: 20,
+                              mr: 1,
+                            },
+                          }}
+                        >
+                          {InputProps?.endAdornment}
+                          <input
+                            ref={inputRef}
+                            {...inputProps}
+                            placeholder="Select date"
+                            style={{
+                              width: '100%',
+                              border: 'none',
+                              outline: 'none',
+                              background: 'transparent',
+                              fontSize: '0.875rem',
+                            }}
+                          />
+                        </Box>
+                      )}
                     />
                   </LocalizationProvider>
                 </Box>
+
                 <Box sx={{ gap: 1, display: 'flex' }}>
                   {doc.file && (
                     <IconButton size="small" color="primary">
                       <Iconify icon="solar:eye-bold" width={20} />
                     </IconButton>
                   )}
-                  <IconButton
-                    size="small"
-                    onClick={() => document.getElementById(`file-upload-${doc.id}`)?.click()}
-                  >
-                    <Iconify icon="solar:refresh-bold" width={20} />
-                  </IconButton>
+                  <>
+                    <input
+                      id={`file-upload-${doc.id}`}
+                      type="file"
+                      style={{ display: 'none' }}
+                      onChange={(e) => handleFileUpload(e, doc.id)}
+                      key={doc.id}
+                    />
+                    <IconButton
+                      size="small"
+                      onClick={() => document.getElementById(`file-upload-${doc.id}`)?.click()}
+                    >
+                      <Iconify icon="solar:upload-minimalistic-bold" width={20} />
+                    </IconButton>
+                  </>
                   {doc.file && (
                     <IconButton size="small" color="error" onClick={() => handleDelete(doc.id)}>
                       <Iconify icon="solar:trash-bin-trash-bold" width={20} />
                     </IconButton>
                   )}
+                </Box>
+              </Box>
+            ))}
+
+            {/* Mobile View */}
+            {documents.map((doc) => (
+              <Box
+                key={`mobile-${doc.id}`}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: 1,
+                  p: 2,
+                  mb: 2,
+                  '&:last-child': {
+                    mb: 0,
+                  },
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
+                  <Typography variant="subtitle2">Year:</Typography>
+                  <Typography variant="body2">{doc.year}</Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    mb: 1.5,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography variant="subtitle2">Type:</Typography>
+                  <RadioGroup
+                    row
+                    value={doc.statementType}
+                    onChange={(e) => {
+                      const newDocuments = documents.map((d) =>
+                        d.id === doc.id ? { ...d, statementType: e.target.value } : d
+                      );
+                      setDocuments(newDocuments);
+                    }}
+                    sx={{ '& .MuiFormControlLabel-label': { fontSize: '0.875rem' } }}
+                  >
+                    <FormControlLabel
+                      value="Audited"
+                      control={<Radio size="small" />}
+                      label="Audited"
+                    />
+                    <FormControlLabel
+                      value="Provisional"
+                      control={<Radio size="small" />}
+                      label="Provisional"
+                    />
+                  </RadioGroup>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    mb: 1.5,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography variant="subtitle2">Status:</Typography>
+                  <Box
+                    component="span"
+                    sx={{
+                      px: 1.5,
+                      py: 0.5,
+                      borderRadius: 1,
+                      typography: 'caption',
+                      color: (theme) => theme.palette[getStatusColor(doc.status)].darker,
+                      bgcolor: (theme) =>
+                        alpha(theme.palette[getStatusColor(doc.status)].main, 0.16),
+                    }}
+                  >
+                    {doc.status}
+                  </Box>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    mb: 1.5,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography variant="subtitle2">Report Date:</Typography>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      value={doc.reportDate}
+                      onChange={(newValue) => handleDateChange(newValue, doc.id)}
+                      renderInput={({ inputRef, inputProps, InputProps }) => (
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          {InputProps?.endAdornment}
+                          <input
+                            ref={inputRef}
+                            {...inputProps}
+                            style={{
+                              width: '120px',
+                              border: 'none',
+                              outline: 'none',
+                              background: 'transparent',
+                              fontSize: '0.875rem',
+                              textAlign: 'right',
+                            }}
+                          />
+                        </Box>
+                      )}
+                    />
+                  </LocalizationProvider>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mt: 2,
+                    pt: 2,
+                    borderTop: '1px dashed',
+                    borderColor: 'divider',
+                  }}
+                >
+                  {!doc.file ? (
+                    <label
+                      htmlFor={`mobile-file-upload-${doc.id}`}
+                      style={{ flexGrow: 1, marginRight: 2 }}
+                    >
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        component="span"
+                        startIcon={<Iconify icon="solar:upload-minimalistic-bold" width={16} />}
+                        size="small"
+                      >
+                        Upload File
+                      </Button>
+                      <input
+                        id={`mobile-file-upload-${doc.id}`}
+                        type="file"
+                        style={{ display: 'none' }}
+                        onChange={(e) => handleFileUpload(e, doc.id)}
+                      />
+                    </label>
+                  ) : (
+                    <Typography variant="body2" sx={{ flexGrow: 1, mr: 1 }}>
+                      {doc.file.name}
+                    </Typography>
+                  )}
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    {doc.file && (
+                      <IconButton size="small" color="primary">
+                        <Iconify icon="solar:eye-bold" width={20} />
+                      </IconButton>
+                    )}
+                    <IconButton
+                      size="small"
+                      onClick={() =>
+                        document.getElementById(`mobile-file-upload-${doc.id}`)?.click()
+                      }
+                    >
+                      <Iconify icon="solar:refresh-bold" width={20} />
+                    </IconButton>
+                    {doc.file && (
+                      <IconButton size="small" color="error" onClick={() => handleDelete(doc.id)}>
+                        <Iconify icon="solar:trash-bin-trash-bold" width={20} />
+                      </IconButton>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             ))}
