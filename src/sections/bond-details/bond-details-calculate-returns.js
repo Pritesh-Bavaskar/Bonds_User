@@ -131,7 +131,7 @@ export default function BondDetailsCalculateReturns({ bond }) {
                       </IconButton>
                     </Typography>
                     <Typography variant="subtitle1">
-                      {bond?.bond?.ratings[0].rating || 'NA'}
+                      {bond?.bond?.ratings[0]?.rating || 'NA'}
                     </Typography>
                   </Grid>
                   <Grid item xs={5} md={5}>
