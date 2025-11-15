@@ -32,7 +32,7 @@ const SORT_OPTIONS = [
   { value: 'oldest', label: 'Oldest' },
 ];
 
-export default function BondLibraryList({ bonds, onSearchChange, onFilterChange }) {
+export default function BondLibraryList({ bonds, onSearchChange, onSortChange, onFilterChange }) {
   const settings = useSettingsContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -130,7 +130,10 @@ export default function BondLibraryList({ bonds, onSearchChange, onFilterChange 
                 <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
                   <Select
                     value={sortBy}
-                    onChange={handleSortBy}
+                    onChange={(e) => {
+                      handleSortBy(e);
+                      onSortChange(e.target.value);
+                    }}
                     displayEmpty
                     inputProps={{ 'aria-label': 'Sort by' }}
                     sx={{
@@ -201,7 +204,10 @@ export default function BondLibraryList({ bonds, onSearchChange, onFilterChange 
             <FormControl variant="outlined" size="small" sx={{ minWidth: 180 }}>
               <Select
                 value={sortBy}
-                onChange={handleSortBy}
+                onChange={(e) => {
+                  handleSortBy(e);
+                  onSortChange(e.target.value);
+                }}
                 displayEmpty
                 inputProps={{ 'aria-label': 'Sort by' }}
                 sx={{
@@ -281,4 +287,5 @@ BondLibraryList.propTypes = {
   bonds: PropTypes.array,
   onSearchChange: PropTypes.func.isRequired,
   onFilterChange: PropTypes.func,
+  onSortChange: PropTypes.func,
 };
