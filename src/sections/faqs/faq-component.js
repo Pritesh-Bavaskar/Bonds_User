@@ -13,7 +13,7 @@ import { Box } from '@mui/material';
 
 export default function FaqsComponent() {
   return (
-    <Box sx={{ py: { xs: 6, md: 15 }, px: { xs: '15px' } }}>
+    <Box sx={{ py: { xs: 6, md: 15 }}}>
       <Box>
         <Typography
           variant="h1"
