@@ -267,15 +267,12 @@ export default function HomeGetStartedKYC({ numberShow }) {
               <Button
                 variant="contained"
                 size="large"
+                color="primary"
                 sx={{
-                  bgcolor: '#003289',
                   px: 6,
                   py: 1.5,
                   textTransform: 'none',
                   fontSize: '1rem',
-                  '&:hover': {
-                    bgcolor: '#003289',
-                  },
                 }}
               >
                 Start Investing
