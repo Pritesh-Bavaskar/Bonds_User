@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import { RHFUploadBox } from 'src/components/hook-form/rhf-upload';
 import { alpha, styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
 
 // components
 import { RouterLink } from 'src/routes/components';
@@ -286,49 +287,57 @@ export default function KYCBankDetails() {
       />
 
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
-          <Stack direction="column">
-            <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
-              Auto-Fill Details
-            </Typography>
-            <Typography variant="h5" sx={{ mb: 1, color: 'text.primary' }}>
-              Upload Passbook/cancel cheque/bank statement to fill the details automatically
-            </Typography>
+        <Paper
+          sx={{
+            p: { xs: 2, md: 4 },
+            borderRadius: 2,
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
+          }}
+        >
+          <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
+            <Stack direction="column">
+              <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
+                Auto-Fill Details
+              </Typography>
+              <Typography variant="h5" sx={{ mb: 1, color: 'text.primary' }}>
+                Upload Passbook/cancel cheque/bank statement to fill the details automatically
+              </Typography>
+            </Stack>
           </Stack>
-        </Stack>
-        <Stack direction="column" spacing={2} sx={{ my: 2, alignItems: 'start' }}>
-          <Typography variant="h6" sx={{ fontWeight: 500 }}>
-            Select Document Type:
-          </Typography>
-          <Box sx={{ width: 200 }}>
-            <RHFSelect
-              name="documentType"
-              placeholder="Select Document Type"
-              SelectProps={{
-                displayEmpty: true,
-                renderValue: (value) => {
-                  if (!value) {
-                    return <Box sx={{ color: 'text.disabled' }}>Select Type</Box>;
-                  }
-                  const options = [
-                    { value: 'passbook', label: 'Passbook' },
-                    { value: 'cheque', label: 'Cheque' },
-                    { value: 'bank_statement', label: 'Bank Statement' },
-                  ];
-                  const selectedOption = options.find((option) => option.value === value);
-                  return selectedOption ? selectedOption.label : value;
-                },
-              }}
-            >
-              <MenuItem value="passbook">Passbook</MenuItem>
-              <MenuItem value="cheque">Cheque</MenuItem>
-              <MenuItem value="bank_statement">Bank Statement</MenuItem>
-            </RHFSelect>
-          </Box>
-        </Stack>
-        {/* Address Proof Section */}
-        <Stack spacing={4}>
-          {/* <Box sx={{ width: '100%' }}>
+          <Stack direction="column" spacing={2} sx={{ my: 2, alignItems: 'start' }}>
+            <Typography variant="h6" sx={{ fontWeight: 500 }}>
+              Select Document Type:
+            </Typography>
+            <Box sx={{ width: 200 }}>
+              <RHFSelect
+                name="documentType"
+                placeholder="Select Document Type"
+                SelectProps={{
+                  displayEmpty: true,
+                  renderValue: (value) => {
+                    if (!value) {
+                      return <Box sx={{ color: 'text.disabled' }}>Select Type</Box>;
+                    }
+                    const options = [
+                      { value: 'passbook', label: 'Passbook' },
+                      { value: 'cheque', label: 'Cheque' },
+                      { value: 'bank_statement', label: 'Bank Statement' },
+                    ];
+                    const selectedOption = options.find((option) => option.value === value);
+                    return selectedOption ? selectedOption.label : value;
+                  },
+                }}
+              >
+                <MenuItem value="passbook">Passbook</MenuItem>
+                <MenuItem value="cheque">Cheque</MenuItem>
+                <MenuItem value="bank_statement">Bank Statement</MenuItem>
+              </RHFSelect>
+            </Box>
+          </Stack>
+          {/* Address Proof Section */}
+          <Stack spacing={4}>
+            {/* <Box sx={{ width: '100%' }}>
             {!addressProof ? (
               <RHFUploadBox
                 name="addressProof"
@@ -427,247 +436,265 @@ export default function KYCBankDetails() {
               </Box>
             )}
           </Box> */}
-          {watch('documentType') && (
-            <RHFFileUploadBox
-              name="addressProof"
-              label="Upload address proof"
-              icon="mdi:file-document-outline"
-              color="#1e88e5"
-              acceptedTypes="pdf,xls,docx,jpeg"
-              maxSizeMB={10}
-              onDrop={(acceptedFiles) => handleDrop(acceptedFiles)}
-            />
-          )}
-          <YupErrorMessage name="addressProof" />
-        </Stack>
-        <Box sx={{ py: 4 }}>
-          <Grid container spacing={3}>
-            {/* Left Section (9 columns) */}
-            <Grid xs={12} md={9} order={{ xs: 2, md: 1 }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                {/* Bank Name */}
-                <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>Bank Name</Box>
-                  <RHFSelect
-                    name="bankName"
-                    placeholder="Select Bank"
-                    SelectProps={{
-                      displayEmpty: true,
-                      renderValue: (value) =>
-                        value || <Box sx={{ color: 'text.disabled' }}>Select Bank</Box>,
-                    }}
-                  >
-                    <MenuItem value="">Select Bank</MenuItem>
-                    {/* Add banks list if available */}
-                  </RHFSelect>
-                  <Typography
-                    variant="caption"
-                    sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                  >
-                    This will be filled automatically after verifying your IFSC code
-                  </Typography>
-                </Box>
+            {watch('documentType') && (
+              <RHFFileUploadBox
+                name="addressProof"
+                label="Upload address proof"
+                icon="mdi:file-document-outline"
+                color="#1e88e5"
+                acceptedTypes="pdf,xls,docx,jpeg"
+                maxSizeMB={10}
+                onDrop={(acceptedFiles) => handleDrop(acceptedFiles)}
+              />
+            )}
+            <YupErrorMessage name="addressProof" />
+          </Stack>
+          <Box sx={{ py: 4 }}>
+            <Grid container spacing={3}>
+              {/* Left Section (9 columns) */}
+              <Grid xs={12} md={9} order={{ xs: 2, md: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  {/* Bank Name */}
+                  <Box>
+                    <Box sx={{ mb: 1, fontWeight: 600 }}>Bank Name</Box>
+                    <RHFSelect
+                      name="bankName"
+                      placeholder="Select Bank"
+                      SelectProps={{
+                        displayEmpty: true,
+                        renderValue: (value) =>
+                          value || <Box sx={{ color: 'text.disabled' }}>Select Bank</Box>,
+                      }}
+                    >
+                      <MenuItem value="">Select Bank</MenuItem>
+                      {/* Add banks list if available */}
+                    </RHFSelect>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                    >
+                      This will be filled automatically after verifying your IFSC code
+                    </Typography>
+                  </Box>
 
-                {/* Branch Name */}
-                <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>Branch Name</Box>
-                  <RHFTextField name="branchName" placeholder="Enter Branch Name" />
-                  <Typography
-                    variant="caption"
-                    sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                  >
-                    Branch name is automatically detected once IFSC code is confirmed.
-                  </Typography>
-                </Box>
+                  {/* Branch Name */}
+                  <Box>
+                    <Box sx={{ mb: 1, fontWeight: 600 }}>Branch Name</Box>
+                    <RHFTextField name="branchName" placeholder="Enter Branch Name" />
+                    <Typography
+                      variant="caption"
+                      sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                    >
+                      Branch name is automatically detected once IFSC code is confirmed.
+                    </Typography>
+                  </Box>
 
-                {/* Account Number */}
-                <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>Account Number</Box>
-                  <RHFTextField name="accountNumber" placeholder="Enter Account Number" />
-                  <Typography
-                    variant="caption"
-                    sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                  >
-                    Your account number is encrypted and secure.
-                  </Typography>
-                </Box>
+                  {/* Account Number */}
+                  <Box>
+                    <Box sx={{ mb: 1, fontWeight: 600 }}>Account Number</Box>
+                    <RHFTextField name="accountNumber" placeholder="Enter Account Number" />
+                    <Typography
+                      variant="caption"
+                      sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                    >
+                      Your account number is encrypted and secure.
+                    </Typography>
+                  </Box>
 
-                {/* IFSC Code + Verify */}
-                <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>IFSC Code</Box>
-                  <RHFTextField name="ifscCode" placeholder="Enter IFSC Code (E.G., SBIN001234)" />
-                  <Typography
-                    variant="caption"
-                    sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                  >
-                    Enter your IFSC code to auto-detect your bank and branch details.
-                  </Typography>
-                  <Box sx={{ mt: 2 }}>
-                    <Button variant="contained" type="button" onClick={() => verifyBankDetail(values)}>
-                      Verify
-                    </Button>
+                  {/* IFSC Code + Verify */}
+                  <Box>
+                    <Box sx={{ mb: 1, fontWeight: 600 }}>IFSC Code</Box>
+                    <RHFTextField
+                      name="ifscCode"
+                      placeholder="Enter IFSC Code (E.G., SBIN001234)"
+                    />
+                    <Typography
+                      variant="caption"
+                      sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                    >
+                      Enter your IFSC code to auto-detect your bank and branch details.
+                    </Typography>
+                    <Box sx={{ mt: 2 }}>
+                      <Button
+                        variant="contained"
+                        type="button"
+                        onClick={() => verifyBankDetail(values)}
+                      >
+                        Verify
+                      </Button>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            </Grid>
+              </Grid>
 
-            {/* Right Section (3 columns) */}
-            <Grid xs={12} md={3} order={{ xs: 1, md: 2 }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                {/* Account Type */}
-                <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>Account Type</Box>
-                  <RHFSelect name="accountType" placeholder="Select Account Type">
-                    <MenuItem value="">Select Account Type</MenuItem>
-                    <MenuItem value="SAVINGS">Savings</MenuItem>
-                    <MenuItem value="CURRENT">Current</MenuItem>
-                  </RHFSelect>
-                  <Typography
-                    variant="caption"
-                    sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                  >
-                    Select your account type to proceed.
-                  </Typography>
-                </Box>
+              {/* Right Section (3 columns) */}
+              <Grid xs={12} md={3} order={{ xs: 1, md: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  {/* Account Type */}
+                  <Box>
+                    <Box sx={{ mb: 1, fontWeight: 600 }}>Account Type</Box>
+                    <RHFSelect name="accountType" placeholder="Select Account Type">
+                      <MenuItem value="">Select Account Type</MenuItem>
+                      <MenuItem value="SAVINGS">Savings</MenuItem>
+                      <MenuItem value="CURRENT">Current</MenuItem>
+                    </RHFSelect>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                    >
+                      Select your account type to proceed.
+                    </Typography>
+                  </Box>
 
-                {/* Illustration */}
-                <Box
-                  sx={{
-                    display: { xs: 'none', md: 'flex' },
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
+                  {/* Illustration */}
                   <Box
-                    component="img"
-                    src="/assets/images/kyc/kyc-basic-info/kyc-autofill.svg"
-                    alt="Bank details illustration"
-                    sx={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-                  />
+                    sx={{
+                      display: { xs: 'none', md: 'flex' },
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src="/assets/images/kyc/kyc-basic-info/kyc-autofill.svg"
+                      alt="Bank details illustration"
+                      sx={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                    />
+                  </Box>
                 </Box>
-              </Box>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </Paper>
+
         {/* </FormProvider> */}
 
         {/* {showDemat && ( */}
         {/* <> */}
-        <Typography variant="h4" sx={{ fontWeight: 700, mt: 3, mb: 2 }}>
-          Demat Account Details
-        </Typography>
-        <Typography variant="h6" sx={{ fontWeight: 500, mb: 2 }}>
-          Required for bond transactions
-        </Typography>
-        {/* <FormProvider methods={dematMethods} onSubmit={onSubmitDemat}> */}
-        <Box sx={{ py: 2 }}>
-          <Grid container spacing={3}>
-            {/* Left Section (9 columns) */}
-            <Grid xs={12} md={12}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-                  <Button variant="contained">Fetch</Button>
-                </Box>
+        <Paper
+          sx={{
+            mt: 3,
+            p: { xs: 2, md: 4 },
+            borderRadius: 2,
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
+          }}
+        >
+          <Typography variant="h4" sx={{ fontWeight: 700, mt: 3, mb: 2 }}>
+            Demat Account Details
+          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: 500, mb: 2 }}>
+            Required for bond transactions
+          </Typography>
+          {/* <FormProvider methods={dematMethods} onSubmit={onSubmitDemat}> */}
+          <Box sx={{ py: 2 }}>
+            <Grid container spacing={3}>
+              {/* Left Section (9 columns) */}
+              <Grid xs={12} md={12}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                    <Button variant="contained">Fetch</Button>
+                  </Box>
 
-                <Grid container spacing={3}>
-                  <Grid xs={12} md={6}>
-                    <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>DP ID</Box>
-                      <RHFTextField name="dpId" placeholder="Enter DP ID (8 Digits)" />
-                      <Typography
-                        variant="caption"
-                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                      >
-                        Depository Participant Identification
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid xs={12} md={6}>
-                    <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>DP Name</Box>
-                      <RHFTextField name="dpName" placeholder="zerodha broking ltd (fetch)" />
-                      <Typography
-                        variant="caption"
-                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                      >
-                        Beneficial Owner Identification
-                      </Typography>
-                    </Box>
-                  </Grid>
+                  <Grid container spacing={3}>
+                    <Grid xs={12} md={6}>
+                      <Box>
+                        <Box sx={{ mb: 1, fontWeight: 600 }}>DP ID</Box>
+                        <RHFTextField name="dpId" placeholder="Enter DP ID (8 Digits)" />
+                        <Typography
+                          variant="caption"
+                          sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                        >
+                          Depository Participant Identification
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid xs={12} md={6}>
+                      <Box>
+                        <Box sx={{ mb: 1, fontWeight: 600 }}>DP Name</Box>
+                        <RHFTextField name="dpName" placeholder="zerodha broking ltd (fetch)" />
+                        <Typography
+                          variant="caption"
+                          sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                        >
+                          Beneficial Owner Identification
+                        </Typography>
+                      </Box>
+                    </Grid>
 
-                  <Grid xs={12} md={6}>
-                    <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>Client ID / BO ID</Box>
-                      <RHFTextField name="beneficiaryClientId" placeholder="123456678" />
-                      <Typography
-                        variant="caption"
-                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                      >
-                        Enter A Number of Client ID / BO ID
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid xs={12} md={6}>
-                    <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>Demat ID</Box>
-                      <RHFTextField
-                        name="dematAccountNumber"
-                        placeholder="Enter 16 digit Number "
-                      />
-                      <Typography
-                        variant="caption"
-                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                      >
-                        Enter a Depository Participant Identification & Client ID
-                      </Typography>
-                    </Box>
-                  </Grid>
+                    <Grid xs={12} md={6}>
+                      <Box>
+                        <Box sx={{ mb: 1, fontWeight: 600 }}>Client ID / BO ID</Box>
+                        <RHFTextField name="beneficiaryClientId" placeholder="123456678" />
+                        <Typography
+                          variant="caption"
+                          sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                        >
+                          Enter A Number of Client ID / BO ID
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid xs={12} md={6}>
+                      <Box>
+                        <Box sx={{ mb: 1, fontWeight: 600 }}>Demat ID</Box>
+                        <RHFTextField
+                          name="dematAccountNumber"
+                          placeholder="Enter 16 digit Number "
+                        />
+                        <Typography
+                          variant="caption"
+                          sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                        >
+                          Enter a Depository Participant Identification & Client ID
+                        </Typography>
+                      </Box>
+                    </Grid>
 
-                  <Grid xs={12} md={6}>
-                    <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>Depository</Box>
-                      <RHFSelect
-                        name="depository"
-                        placeholder="Select Depository"
-                        SelectProps={{
-                          displayEmpty: true,
-                          renderValue: (value) =>
-                            value || <Box sx={{ color: 'text.disabled' }}>CDSL</Box>,
+                    <Grid xs={12} md={6}>
+                      <Box>
+                        <Box sx={{ mb: 1, fontWeight: 600 }}>Depository</Box>
+                        <RHFSelect
+                          name="depository"
+                          placeholder="Select Depository"
+                          SelectProps={{
+                            displayEmpty: true,
+                            renderValue: (value) =>
+                              value || <Box sx={{ color: 'text.disabled' }}>CDSL</Box>,
+                          }}
+                        >
+                          <MenuItem value="CDSL">CDSL</MenuItem>
+                          <MenuItem value="NSDL">NSDL</MenuItem>
+                        </RHFSelect>
+                        <Typography
+                          variant="caption"
+                          sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
+                        >
+                          Depository Participant Identification
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid xs={12} md={6}>
+                      <Box
+                        sx={{
+                          display: { xs: 'none', md: 'flex' },
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       >
-                        <MenuItem value="CDSL">CDSL</MenuItem>
-                        <MenuItem value="NSDL">NSDL</MenuItem>
-                      </RHFSelect>
-                      <Typography
-                        variant="caption"
-                        sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
-                      >
-                        Depository Participant Identification
-                      </Typography>
-                    </Box>
+                        <Box
+                          component="img"
+                          src="/assets/images/kyc/kyc-demat-img.svg"
+                          alt="Bank details illustration"
+                          sx={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                        />
+                      </Box>
+                    </Grid>
                   </Grid>
-                  <Grid xs={12} md={6}>
-                    <Box
-                      sx={{
-                        display: { xs: 'none', md: 'flex' },
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Box
-                        component="img"
-                        src="/assets/images/kyc/kyc-demat-img.svg"
-                        alt="Bank details illustration"
-                        sx={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-                      />
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
-            </Grid>
+                </Box>
+              </Grid>
 
-            {/* Right Section (3 columns) */}
-            {/* <Grid xs={12} md={3}>
+              {/* Right Section (3 columns) */}
+              {/* <Grid xs={12} md={3}>
                   <Box
                     sx={{
                       display: 'flex',
@@ -684,58 +711,58 @@ export default function KYCBankDetails() {
                     />
                   </Box>
                 </Grid> */}
-          </Grid>
-        </Box>
+            </Grid>
+          </Box>
 
-        {/* Demat Account Information Tip */}
-        <Box
-          sx={{
-            mt: 4,
-            p: 3,
-            border: '1px solid #0049C6',
-            borderRadius: 1,
-            backgroundColor: 'rgba(0, 111, 255, 0.05)',
-          }}
-        >
-          <Typography variant="subtitle1" sx={{ color: '#006FFF', fontWeight: 600, mb: 1 }}>
-            Demat Account Information
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Your DP ID and BO ID can be found on your demat account statement. These details are
-            required to facilitate bond transactions and settlements.
-          </Typography>
-        </Box>
-
-        {/* Account Verification Section */}
-        <Box
-          sx={{
-            mt: 3,
-            p: 3,
-            backgroundColor: '#FFF7EA',
-            borderRadius: 1,
-            border: '1px solid #FFEBD0',
-          }}
-        >
-          <Typography variant="subtitle1" sx={{ color: '#7B332B', fontWeight: 600, mb: 1 }}>
-            Account Verification
-          </Typography>
-          <Typography variant="body2" sx={{ color: '#BE5149', mb: 2 }}>
-            Your bank and demat account details will be verified during the compliance review
-            process. Please ensure all information is accurate to avoid delays
-          </Typography>
-          <Box component="ul" sx={{ pl: 2, m: 0, '& li': { color: '#ED9B00', mb: 0.5 } }}>
-            <Typography component="li" variant="body2">
-              Bank account should be in the company's name
+          {/* Demat Account Information Tip */}
+          <Box
+            sx={{
+              mt: 4,
+              p: 3,
+              border: '1px solid #0049C6',
+              borderRadius: 1,
+              backgroundColor: 'rgba(0, 111, 255, 0.05)',
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ color: '#006FFF', fontWeight: 600, mb: 1 }}>
+              Demat Account Information
             </Typography>
-            <Typography component="li" variant="body2">
-              Demat account should be linked to the same company
-            </Typography>
-            <Typography component="li" variant="body2">
-              All details will be cross-verified with regulatory databases
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              Your DP ID and BO ID can be found on your demat account statement. These details are
+              required to facilitate bond transactions and settlements.
             </Typography>
           </Box>
-        </Box>
 
+          {/* Account Verification Section */}
+          <Box
+            sx={{
+              mt: 3,
+              p: 3,
+              backgroundColor: '#FFF7EA',
+              borderRadius: 1,
+              border: '1px solid #FFEBD0',
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ color: '#7B332B', fontWeight: 600, mb: 1 }}>
+              Account Verification
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#BE5149', mb: 2 }}>
+              Your bank and demat account details will be verified during the compliance review
+              process. Please ensure all information is accurate to avoid delays
+            </Typography>
+            <Box component="ul" sx={{ pl: 2, m: 0, '& li': { color: '#ED9B00', mb: 0.5 } }}>
+              <Typography component="li" variant="body2">
+                Bank account should be in the company's name
+              </Typography>
+              <Typography component="li" variant="body2">
+                Demat account should be linked to the same company
+              </Typography>
+              <Typography component="li" variant="body2">
+                All details will be cross-verified with regulatory databases
+              </Typography>
+            </Box>
+          </Box>
+        </Paper>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, mb: 2 }}>
           <Button component={RouterLink} href={paths.KYCCompanyDetails} variant="outlined">
             Back

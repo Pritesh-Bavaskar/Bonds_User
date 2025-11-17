@@ -10,6 +10,8 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+
 // components
 import { RouterLink } from 'src/routes/components';
 import { MotionContainer, varFade } from 'src/components/animate';
@@ -255,148 +257,160 @@ export default function KYCCompanyDetails() {
           var ex_IEC = toExisting(byName('IEC'));
           return null;
         })()}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, mt: 3 }}>
-          <RHFFileUploadBox
-            name="certificateOfIncorporation"
-            label="Certificate of Incorporation*"
-            icon="mdi:certificate-outline"
-            color="#1e88e5"
-            acceptedTypes="pdf,xls,docx,jpeg"
-            maxSizeMB={10}
-            existing={
-              (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC')
-                ? {
-                    name:
-                      (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC')
-                        .document_name_display ||
-                      (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC').document_name,
-                    status: (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC').status,
-                  }
-                : null
-            }
-          />
+        <Paper
+          sx={{
+            p: { xs: 2, md: 4 },
+            borderRadius: 2,
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
+          }}
+        >
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, mt: 3 }}>
+            <RHFFileUploadBox
+              name="certificateOfIncorporation"
+              label="Certificate of Incorporation*"
+              icon="mdi:certificate-outline"
+              color="#1e88e5"
+              acceptedTypes="pdf,xls,docx,jpeg"
+              maxSizeMB={10}
+              existing={
+                (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC')
+                  ? {
+                      name:
+                        (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC')
+                          .document_name_display ||
+                        (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC')
+                          .document_name,
+                      status: (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC')
+                        .status,
+                    }
+                  : null
+              }
+            />
 
-          <RHFSelect
-            name="moaAoaType"
-            label="Select Document Type"
-            sx={{ width: '100%', maxWidth: 400 }}
-          >
-            <MenuItem value="">Select</MenuItem>
-            <MenuItem value="moa">MoA - Memorandum of Association</MenuItem>
-            <MenuItem value="aoa">AoA - Articles of Association</MenuItem>
-            {/* <MenuItem value="both">Both (MoA + AoA Combined)</MenuItem> */}
-          </RHFSelect>
-          {(() => {
-            const moad = (docs || []).find(
-              (d) => d.document_name === 'MOA' || d.document_name === 'AOA'
-            );
-            return moad ? (
-              <Typography variant="caption" color="text.secondary">
-                Selected: {moad.document_name_display || moad.document_name}
-              </Typography>
-            ) : null;
-          })()}
+            <RHFSelect
+              name="moaAoaType"
+              label="Select Document Type"
+              sx={{ width: '100%', maxWidth: 400 }}
+            >
+              <MenuItem value="">Select</MenuItem>
+              <MenuItem value="moa">MoA - Memorandum of Association</MenuItem>
+              <MenuItem value="aoa">AoA - Articles of Association</MenuItem>
+              {/* <MenuItem value="both">Both (MoA + AoA Combined)</MenuItem> */}
+            </RHFSelect>
+            {(() => {
+              const moad = (docs || []).find(
+                (d) => d.document_name === 'MOA' || d.document_name === 'AOA'
+              );
+              return moad ? (
+                <Typography variant="caption" color="text.secondary">
+                  Selected: {moad.document_name_display || moad.document_name}
+                </Typography>
+              ) : null;
+            })()}
 
-          <RHFFileUploadBox
-            name="moaAoa"
-            label={getMoaAoaLabel()}
-            icon="mdi:file-document-edit-outline"
-            color="#1e88e5"
-            acceptedTypes="pdf,xls,docx,jpeg"
-            maxSizeMB={10}
-            // multiple={moaAoaType === 'both'}
-            existing={
-              (docs || []).find((d) => d.document_name === (moaAoaType === 'aoa' ? 'AOA' : 'MOA'))
-                ? {
-                    name:
-                      (docs || []).find(
+            <RHFFileUploadBox
+              name="moaAoa"
+              label={getMoaAoaLabel()}
+              icon="mdi:file-document-edit-outline"
+              color="#1e88e5"
+              acceptedTypes="pdf,xls,docx,jpeg"
+              maxSizeMB={10}
+              // multiple={moaAoaType === 'both'}
+              existing={
+                (docs || []).find((d) => d.document_name === (moaAoaType === 'aoa' ? 'AOA' : 'MOA'))
+                  ? {
+                      name:
+                        (docs || []).find(
+                          (d) => d.document_name === (moaAoaType === 'aoa' ? 'AOA' : 'MOA')
+                        )?.document_name_display ||
+                        (docs || []).find(
+                          (d) => d.document_name === (moaAoaType === 'aoa' ? 'AOA' : 'MOA')
+                        )?.document_name ||
+                        getMoaAoaLabel(),
+                      status: (docs || []).find(
                         (d) => d.document_name === (moaAoaType === 'aoa' ? 'AOA' : 'MOA')
-                      )?.document_name_display ||
-                      (docs || []).find(
-                        (d) => d.document_name === (moaAoaType === 'aoa' ? 'AOA' : 'MOA')
-                      )?.document_name ||
-                      getMoaAoaLabel(),
-                    status: (docs || []).find(
-                      (d) => d.document_name === (moaAoaType === 'aoa' ? 'AOA' : 'MOA')
-                    )?.status,
-                  }
-                : null
-            }
-          />
+                      )?.status,
+                    }
+                  : null
+              }
+            />
 
-          <RHFSelect
-            name="msmeUdyamAvailability"
-            label="Select Document Type"
-            sx={{ width: '100%', maxWidth: 400 }}
-          >
-            <MenuItem value="">Select</MenuItem>
-            <MenuItem value="msme">MSME</MenuItem>
-            <MenuItem value="udyam">Udyam Certificate</MenuItem>
-            {/* <MenuItem value="both">Both (MSME + Udyam Certificate)</MenuItem> */}
-          </RHFSelect>
-          {(() => {
-            const md = (docs || []).find(
-              (d) => d.document_name === 'MSME' || d.document_name === 'UDYAM'
-            );
-            return md ? (
-              <Typography variant="caption" color="text.secondary">
-                Selected: {md.document_name_display || md.document_name}
-              </Typography>
-            ) : null;
-          })()}
+            <RHFSelect
+              name="msmeUdyamAvailability"
+              label="Select Document Type"
+              sx={{ width: '100%', maxWidth: 400 }}
+            >
+              <MenuItem value="">Select</MenuItem>
+              <MenuItem value="msme">MSME</MenuItem>
+              <MenuItem value="udyam">Udyam Certificate</MenuItem>
+              {/* <MenuItem value="both">Both (MSME + Udyam Certificate)</MenuItem> */}
+            </RHFSelect>
+            {(() => {
+              const md = (docs || []).find(
+                (d) => d.document_name === 'MSME' || d.document_name === 'UDYAM'
+              );
+              return md ? (
+                <Typography variant="caption" color="text.secondary">
+                  Selected: {md.document_name_display || md.document_name}
+                </Typography>
+              ) : null;
+            })()}
 
-          <RHFFileUploadBox
-            name="msmeUdyamCertificate"
-            label={getMsmeUdyamLabel()}
-            icon="mdi:briefcase-outline"
-            color="#1e88e5"
-            acceptedTypes="pdf,xls,docx,jpeg"
-            maxSizeMB={10}
-            // multiple={msmeUdyamAvailability === 'both'}
-            existing={
-              (docs || []).find(
-                (d) => d.document_name === (msmeUdyamAvailability === 'udyam' ? 'UDYAM' : 'MSME')
-              )
-                ? {
-                    name:
-                      (docs || []).find(
+            <RHFFileUploadBox
+              name="msmeUdyamCertificate"
+              label={getMsmeUdyamLabel()}
+              icon="mdi:briefcase-outline"
+              color="#1e88e5"
+              acceptedTypes="pdf,xls,docx,jpeg"
+              maxSizeMB={10}
+              // multiple={msmeUdyamAvailability === 'both'}
+              existing={
+                (docs || []).find(
+                  (d) => d.document_name === (msmeUdyamAvailability === 'udyam' ? 'UDYAM' : 'MSME')
+                )
+                  ? {
+                      name:
+                        (docs || []).find(
+                          (d) =>
+                            d.document_name ===
+                            (msmeUdyamAvailability === 'udyam' ? 'UDYAM' : 'MSME')
+                        )?.document_name_display ||
+                        (docs || []).find(
+                          (d) =>
+                            d.document_name ===
+                            (msmeUdyamAvailability === 'udyam' ? 'UDYAM' : 'MSME')
+                        )?.document_name ||
+                        getMsmeUdyamLabel(),
+                      status: (docs || []).find(
                         (d) =>
                           d.document_name === (msmeUdyamAvailability === 'udyam' ? 'UDYAM' : 'MSME')
-                      )?.document_name_display ||
-                      (docs || []).find(
-                        (d) =>
-                          d.document_name === (msmeUdyamAvailability === 'udyam' ? 'UDYAM' : 'MSME')
-                      )?.document_name ||
-                      getMsmeUdyamLabel(),
-                    status: (docs || []).find(
-                      (d) =>
-                        d.document_name === (msmeUdyamAvailability === 'udyam' ? 'UDYAM' : 'MSME')
-                    )?.status,
-                  }
-                : null
-            }
-          />
+                      )?.status,
+                    }
+                  : null
+              }
+            />
 
-          <RHFFileUploadBox
-            name="importExportCertificate"
-            label="Import Export Certificate (IEC)"
-            icon="mdi:earth"
-            color="#1e88e5"
-            acceptedTypes="pdf,xls,docx,jpeg"
-            maxSizeMB={10}
-            existing={
-              (docs || []).find((d) => d.document_name === 'IEC')
-                ? {
-                    name:
-                      (docs || []).find((d) => d.document_name === 'IEC').document_name_display ||
-                      (docs || []).find((d) => d.document_name === 'IEC').document_name,
-                    status: (docs || []).find((d) => d.document_name === 'IEC').status,
-                  }
-                : null
-            }
-          />
-        </Box>
-
+            <RHFFileUploadBox
+              name="importExportCertificate"
+              label="Import Export Certificate (IEC)"
+              icon="mdi:earth"
+              color="#1e88e5"
+              acceptedTypes="pdf,xls,docx,jpeg"
+              maxSizeMB={10}
+              existing={
+                (docs || []).find((d) => d.document_name === 'IEC')
+                  ? {
+                      name:
+                        (docs || []).find((d) => d.document_name === 'IEC').document_name_display ||
+                        (docs || []).find((d) => d.document_name === 'IEC').document_name,
+                      status: (docs || []).find((d) => d.document_name === 'IEC').status,
+                    }
+                  : null
+              }
+            />
+          </Box>
+        </Paper>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, mb: 2 }}>
           <Button component={RouterLink} href={paths.KYCAddressInfo} variant="outlined">
             Back

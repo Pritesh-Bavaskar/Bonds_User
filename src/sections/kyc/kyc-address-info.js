@@ -397,11 +397,12 @@ export default function KycAddressInfo() {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Paper
-          // sx={{
-          //   p: { xs: 2, md: 4 },
-          //   borderRadius: 2,
-          //   boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
-          // }}
+            sx={{
+              p: { xs: 2, md: 4 },
+              borderRadius: 2,
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
+            }}
           >
             {/* Address Proof Section */}
             <Stack spacing={4}>
@@ -706,21 +707,23 @@ export default function KycAddressInfo() {
                   </Grid>
                 </Grid>
               </Box>
-
-              {/* Submit Button */}
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  disabled={isUploading}
-                  sx={{ minWidth: 120 }}
-                >
-                  Next
-                </Button>
-              </Box>
             </Stack>
           </Paper>
+          {/* Submit Button */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, mb: 2 }}>
+            <Button component={RouterLink} href={paths.KYCBasicInfo} variant="outlined">
+              Back
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              disabled={isUploading}
+              sx={{ minWidth: 120 }}
+            >
+              Next
+            </Button>
+          </Box>
         </form>
       </FormProvider>
 

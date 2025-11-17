@@ -117,7 +117,7 @@ export default function KYCBasicInfo({ currentInfo }) {
       companyName: currentInfo?.companyName || '',
       gstin: currentInfo?.gstin || '',
       dateOfIncorporation: currentInfo?.dateOfIncorporation || null,
-      msmeUdyamRegistrationNo: currentInfo?.msmeUdyamRegistrationNo || '',
+      msmeUdyamRegistrationNo: currentInfo?.msme_udyam_registration_no || '',
       city: currentInfo?.city || '',
       state: currentInfo?.state || '',
       country: currentInfo?.country || '',
