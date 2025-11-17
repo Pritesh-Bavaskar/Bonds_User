@@ -93,12 +93,15 @@ export default function Advantage() {
           <TableHead>
             <TableRow>
               <TableCell
-                colSpan={3} // spans across all 3 columns
+                colSpan={3}
                 align="center"
                 sx={{
+                  background: 'linear-gradient(90deg, #00059A 0%, #3C6ADE 50%, #00059A 100%)',
                   color: 'white',
                   fontWeight: 'bold',
                   fontSize: '1.2rem',
+                  borderTopLeftRadius: '8px',
+                  borderTopRightRadius: '8px',
                 }}
               >
                 Listed vs Unlisted Bonds Comparison

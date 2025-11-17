@@ -71,7 +71,7 @@ export default function HomeHero() {
                 </m.div>
 
                 <m.div variants={varFade().inUp}>
-                  <Stack direction={{md:"row", xs:"column"}} spacing={2}>
+                  <Stack direction={{ md: "row", xs: "column" }} spacing={2}>
                     <Button
                       variant="contained"
                       size="large"
@@ -94,12 +94,13 @@ export default function HomeHero() {
                     >
                       Start Registration
                     </Button>
-                    <MultiStepLoginDialog 
-                      open={openLogin} 
-                      onClose={() => setOpenLogin(false)} 
+                    <MultiStepLoginDialog
+                      open={openLogin}
+                      onClose={() => setOpenLogin(false)}
                     />
                     <Button
                       component={RouterLink}
+                      href="/about-us"
                       variant="outlined"
                       size="large"
                       sx={{
@@ -110,12 +111,6 @@ export default function HomeHero() {
                         '&:hover': {
                           bgcolor: '#F5F5F5',
                           color: '#000000',
-                        },
-                        '& .MuiButton-label': {
-                          typography: 'h5',
-                          fontWeight: 500,
-                          textTransform: 'none',
-                          letterSpacing: 0,
                         },
                       }}
                     >
@@ -128,11 +123,11 @@ export default function HomeHero() {
           </Grid>
 
           <Grid xs={12} md={4}>
-            <m.div 
+            <m.div
               variants={varFade().inUp}
               style={{
                 display: 'flex',
-                justifyContent: { md:'flex-end', xs:'center' },
+                justifyContent: { md: 'flex-end', xs: 'center' },
                 width: '100%',
                 height: '100%',
               }}
@@ -143,7 +138,7 @@ export default function HomeHero() {
                 alt="Hand shake"
                 sx={{
                   maxWidth: '100%',
-                  height: { md:'300px', xs:'auto' },
+                  height: { md: '300px', xs: 'auto' },
                   objectFit: 'contain',
                   display: 'block',
                   mt: { xs: 5, md: 0 },

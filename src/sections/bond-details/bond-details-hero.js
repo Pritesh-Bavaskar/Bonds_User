@@ -53,7 +53,7 @@ export default function BondDetailsHero({ bondHero }) {
               textAlign: 'left',
             }}
           >
-            {bondHero?.company?.company?.issuer_name || 'Navi Finserv Limited - INE3342T07494'}
+            {bondHero?.bond?.issuer_name || 'NA'}
           </Typography>
         </Box>
         <Grid container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mt: 4 }} spacing={2} >

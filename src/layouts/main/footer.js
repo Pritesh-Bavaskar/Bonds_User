@@ -32,15 +32,15 @@ const LINKS = [
   {
     headline: 'Become a issuer',
     children: [
-      { name: 'Issuer' },
+      { name: 'Issuer' , href: paths.issuer },
     ],
   },
   {
     headline: 'Resources',
     children: [
-      { name: 'Blog'  },
-      { name: 'Bonds Calculator' },
-      { name: 'News & Insight' },
+      { name: 'Blog', href: paths.post.root},
+      { name: 'Bonds Calculator' , href: paths.calculator },
+      { name: 'News & Insight', hre: paths.newsInsight},
     ],
   },
   {
