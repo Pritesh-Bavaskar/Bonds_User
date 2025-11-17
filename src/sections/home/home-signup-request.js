@@ -15,6 +15,7 @@ export default function HomeSignupRequest() {
         minHeight: { xs: 200, sm: 220, md: 250 },
         display: 'flex',
         alignItems: 'center',
+      
       }}
     >
       <Container maxWidth="lg">
@@ -22,12 +23,11 @@ export default function HomeSignupRequest() {
           align="center"
           variant="h4"
           sx={{
-            lineHeight: 1.2,
+            lineHeight: 1.3,
             color: '#FFFFFF',
           }}
         >
-          Sign up for free and get instant access to our stock and bond listings, along with tools
-          designed to make investing easier and smarter
+         Explore high-quality bond opportunities across corporate, government, and unlisted markets, with intuitive tools designed to simplify comparison, analysis, and decision-making.
         </Typography>
       </Container>
     </Box>

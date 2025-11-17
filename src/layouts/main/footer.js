@@ -22,11 +22,25 @@ import Iconify from 'src/components/iconify';
 
 const LINKS = [
   {
-    headline: 'Bond',
+    headline: 'About us',
     children: [
-      { name: 'About us', href: paths.about },
-      { name: 'Contact us', href: paths.contact },
+      { name: 'Our Company', href: paths.about },
+      { name: 'Values' },
       { name: 'FAQs', href: paths.faqs },
+    ],
+  },
+    {
+    headline: 'Become a issuer',
+    children: [
+      { name: 'Issuer' },
+    ],
+  },
+    {
+    headline: 'Resources',
+    children: [
+      { name: 'Blog' },
+      { name: 'Bonds Calculator' },
+      { name: 'News & Insight'},
     ],
   },
   {
@@ -71,103 +85,128 @@ export default function Footer() {
     </Box>
   );
 
-  const mainFooter = (
-    <Box
-      component="footer"
-      sx={{
-        position: 'relative',
-        bgcolor: 'background.default',
-      }}
-    >
-      <Divider />
+ const mainFooter = (
+  <Box
+    component="footer"
+    sx={{
+      position: 'relative',
+      bgcolor: '#001D4F',
+      color: '#ffffff',
+      pt: 3,
+      pb: 3,
+      pl:6,
+      pr:3,
+    }}
+  >
+    <Container maxWidth="xl">
 
-      <Container
-        sx={{
-          pt: 10,
-          pb: 5,
-          textAlign: { xs: 'center', md: 'unset' },
-        }}
-      >
-        <Logo sx={{ mb: 3 }} />
+      {/* TOP ROW (Logo + Columns) */}
+      <Grid container spacing={5} justifyContent="space-between">
 
-        <Grid
-          container
-          justifyContent={{
-            xs: 'center',
-            md: 'space-between',
-          }}
-        >
-          <Grid xs={8} md={3}>
-            <Typography
-              variant="body2"
-              sx={{
-                maxWidth: 270,
-                mx: { xs: 'auto', md: 'unset' },
-              }}
-            >
-              Your all-in-one platform for exploring stocks and bonds. Real-time data, interactive
-              tools, and clear insights to help you make confident investment decisions.
-            </Typography>
+    
+        <Grid xs={12} md={4}>
+          <Box sx={{ mb: 2 }}>
+            <Logo />
+          </Box>
+          <Typography
+            variant="body2"
+            sx={{
+              lineHeight: 1.6,
+              maxWidth: 280,
+            }}
+          >
+            A secure and transparent platform dedicated to helping investors access high-quality bonds,
+            make informed decisions, and build long-term financial stability with confidence.
+          </Typography>
+        </Grid>
 
-            <Stack
-              direction="row"
-              justifyContent={{ xs: 'center', md: 'flex-start' }}
-              sx={{
-                mt: 3,
-                mb: { xs: 5, md: 0 },
-              }}
-            >
-              {_socials.map((social) => (
-                <IconButton
-                  key={social.name}
-                  sx={{
-                    '&:hover': {
-                      bgcolor: alpha(social.color, 0.08),
-                    },
-                  }}
+        <Grid xs={12} md={8}>
+          <Grid container spacing={4}>
+
+            {LINKS.map((list) => (
+              <Grid key={list.headline} xs={6} sm={4} md={2.4}>
+                <Typography
+                  variant="overline"
+                  sx={{ fontWeight: 700, color: '#ffffff' }}
                 >
-                  <Iconify color={social.color} icon={social.icon} />
-                </IconButton>
-              ))}
-            </Stack>
-          </Grid>
+                  {list.headline}
+                </Typography>
 
-          <Grid xs={12} md={6}>
-            <Stack spacing={5} direction={{ xs: 'column', md: 'row' }}>
-              {LINKS.map((list) => (
-                <Stack
-                  key={list.headline}
-                  spacing={2}
-                  alignItems={{ xs: 'center', md: 'flex-start' }}
-                  sx={{ width: 1 }}
-                >
-                  <Typography component="div" variant="overline">
-                    {list.headline}
-                  </Typography>
-
+                <Stack spacing={1.2} sx={{ mt: 1 }}>
                   {list.children.map((link) => (
                     <Link
                       key={link.name}
                       component={RouterLink}
                       href={link.href}
-                      color="inherit"
-                      variant="body2"
+                      sx={{
+                        color: '#d7d7d7',
+                        textDecoration: 'none',
+                        fontSize: '0.85rem',
+                        '&:hover': { color: '#fff' },
+                      }}
                     >
                       {link.name}
                     </Link>
                   ))}
                 </Stack>
-              ))}
-            </Stack>
+              </Grid>
+            ))}
+
+
           </Grid>
         </Grid>
+      </Grid>
 
-        <Typography variant="body2" sx={{ mt: 10 }}>
-          © 2023. All rights reserved
+      {/* HELP SECTION */}
+      <Box sx={{ mt: 5 }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+          Help and Support:
         </Typography>
-      </Container>
-    </Box>
-  );
+
+        <Typography
+          variant="body2"
+          sx={{ mt: 1, maxWidth: 'lg', color: '#d7d7d7' }}
+        >
+          Need help with KYC or bond investing? Our team is here to assist you with verification,
+          bond insights, and all your platform queries.
+        </Typography>
+      </Box>
+
+      {/* DISCLAIMER */}
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+          Disclaimer :
+        </Typography>
+
+        <Typography
+          variant="body2"
+          sx={{ mt: 1, maxWidth: 'lg', color: '#d7d7d7' }}
+        >
+          Our platform enables access to listed, unlisted, corporate, and government bond opportunities, 
+          but we do not provide financial, legal, or tax advice. All information displayed is for 
+          educational and informational purposes only and may be based on publicly available data. 
+          Issuer details, ratings, yields, coupon rates, and maturity information are provided as 
+          received from issuers, rating agencies, or authorized market sources. We do not guarantee 
+          the accuracy, completeness, or timeliness of this information. The responsibility for 
+          reviewing, verifying, and assessing any bond rests solely with the investor.
+        </Typography>
+      </Box>
+
+      {/* COPYRIGHT */}
+      <Typography
+        variant="body2"
+        sx={{
+          mt: 5,
+          textAlign: 'center',
+          color: '#ffffff',
+          opacity: 0.8,
+        }}
+      >
+        © 2025. All rights reserved
+      </Typography>
+    </Container>
+  </Box>
+);
 
   return mainFooter;
 }

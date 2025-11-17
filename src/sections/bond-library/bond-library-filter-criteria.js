@@ -28,17 +28,17 @@ const INTEREST_PAYMENT_FREQUENCY = [
   { id: 'quarterly', label: 'QUARTERLY' },
   { id: 'half_yearly', label: 'HALF YEARLY' },
   { id: 'annually', label: 'ANNUALLY' },
-  { id: 'cumulative_at_maturity', label: 'CUMULATIVE AT MATURITY' },
+  { id: 'cumulative', label: 'CUMULATIVE AT MATURITY' },
 ];
 
 const CREDIT_RATING = [
-  { id: 'aaa', label: 'AAA' },
-  { id: 'aa+', label: 'AA+' },
-  { id: 'aa-', label: 'AA-' },
-  { id: 'a+', label: 'A+' },
-  { id: 'a', label: 'A' },
-  { id: 'a-', label: 'A-' },
-  { id: 'bbb+', label: 'BBB+ and BELOW' },
+  { id: 'AAA', label: 'AAA' },
+  { id: 'AA+', label: 'AA+' },
+  { id: 'AA-', label: 'AA-' },
+  { id: 'A+', label: 'A+' },
+  { id: 'A', label: 'A' },
+  { id: 'A-', label: 'A-' },
+  { id: 'BBB+', label: 'BBB+ and BELOW' },
   { id: 'unrated', label: 'UNRATED' },
 ];
 
@@ -77,8 +77,8 @@ const BALANCE_TENURE_OPTIONS = [
 ];
 
 const TAXATION = [
-  { id: 'tax_free', label: 'TAX FREE' },
-  { id: 'taxable', label: 'TAXABLE' },
+  { id: 'TAX_FREE', label: 'TAX FREE' },
+  { id: 'TAXABLE', label: 'TAXABLE' },
 ];
 
 const BOND_PRICE_LVL = [

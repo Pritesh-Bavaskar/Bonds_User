@@ -15,6 +15,8 @@ import HomeFeaturedBlogs from '../home-fearured-blogs';
 import HomeGetStartedKYC from '../home-getstarted-kyc';
 import { useGetFeaturedBonds } from 'src/api/bonds';
 import FaqsComponent from 'src/sections/faqs/faq-component';
+import StartInvesting from './start-investing';
+import { Container } from '@mui/material';
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
@@ -32,9 +34,12 @@ export default function HomeView() {
       <HomeWhyBonds bonds={featuredBonds} />
       <HomeGetStartedKYC />
       <HomeFeaturedBlogs />
-      <HomeExplore />
+      {/* <HomeExplore /> */}
       <HomeSignupRequest />
-      <FaqsComponent />
+      <StartInvesting />
+      <Container sx={{ py: 5 }}>
+        <FaqsComponent />
+      </Container>
     </>
   );
 }

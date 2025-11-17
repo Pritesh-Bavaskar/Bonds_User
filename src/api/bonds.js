@@ -32,6 +32,7 @@ export function useGetBondsFilter(filter) {
   const memoizedValue = useMemo(
     () => ({
       Bonds: data?.results || [],
+      count: data?.count || 0,
       BondsLoading: isLoading,
       BondsError: error,
       BondsValidating: isValidating,
@@ -69,7 +70,7 @@ export function useGetSimilarBonds(bondISIN) {
   const URL = bondISIN ? endpoints.bond.similar(bondISIN) : null;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  
+
   const memoizedValue = useMemo(
     () => ({
       SimilarBonds: data,

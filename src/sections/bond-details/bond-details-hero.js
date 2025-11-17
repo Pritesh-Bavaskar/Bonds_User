@@ -56,24 +56,24 @@ export default function BondDetailsHero({ bondHero }) {
             {bondHero?.company?.company?.issuer_name || 'Navi Finserv Limited - INE3342T07494'}
           </Typography>
         </Box>
-        <Grid container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mt: 4 }} spacing={2}>
-          <Grid item md={2}>
+        <Grid container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ mt: 4 }} spacing={2} >
+          <Grid item xs={6} md={2}>
             <Typography sx={{ color: theme.palette.common.white }}>Yield to Maturity</Typography>
             <Typography sx={{ color: theme.palette.common.white }}>{bondHero?.bond?.ytm_percent || 'NA'}% </Typography>
           </Grid>
-          <Grid item md={2}>
+          <Grid item xs={6} md={2}>
             <Typography sx={{ color: theme.palette.common.white }}>Coupon Rate</Typography>
             <Typography sx={{ color: theme.palette.common.white }}>{bondHero?.bond?.coupon_rate_percent || 'NA'}%</Typography>
           </Grid>
-          <Grid item md={2}>
+          <Grid item xs={6} md={2}>
             <Typography sx={{ color: theme.palette.common.white }}>Maturity Date</Typography>
             <Typography sx={{ color: theme.palette.common.white }}>{bondHero?.bond?.maturity_date || 'NA'}</Typography>
           </Grid>
-          <Grid item md={2}>
+          <Grid item xs={6} md={2}>
             <Typography sx={{ color: theme.palette.common.white }}>Min Investment</Typography>
             <Typography sx={{ color: theme.palette.common.white }}>₹{bondHero?.bond?.minimum_investment_rs || 'NA'}</Typography>
           </Grid>
-          <Grid item md={2}>
+          <Grid item xs={6} md={2}>
             <Typography sx={{ color: theme.palette.common.white }}>ISIN</Typography>
             <Typography sx={{ color: theme.palette.common.white }}>{bondHero?.bond?.isin_code || 'NA'}</Typography>
           </Grid>
