@@ -130,7 +130,7 @@ export default function KycAddressInfo() {
       correspondenceEmail: '',
       correspondencePhone: '',
       addressProof: null,
-      documentType: '',
+      documentType: 'electricityBill',
     },
   });
 
@@ -559,7 +559,13 @@ export default function KycAddressInfo() {
               {watch('documentType') && (
                 <RHFFileUploadBox
                   name="addressProof"
-                  label="Upload address proof"
+                  label={`Upload ${
+                    watch('documentType')
+                      ? watch('documentType')
+                          .replace(/([A-Z])/g, ' $1')
+                          .replace(/^./, (str) => str.toUpperCase())
+                      : 'address proof'
+                  }`}
                   icon="mdi:file-document-outline"
                   color="#1e88e5"
                   acceptedTypes="pdf,xls,docx,jpeg"
@@ -583,7 +589,7 @@ export default function KycAddressInfo() {
                   <Grid xs={12} md={6}>
                     <Typography
                       variant="h5"
-                      sx={{ mb: 3, mt: 1, fontWeight: 600, color: 'primary.main' }}
+                      sx={{ mb: 3, mt: 0, fontWeight: 600, color: 'primary.main' }}
                     >
                       Registered Address
                     </Typography>

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';// Import useSnackbar at the top of the file
+import { useSnackbar } from 'src/components/snackbar';
 import {
   Box,
   Card,
@@ -34,6 +35,9 @@ function UploadBox({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  // Get the snackbar function
+  const { enqueueSnackbar } = useSnackbar();
+
   // ---- Safe file processing ----
   const validateFile = (file) => {
     if (!file) return;
@@ -43,14 +47,14 @@ function UploadBox({
 
     // Validate file type
     if (allowedTypes.length > 0 && !allowedTypes.includes(fileType)) {
-      alert(`Invalid file type. Allowed types: ${acceptedTypes}`);
+      enqueueSnackbar(`Invalid file type. Allowed types: ${acceptedTypes}`, { variant: 'error' });
       return false;
     }
 
     // Validate size
     const maxSizeBytes = maxSizeMB * 1024 * 1024;
     if (file.size > maxSizeBytes) {
-      alert(`File size exceeds ${maxSizeMB}MB limit.`);
+      enqueueSnackbar(`File size exceeds ${maxSizeMB}MB limit.`, { variant: 'error' });
       return false;
     }
 

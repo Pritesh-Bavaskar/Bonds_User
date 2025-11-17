@@ -76,12 +76,12 @@ export default function KYCBankDetails() {
     resolver: yupResolver(NewSchema),
     reValidateMode: 'onChange',
     defaultValues: {
-      documentType: '',
+      documentType: 'passbook',
       bankName: '',
       branchName: '',
       accountNumber: '',
       ifscCode: '',
-      accountType: '',
+      accountType: 'SAVINGS',
       addressProof: null,
       dpId: '',
       dpName: '',
@@ -102,8 +102,17 @@ export default function KYCBankDetails() {
   const documentType = useWatch({ control, name: 'documentType' });
   const COMPANY_ID = sessionStorage.getItem('company_information_id');
 
-  const verifyBankDetail = async () => {
+  const verifyBankDetail = async (data) => {
     console.log('Verifying bank details with values:');
+
+    const bankPayload = {
+      account_number: data.accountNumber,
+      bank_name: data.bankName,
+      branch_name: data.branchName,
+      account_type: data.accountType,
+      ifsc_code: data.ifscCode,
+    };
+
     try {
       const data = methods.getValues();
 
@@ -128,6 +137,17 @@ export default function KYCBankDetails() {
       });
 
       // ✅ Open the Demat section on success
+      const resSubmit = await axiosInstance.post(
+        `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/submit/`,
+        bankPayload,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      enqueueSnackbar(resSubmit.data?.message || 'Bank details submitted successfully ✅', {
+        variant: 'success',
+      });
       setShowDemat(true);
     } catch (error) {
       console.error('❌ Error verifying bank details:', error.response?.data || error);
@@ -187,7 +207,7 @@ export default function KYCBankDetails() {
       setValue('branchName', extracted.branch_name || '', { shouldValidate: true });
       setValue('accountNumber', extracted.account_number || '', { shouldValidate: true });
       setValue('ifscCode', extracted.ifsc_code || '', { shouldValidate: true });
-      setValue('accountType', extracted.account_type || 'savings', {
+      setValue('accountType', extracted.account_type || 'SAVINGS', {
         shouldValidate: true,
         // shouldDirty: true,
       });
@@ -200,13 +220,13 @@ export default function KYCBankDetails() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       // ✅ BANK PAYLOAD
-      const bankPayload = {
-        account_number: data.accountNumber,
-        bank_name: data.bankName,
-        branch_name: data.branchName,
-        account_type: data.accountType,
-        ifsc_code: data.ifscCode,
-      };
+      // const bankPayload = {
+      //   account_number: data.accountNumber,
+      //   bank_name: data.bankName,
+      //   branch_name: data.branchName,
+      //   account_type: data.accountType,
+      //   ifsc_code: data.ifscCode,
+      // };
 
       // ✅ DEMAT PAYLOAD
       const dematPayload = {
@@ -217,28 +237,28 @@ export default function KYCBankDetails() {
         client_id_bo_id: Number(data.beneficiaryClientId),
       };
 
-      console.log('📤 Submitting Bank Payload:', bankPayload);
+      // console.log('📤 Submitting Bank Payload:', bankPayload);
       console.log('📤 Submitting Demat Payload:', dematPayload);
 
       // ✅ Parallel API Calls
       const [bankRes, dematRes] = await Promise.all([
-        axiosInstance.post(`/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/submit/`, bankPayload, {
-          headers: { 'Content-Type': 'application/json' },
-        }),
+        // axiosInstance.post(`/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/submit/`, bankPayload, {
+        //   headers: { 'Content-Type': 'application/json' },
+        // }),
         axiosInstance.post(`/api/kyc/issuer_kyc/company/${COMPANY_ID}/demat/`, dematPayload, {
           headers: { 'Content-Type': 'application/json' },
         }),
       ]);
 
       // ✅ Handle Success
-      enqueueSnackbar(bankRes.data?.message || 'Bank details submitted successfully ✅', {
-        variant: 'success',
-      });
+      // enqueueSnackbar(bankRes.data?.message || 'Bank details submitted successfully ✅', {
+      //   variant: 'success',
+      // });
       enqueueSnackbar(dematRes.data?.message || 'Demat details submitted successfully ✅', {
         variant: 'success',
       });
 
-      console.log('✅ Bank Response:', bankRes.data);
+      // console.log('✅ Bank Response:', bankRes.data);
       console.log('✅ Demat Response:', dematRes.data);
 
       // Optional: Move to next page
@@ -421,7 +441,7 @@ export default function KYCBankDetails() {
           <YupErrorMessage name="addressProof" />
         </Stack>
         <Box sx={{ py: 4 }}>
-          <Grid container spacing={3} >
+          <Grid container spacing={3}>
             {/* Left Section (9 columns) */}
             <Grid xs={12} md={9} order={{ xs: 2, md: 1 }}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -483,7 +503,7 @@ export default function KYCBankDetails() {
                     Enter your IFSC code to auto-detect your bank and branch details.
                   </Typography>
                   <Box sx={{ mt: 2 }}>
-                    <Button variant="contained" type="button" onClick={verifyBankDetail}>
+                    <Button variant="contained" type="button" onClick={() => verifyBankDetail(values)}>
                       Verify
                     </Button>
                   </Box>
@@ -511,7 +531,13 @@ export default function KYCBankDetails() {
                 </Box>
 
                 {/* Illustration */}
-                <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center', }}>
+                <Box
+                  sx={{
+                    display: { xs: 'none', md: 'flex' },
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
                   <Box
                     component="img"
                     src="/assets/images/kyc/kyc-basic-info/kyc-autofill.svg"
@@ -527,7 +553,7 @@ export default function KYCBankDetails() {
 
         {/* {showDemat && ( */}
         {/* <> */}
-        <Typography variant="h4" sx={{ fontWeight: 700, mt: 3 , mb: 2}}>
+        <Typography variant="h4" sx={{ fontWeight: 700, mt: 3, mb: 2 }}>
           Demat Account Details
         </Typography>
         <Typography variant="h6" sx={{ fontWeight: 500, mb: 2 }}>
@@ -540,9 +566,7 @@ export default function KYCBankDetails() {
             <Grid xs={12} md={12}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-                  <Button variant="contained">
-                    Fetch
-                  </Button>
+                  <Button variant="contained">Fetch</Button>
                 </Box>
 
                 <Grid container spacing={3}>
@@ -620,6 +644,22 @@ export default function KYCBankDetails() {
                       >
                         Depository Participant Identification
                       </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid xs={12} md={6}>
+                    <Box
+                      sx={{
+                        display: { xs: 'none', md: 'flex' },
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Box
+                        component="img"
+                        src="/assets/images/kyc/kyc-demat-img.svg"
+                        alt="Bank details illustration"
+                        sx={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                      />
                     </Box>
                   </Grid>
                 </Grid>

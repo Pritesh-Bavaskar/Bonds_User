@@ -154,9 +154,9 @@ export default function KYCBasicInfo({ currentInfo }) {
               ? dayjs(companyData.date_of_incorporation).toDate()
               : null,
             msmeUdyamRegistrationNo: companyData.msme_udyam_registration_no || '',
-            city: companyData.city_of_incorporation || '',
+            city: companyData.place_of_incorporation || '',
             state: companyData.state_of_incorporation || '',
-            country: companyData.country_of_incorporation || '',
+            country: companyData.country_of_incorporation || 'India',
             entityType: companyData.entity_type?.toLowerCase() || '', // Ensure lowercase to match form values
             sector: companyData.sector || '',
             panNumber: companyData.company_pan_number || '',
