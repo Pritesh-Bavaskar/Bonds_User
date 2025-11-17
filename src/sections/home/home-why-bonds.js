@@ -129,7 +129,7 @@ export default function HomeWhyBonds({ isDetails, bonds }) {
         <Typography
           align="center"
           variant="h5"
-          color="#18191B"
+          color="#637381"
           sx={{
             mt: 2,
             mx: 'auto',

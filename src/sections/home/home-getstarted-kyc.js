@@ -105,6 +105,7 @@ export default function HomeGetStartedKYC({ numberShow }) {
             sx={{
               fontWeight: 300,
               maxWidth: 900,
+              color:'#637381'
             }}
           >
             Completing your KYC is the first step toward investing seamlessly and securely on our

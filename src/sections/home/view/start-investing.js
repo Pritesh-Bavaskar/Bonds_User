@@ -30,7 +30,7 @@ export default function StartInvesting() {
         variant="body1"
         sx={{
           maxWidth: 800,
-          color: '#18191B',
+          color: '#637381',
           mb: 3,
         }}
       >

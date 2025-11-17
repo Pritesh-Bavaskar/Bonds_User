@@ -31,7 +31,7 @@ export default function HomeStats() {
           <Typography variant="h3" align="center" color="#003289" gutterBottom sx={{ fontWeight: 700, }}>
             Our Growing Investment Community
           </Typography>
-          <Typography variant="h5" align="center" color="#18191B" gutterBottom>
+          <Typography variant="h5" align="center" color="#637381" gutterBottom>
             Find government and corporate bonds with detailed coupon rates, yields, and maturity
             schedules. Our interactive bond timeline helps you identify opportunities at the right
             time.
@@ -118,7 +118,7 @@ export default function HomeStats() {
         </Grid>
         </Container>
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 4 }}>
-          <Typography variant="h5" align="center" color="#18191B" gutterBottom>
+          <Typography variant="h5" align="center" color="#637381" gutterBottom>
             We are committed to breaking down the barriers of traditional finance by offering clear
             information, real-time updates, and user-friendly tools that help investors stay
             informed and ahead of the market.

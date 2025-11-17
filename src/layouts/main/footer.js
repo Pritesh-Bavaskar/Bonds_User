@@ -29,18 +29,18 @@ const LINKS = [
       { name: 'FAQs', href: paths.faqs },
     ],
   },
-    {
+  {
     headline: 'Become a issuer',
     children: [
       { name: 'Issuer' },
     ],
   },
-    {
+  {
     headline: 'Resources',
     children: [
-      { name: 'Blog' },
+      { name: 'Blog'  },
       { name: 'Bonds Calculator' },
-      { name: 'News & Insight'},
+      { name: 'News & Insight' },
     ],
   },
   {
@@ -85,128 +85,137 @@ export default function Footer() {
     </Box>
   );
 
- const mainFooter = (
-  <Box
-    component="footer"
-    sx={{
-      position: 'relative',
-      bgcolor: '#001D4F',
-      color: '#ffffff',
-      pt: 3,
-      pb: 3,
-      pl:6,
-      pr:3,
-    }}
-  >
-    <Container maxWidth="xl">
+  const mainFooter = (
+    <Box
+      component="footer"
+      sx={{
+        position: 'relative',
+        bgcolor: '#001D4F',
+        color: '#ffffff',
+        pt: 3,
+        pb: 3,
+        pl: 6,
+        pr: 3,
+      }}
+    >
+      <Container maxWidth="xl">
 
-      {/* TOP ROW (Logo + Columns) */}
-      <Grid container spacing={5} justifyContent="space-between">
-
-    
-        <Grid xs={12} md={4}>
-          <Box sx={{ mb: 2 }}>
-            <Logo />
-          </Box>
-          <Typography
-            variant="body2"
-            sx={{
-              lineHeight: 1.6,
-              maxWidth: 280,
-            }}
-          >
-            A secure and transparent platform dedicated to helping investors access high-quality bonds,
-            make informed decisions, and build long-term financial stability with confidence.
-          </Typography>
-        </Grid>
-
-        <Grid xs={12} md={8}>
-          <Grid container spacing={4}>
-
-            {LINKS.map((list) => (
-              <Grid key={list.headline} xs={6} sm={4} md={2.4}>
-                <Typography
-                  variant="overline"
-                  sx={{ fontWeight: 700, color: '#ffffff' }}
-                >
-                  {list.headline}
-                </Typography>
-
-                <Stack spacing={1.2} sx={{ mt: 1 }}>
-                  {list.children.map((link) => (
-                    <Link
-                      key={link.name}
-                      component={RouterLink}
-                      href={link.href}
-                      sx={{
-                        color: '#d7d7d7',
-                        textDecoration: 'none',
-                        fontSize: '0.85rem',
-                        '&:hover': { color: '#fff' },
-                      }}
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
-                </Stack>
-              </Grid>
-            ))}
+        {/* TOP ROW (Logo + Columns) */}
+        <Grid container spacing={5} justifyContent="space-between">
 
 
+          <Grid xs={12} md={4}>
+            <Box
+              sx={{
+                mb: 2,
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
+              <Logo />
+              <Typography variant="body2">My name is bond</Typography>
+            </Box>
+            <Typography
+              variant="body2"
+              sx={{
+                lineHeight: 1.6,
+                maxWidth: 280,
+              }}
+            >
+              A secure and transparent platform dedicated to helping investors access high-quality bonds,
+              make informed decisions, and build long-term financial stability with confidence.
+            </Typography>
+          </Grid>
+
+          <Grid xs={12} md={8}>
+            <Grid container spacing={4}>
+
+              {LINKS.map((list) => (
+                <Grid key={list.headline} xs={6} sm={4} md={2.4}>
+                  <Typography
+                    variant="overline"
+                    sx={{ fontWeight: 700, color: '#ffffff' }}
+                  >
+                    {list.headline}
+                  </Typography>
+
+                  <Stack spacing={1.2} sx={{ mt: 1 }}>
+                    {list.children.map((link) => (
+                      <Link
+                        key={link.name}
+                        component={RouterLink}
+                        href={link.href}
+                        sx={{
+                          color: '#d7d7d7',
+                          textDecoration: 'none',
+                          fontSize: '0.85rem',
+                          '&:hover': { color: '#fff' },
+                        }}
+                      >
+                        {link.name}
+                      </Link>
+                    ))}
+                  </Stack>
+                </Grid>
+              ))}
+
+
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
 
-      {/* HELP SECTION */}
-      <Box sx={{ mt: 5 }}>
-        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-          Help and Support:
-        </Typography>
+        {/* HELP SECTION */}
+        <Box sx={{ mt: 5 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+            Help and Support:
+          </Typography>
 
+          <Typography
+            variant="body2"
+            sx={{ mt: 1, maxWidth: 'lg', color: '#d7d7d7' }}
+          >
+            Need help with KYC or bond investing? Our team is here to assist you with verification,
+            bond insights, and all your platform queries.
+          </Typography>
+        </Box>
+
+        {/* DISCLAIMER */}
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+            Disclaimer :
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{ mt: 1, maxWidth: 'lg', color: '#d7d7d7' }}
+          >
+            Our platform enables access to listed, unlisted, corporate, and government bond opportunities,
+            but we do not provide financial, legal, or tax advice. All information displayed is for
+            educational and informational purposes only and may be based on publicly available data.
+            Issuer details, ratings, yields, coupon rates, and maturity information are provided as
+            received from issuers, rating agencies, or authorized market sources. We do not guarantee
+            the accuracy, completeness, or timeliness of this information. The responsibility for
+            reviewing, verifying, and assessing any bond rests solely with the investor.
+          </Typography>
+        </Box>
+
+        {/* COPYRIGHT */}
         <Typography
           variant="body2"
-          sx={{ mt: 1, maxWidth: 'lg', color: '#d7d7d7' }}
+          sx={{
+            mt: 5,
+            textAlign: 'center',
+            color: '#ffffff',
+            opacity: 0.8,
+          }}
         >
-          Need help with KYC or bond investing? Our team is here to assist you with verification,
-          bond insights, and all your platform queries.
+          © 2025. All rights reserved
         </Typography>
-      </Box>
-
-      {/* DISCLAIMER */}
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-          Disclaimer :
-        </Typography>
-
-        <Typography
-          variant="body2"
-          sx={{ mt: 1, maxWidth: 'lg', color: '#d7d7d7' }}
-        >
-          Our platform enables access to listed, unlisted, corporate, and government bond opportunities, 
-          but we do not provide financial, legal, or tax advice. All information displayed is for 
-          educational and informational purposes only and may be based on publicly available data. 
-          Issuer details, ratings, yields, coupon rates, and maturity information are provided as 
-          received from issuers, rating agencies, or authorized market sources. We do not guarantee 
-          the accuracy, completeness, or timeliness of this information. The responsibility for 
-          reviewing, verifying, and assessing any bond rests solely with the investor.
-        </Typography>
-      </Box>
-
-      {/* COPYRIGHT */}
-      <Typography
-        variant="body2"
-        sx={{
-          mt: 5,
-          textAlign: 'center',
-          color: '#ffffff',
-          opacity: 0.8,
-        }}
-      >
-        © 2025. All rights reserved
-      </Typography>
-    </Container>
-  </Box>
-);
+      </Container>
+    </Box>
+  );
 
   return mainFooter;
 }
