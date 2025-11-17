@@ -439,7 +439,11 @@ export default function KYCBankDetails() {
             {watch('documentType') && (
               <RHFFileUploadBox
                 name="addressProof"
-                label="Upload address proof"
+                label={`Upload ${
+                  (watch('documentType') === 'passbook' && 'Passbook') ||
+                  (watch('documentType') === 'cheque' && 'Cheque') ||
+                  (watch('documentType') === 'bank_statement' && 'Bank Statement')
+                }`}
                 icon="mdi:file-document-outline"
                 color="#1e88e5"
                 acceptedTypes="pdf,xls,docx,jpeg"

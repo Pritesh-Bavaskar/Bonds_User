@@ -170,7 +170,7 @@ export default function KYCSignatories() {
 
   const handleConfirmDelete = async () => {
     if (!signatoryToDelete) return;
-    
+
     try {
       setLoading(true);
       const token = sessionStorage.getItem('accessToken');
@@ -210,9 +210,10 @@ export default function KYCSignatories() {
 
       <Box
         sx={{
-          boxShadow: '0px 0px 12px 0px #00000040',
-          p: { xs: 2, sm: 3, md: 4 },
-          borderRadius: '23px',
+          p: { xs: 2, md: 4 },
+          borderRadius: 2,
+          border: (theme) => `1px solid ${theme.palette.divider}`,
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
         }}
       >
         <Box
@@ -282,9 +283,7 @@ export default function KYCSignatories() {
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
-              <DialogTitle id="alert-dialog-title">
-                Delete Signatory
-              </DialogTitle>
+              <DialogTitle id="alert-dialog-title">Delete Signatory</DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                   Are you sure you want to delete this signatory? This action cannot be undone.
@@ -294,9 +293,9 @@ export default function KYCSignatories() {
                 <Button onClick={() => setDeleteDialogOpen(false)} color="primary">
                   Cancel
                 </Button>
-                <Button 
-                  onClick={handleConfirmDelete} 
-                  color="error" 
+                <Button
+                  onClick={handleConfirmDelete}
+                  color="error"
                   variant="contained"
                   autoFocus
                   disabled={loading}
