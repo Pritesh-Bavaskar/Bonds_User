@@ -154,9 +154,9 @@ export default function KYCBasicInfo({ currentInfo }) {
               ? dayjs(companyData.date_of_incorporation).toDate()
               : null,
             msmeUdyamRegistrationNo: companyData.msme_udyam_registration_no || '',
-            city: companyData.place_of_incorporation || '',
+            city: companyData.city_of_incorporation || '',
             state: companyData.state_of_incorporation || '',
-            country: companyData.country || '',
+            country: companyData.country_of_incorporation || '',
             entityType: companyData.entity_type?.toLowerCase() || '', // Ensure lowercase to match form values
             sector: companyData.sector || '',
             panNumber: companyData.company_pan_number || '',
@@ -196,6 +196,7 @@ export default function KYCBasicInfo({ currentInfo }) {
   // ----------------------------------------------------------------------
 
   const handlePanUpload = async (file) => {
+    console.log('handlePanUpload', file);
     try {
       const formData = new FormData();
       formData.append('pan_card_file', file);
@@ -208,9 +209,9 @@ export default function KYCBasicInfo({ currentInfo }) {
       console.log('PAN extraction result:', data);
 
       if (data) {
-        setValue('panNumber', data.pan_number || '');
-        setValue('panHoldersName', data.pan_holder_name || '');
-        setValue('dateOfBirth', data.date_of_birth ? new Date(data.date_of_birth) : null);
+        setValue('panNumber', data.data.pan_number || '');
+        setValue('panHoldersName', data.data.pan_holder_name || '');
+        setValue('dateOfBirth', data.data.date_of_birth ? new Date(data.data.date_of_birth) : null);
         enqueueSnackbar('PAN details fetched successfully!', { variant: 'success' });
       }
     } catch (error) {
@@ -277,8 +278,8 @@ export default function KYCBasicInfo({ currentInfo }) {
         formDataToSend.append('dob', '');
       }
 
-      formDataToSend.append('country', formData.country || '');
-      formDataToSend.append('place_of_incorporation', formData.city || '');
+      formDataToSend.append('country_of_incorporation', formData.country || '');
+      formDataToSend.append('city_of_incorporation', formData.city || '');
       formDataToSend.append('state_of_incorporation', formData.state || '');
       formDataToSend.append('entity_type', formData.entityType || '');
 
@@ -609,7 +610,7 @@ export default function KYCBasicInfo({ currentInfo }) {
           <Grid xs={12} md={12}>
             <Box sx={{ mb: 3 }}>
               <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Iconify icon="solar:calendar-bold" width={24} />
+                <Iconify icon="solar:document-upload-bold" width={24} />
                 <Box component="span" sx={{ fontWeight: 600 }}>
                   Upload PAN to Fill Details Automatically*
                 </Box>
@@ -636,7 +637,7 @@ export default function KYCBasicInfo({ currentInfo }) {
             {/* PAN Number (Left) */}
             <Grid item xs={12} md={6}>
               <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Iconify icon="solar:calendar-bold" width={24} />
+                <Iconify icon="solar:card-bold" width={24} />
                 <Box component="span" sx={{ fontWeight: 600 }}>
                   PAN Number*
                 </Box>
@@ -676,7 +677,7 @@ export default function KYCBasicInfo({ currentInfo }) {
             {/* PAN Holder’s Name (Full width below) */}
             <Grid item xs={12} md={6}>
               <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Iconify icon="solar:calendar-bold" width={24} />
+                <Iconify icon="solar:user-bold" width={24} />
                 <Box component="span" sx={{ fontWeight: 600 }}>
                   PAN Holder's Name*
                 </Box>

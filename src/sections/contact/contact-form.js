@@ -53,7 +53,7 @@ export default function ContactForm() {
         message: data.message,
       };
 
-      await axiosInstance.post('/api/bonds/contact', payload);
+      await axiosInstance.post('/api/bonds/contact/', payload);
       enqueueSnackbar('Message sent successfully!');
       methods.reset();
       methods.reset();

@@ -40,7 +40,7 @@ export default function KYCStepper({ statuses = [] }) {
       case 4:
         return '/kyc/bank-details';
       case 5:
-        return null; // Audit: to be added later
+        return '/kyc/audited-financial'; // Audit: to be added later
       case 6:
         return '/kyc/signatories';
       case 7:
