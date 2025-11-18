@@ -25,10 +25,29 @@ import KYCStepper from './kyc-stepper';
 // ----------------------------------------------------------------------
 
 export default function KYCReviewAndSubmit() {
+
+  const methods = useForm({
+    defaultValues: {
+      consent: false,
+    },
+  });
+
+  const { watch } = methods;
+  const consent = watch("consent");
+
+  // Required fields
+  const requiredFields = ["consent"];
+
+  // Percent logic
+  const calculatePercent = () => {
+    if (!consent) return 50;
+    return 100;
+  };
+
   return (
     <>
       <Container>
-        <KYCStepper />
+        <KYCStepper percent={calculatePercent} />
         <KYCTitle
           title="Review & Submit"
           subtitle={'Please review all information before submitting your application'}

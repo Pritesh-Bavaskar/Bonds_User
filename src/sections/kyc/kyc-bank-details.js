@@ -278,9 +278,54 @@ export default function KYCBankDetails() {
 
   console.log('values', values);
 
+
+  const requiredFields = [
+
+  'addressProof',
+
+  // Bank details
+  'bankName',
+  'branchName',
+  'accountNumber',
+  'ifscCode',
+
+
+  // Demat details
+  'dpId',
+  'dpName',
+  'beneficiaryClientId',
+  'dematAccountNumber',
+  'depository',
+];
+
+  const allValues = methods.watch();
+  const errors = methods.formState.errors;
+
+  const calculatePercent = () => {
+  let validCount = 0;
+
+  requiredFields.forEach((field) => {
+    const value = allValues[field];
+
+    const hasError = !!errors[field];
+
+    // VALID when:
+    //   - field is not empty
+    //   - AND no validation error from Yup
+    if (value && !hasError) {
+      validCount++;
+    }
+  });
+
+  return Math.round((validCount / requiredFields.length) * 100);
+};
+
+
+  const percent = calculatePercent();
+
   return (
     <Container>
-      <KYCStepper />
+      <KYCStepper percent={percent} />
       <KYCTitle
         title="Bank & Demat Details"
         subtitle={'Add your bank and demat account information'}

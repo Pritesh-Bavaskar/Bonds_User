@@ -369,11 +369,52 @@ export default function KYCBasicInfo() {
     }
   });
 
+  const requiredFields = [
+    'cin',
+    'companyName',
+    'gstin',
+    'dateOfIncorporation',
+    'msmeUdyamRegistrationNo',
+    'city',
+    'state',
+    'country',
+    'entityType',
+    'panFile',
+    'panNumber',
+    'dateOfBirth',
+    'panHoldersName',
+    'sector'
+  ];
+
+  const allValues = methods.watch();
+  const errors = methods.formState.errors;
+
+  const calculatePercent = () => {
+  let validCount = 0;
+
+  requiredFields.forEach((field) => {
+    const value = allValues[field];
+
+    const hasError = !!errors[field];
+
+    // VALID when:
+    //   - field is not empty
+    //   - AND no validation error from Yup
+    if (value && !hasError) {
+      validCount++;
+    }
+  });
+
+  return Math.round((validCount / requiredFields.length) * 100);
+};
+
+
+  const percent = calculatePercent();
   // ----------------------------------------------------------------------
 
   return (
     <Container>
-      <KYCStepper />
+      <KYCStepper percent={percent} />
       <KYCTitle
         title="Welcome to Bond Issuer"
         subtitle={"Let's get you started please provide your details"}
