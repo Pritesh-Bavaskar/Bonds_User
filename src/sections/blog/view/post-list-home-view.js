@@ -170,15 +170,15 @@ export default function PostListHomeView() {
 
   const featured = dataFiltered?.[0]
     ? {
-        id: dataFiltered[0].id,
-        title: dataFiltered[0].title,
-        coverUrl: dataFiltered[0].coverUrl,
-        categories: dataFiltered[0].categories || ['Alternative Investments', 'Personal Finance'],
-        readingTime: dataFiltered[0].readingTime || '8 min read',
-        description: dataFiltered[0].description || FEATURED_FALLBACK.description,
-        author: dataFiltered[0].author || FEATURED_FALLBACK.author,
-        createdAt: dataFiltered[0].createdAt || FEATURED_FALLBACK.createdAt,
-      }
+      id: dataFiltered[0].id,
+      title: dataFiltered[0].title,
+      coverUrl: dataFiltered[0].coverUrl,
+      categories: dataFiltered[0].categories || ['Alternative Investments', 'Personal Finance'],
+      readingTime: dataFiltered[0].readingTime || '8 min read',
+      description: dataFiltered[0].description || FEATURED_FALLBACK.description,
+      author: dataFiltered[0].author || FEATURED_FALLBACK.author,
+      createdAt: dataFiltered[0].createdAt || FEATURED_FALLBACK.createdAt,
+    }
     : FEATURED_FALLBACK;
 
   return (
@@ -186,16 +186,17 @@ export default function PostListHomeView() {
       {/* Full-width hero background via PostHero */}
       <PostHero
         featured={featured}
-        query={debouncedQuery}
-        results={searchResults}
-        onSearch={handleSearch}
-        loading={searchLoading}
+
         containerMaxWidth={settings.themeStretch ? false : 'lg'}
       />
 
       {/* Categories pills under the hero */}
+
       <Container maxWidth={settings.themeStretch ? false : 'lg'} sx={{ py: 4 }}>
-        <PostCategories />
+        <PostCategories query={debouncedQuery}
+          results={searchResults}
+          onSearch={handleSearch}
+          loading={searchLoading} />
       </Container>
 
       {/* Featured Insights heading */}

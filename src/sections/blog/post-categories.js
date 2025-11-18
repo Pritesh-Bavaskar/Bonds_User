@@ -4,6 +4,9 @@ import { useRouter } from 'src/routes/hook';
 // @mui
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
+import { paths } from 'src/routes/paths';
+import { Box, Grid } from '@mui/material';
+import PostSearch from './post-search';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +14,10 @@ import Chip from '@mui/material/Chip';
 // - Default categories are based on the provided screenshot
 // - Uses MUI Chips: outlined by default, primary-filled when active
 // - Can be used in controlled or uncontrolled mode
-export default function PostCategories({ items, value, onChange, sx }) {
+export default function PostCategories({ items, value, onChange, sx, query,
+  results,
+  onSearch,
+  loading, }) {
   const defaultItems = [
     'All',
     'Corporate Bonds',
@@ -34,7 +40,7 @@ export default function PostCategories({ items, value, onChange, sx }) {
     onChange?.(cat);
 
     // Handle navigation based on the selected category
-    switch(cat) {
+    switch (cat) {
       case 'Corporate Bonds':
         router.push('/products/corporate_bond');
         break;
@@ -66,6 +72,26 @@ export default function PostCategories({ items, value, onChange, sx }) {
         ...sx,
       }}
     >
+
+      <Grid container justifyContent="center" sx={{ mt: { xs: 1, md: 1 } }}>
+        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Box sx={{ width: '60%' }}>
+            <PostSearch
+              query={query}
+              results={results}
+              onSearch={onSearch}
+              loading={loading}
+              hrefItem={(title) =>
+                results?.some((item) => item.title === title)
+                  ? paths.post.details(title)
+                  : null
+              }
+              sx={{ width: '100%' }}
+            />
+          </Box>
+        </Grid>
+      </Grid>
+
       {categories.map((cat) => {
         const active = selected === cat;
         return (
@@ -95,4 +121,9 @@ PostCategories.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   sx: PropTypes.object,
+  featured: PropTypes.object,
+  loading: PropTypes.bool,
+  onSearch: PropTypes.func,
+  query: PropTypes.string,
+  results: PropTypes.array,
 };
