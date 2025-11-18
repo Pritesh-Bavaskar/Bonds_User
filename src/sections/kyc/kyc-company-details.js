@@ -48,7 +48,7 @@ export default function KYCCompanyDetails() {
       setLoadingDocs(true);
       try {
         const accessToken = sessionStorage.getItem('accessToken');
-        const res = await fetch(`${base}/api/kyc/issuer_kyc/companies/${companyId}/documents/`, {
+        const res = await fetch(`${base}/api/kyc/issuer_kyc/companies/documents/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export default function KYCCompanyDetails() {
   const onSubmit = handleSubmit(async (form) => {
     const base = process.env.REACT_APP_HOST_API || '';
     const companyId = sessionStorage.getItem('company_information_id');
-    const bulkUrl = `${base}/api/kyc/issuer_kyc/companies/${companyId}/documents/bulkupload/`;
+    const bulkUrl = `${base}/api/kyc/issuer_kyc/companies/documents/bulkupload/`;
 
     const accessToken = sessionStorage.getItem('accessToken');
     const upper = (v) => (typeof v === 'string' ? v.toUpperCase() : '');
@@ -157,7 +157,7 @@ export default function KYCCompanyDetails() {
       if (!file || !existingDoc?.document_id) return false;
       const putFd = new FormData();
       putFd.append('file', file);
-      const url = `${base}/api/kyc/issuer_kyc/companies/${companyId}/documents/${existingDoc.document_id}/`;
+      const url = `${base}/api/kyc/issuer_kyc/companies/documents/${existingDoc.document_id}/`;
       putTasks.push(
         fetch(url, {
           method: 'PUT',
@@ -172,10 +172,6 @@ export default function KYCCompanyDetails() {
 
     // Determine which to PUT vs keep for bulk POST
     const bulkFd = new FormData();
-    // Map selects (text values)
-    if (form.moaAoaType) bulkFd.append('moa_aoa_type', upper(form.moaAoaType));
-    if (form.msmeUdyamAvailability)
-      bulkFd.append('msme_udyam_type', upper(form.msmeUdyamAvailability));
 
     // Certificate of Incorporation
     const exCert = findDoc('CERTIFICATE_INC');
@@ -187,13 +183,20 @@ export default function KYCCompanyDetails() {
     // MoA/AoA combined upload field
     const exMoa = findDoc('MOA') || findDoc('AOA');
     if (!tryQueuePut(form.moaAoa, exMoa)) {
-      if (form.moaAoa) bulkFd.append('moa_aoa_file', form.moaAoa);
+      if (form.moaAoa) {
+        bulkFd.append('moa_aoa_file', form.moaAoa);
+        if (form.moaAoaType) bulkFd.append('moa_aoa_type', upper(form.moaAoaType));
+      }
     }
 
     // MSME/Udyam combined field
     const exMsme = findDoc('MSME') || findDoc('UDYAM');
     if (!tryQueuePut(form.msmeUdyamCertificate, exMsme)) {
-      if (form.msmeUdyamCertificate) bulkFd.append('msme_udyam_file', form.msmeUdyamCertificate);
+      if (form.msmeUdyamCertificate) {
+        bulkFd.append('msme_udyam_file', form.msmeUdyamCertificate);
+        if (form.msmeUdyamAvailability)
+          bulkFd.append('msme_udyam_type', upper(form.msmeUdyamAvailability));
+      }
     }
 
     // IEC
@@ -297,6 +300,7 @@ export default function KYCCompanyDetails() {
                   : null
               }
             />
+            <YupErrorMessage name="certificateOfIncorporation" />
 
             <RHFSelect
               name="moaAoaType"
