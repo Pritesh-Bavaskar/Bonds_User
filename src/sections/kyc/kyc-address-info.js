@@ -261,19 +261,19 @@ export default function KycAddressInfo() {
         // Derive sameAsRegistered by comparing core fields
         const same =
           toStr(registered.registered_office) ===
-            toStr(correspondence.registered_office ?? correspondence.correspondence_address) &&
+          toStr(correspondence.registered_office ?? correspondence.correspondence_address) &&
           toStr(registered.city) ===
-            toStr(correspondence.city ?? correspondence.correspondence_city) &&
+          toStr(correspondence.city ?? correspondence.correspondence_city) &&
           // toStr(registered.country) ===
           // toStr(correspondence.city ?? correspondence.correspondence_country) &&
           toStr(registered.state_ut) ===
-            toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut) &&
+          toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut) &&
           toStr(registered.pin_code) ===
-            toStr(correspondence.pin_code ?? correspondence.correspondence_pin_code) &&
+          toStr(correspondence.pin_code ?? correspondence.correspondence_pin_code) &&
           toStr(registered.contact_email) ===
-            toStr(correspondence.contact_email ?? correspondence.correspondence_email) &&
+          toStr(correspondence.contact_email ?? correspondence.correspondence_email) &&
           toTen(registered.contact_phone) ===
-            toTen(correspondence.contact_phone ?? correspondence.correspondence_phone);
+          toTen(correspondence.contact_phone ?? correspondence.correspondence_phone);
         setValue('sameAsRegistered', same, { shouldValidate: true });
 
         // If server returned any address_id, mark as existing for PUT
@@ -452,9 +452,56 @@ export default function KycAddressInfo() {
     setPreview(null);
   };
 
+
+  // for stpper percent
+  const requiredFields = [
+    // Registered Address
+    'documentType',
+    'registeredAddressLine1',
+    'registeredCountry',
+    'registeredCity',
+    'registeredState',
+    'registeredPincode',
+    'registeredEmail',
+    'registeredPhone',
+
+    // Address Proof (file)
+    'addressProof',
+
+    // Correspondence only when NOT same
+    // We will handle this below.
+  ];
+
+
+  const allValues = methods.watch();
+  const errors = methods.formState.errors;
+
+  const calculatePercent = () => {
+    let validCount = 0;
+
+    requiredFields.forEach((field) => {
+      const value = allValues[field];
+
+      const hasError = !!errors[field];
+
+      // VALID when:
+      //   - field is not empty
+      //   - AND no validation error from Yup
+      if (value && !hasError) {
+        validCount++;
+      }
+    });
+
+    return Math.round((validCount / requiredFields.length) * 100);
+  };
+
+
+
+  const percent = calculatePercent();
+
   return (
     <Container maxWidth="lg" sx={{ py: 0 }}>
-      <KYCStepper />
+      <KYCStepper percent={percent} />
 
       <KYCTitle
         title="Fill Your Address Information"
@@ -626,13 +673,12 @@ export default function KycAddressInfo() {
               {watch('documentType') && (
                 <RHFFileUploadBox
                   name="addressProof"
-                  label={`Upload ${
-                    watch('documentType')
+                  label={`Upload ${watch('documentType')
                       ? watch('documentType')
-                          .replace(/([A-Z])/g, ' $1')
-                          .replace(/^./, (str) => str.toUpperCase())
+                        .replace(/([A-Z])/g, ' $1')
+                        .replace(/^./, (str) => str.toUpperCase())
                       : 'address proof'
-                  }`}
+                    }`}
                   icon="mdi:file-document-outline"
                   color="#1e88e5"
                   acceptedTypes="pdf,xls,docx,jpeg"

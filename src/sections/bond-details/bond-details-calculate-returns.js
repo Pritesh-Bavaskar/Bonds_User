@@ -327,7 +327,7 @@ export default function BondDetailsCalculateReturns({ bond }) {
                         <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
                       </IconButton>
                     </Typography>
-                    <Typography variant="subtitle1">Need to check</Typography>
+                    <Typography variant="subtitle1">NA</Typography>
                   </Grid>
                 </Grid>
               </Card>
