@@ -20,7 +20,11 @@ import RHFFileUploadBox from 'src/components/custom-file-upload/file-upload';
 import axios from 'axios';
 import { useAuthContext } from 'src/auth/hooks';
 
-const roles = ['Director', 'Signatory', 'Manager'];
+const ROLES = [
+  { value: 'DIRECTOR', label: 'Director' },
+  { value: 'SIGNATORY', label: 'Signatory' },
+  { value: 'MANAGER', label: 'Manager' },
+];
 
 export default function KYCAddSignatoriesForm({
   open,
@@ -43,12 +47,9 @@ export default function KYCAddSignatoriesForm({
         /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
         'Please enter a valid email address'
       ),
-    phoneNumber: Yup.string()
-      .required('Phone number is required')
-      .matches(
-        /^[0-9]{10}$/,
-        'Please enter a valid 10-digit phone number'
-      ),
+    // phoneNumber: Yup.string()
+    //   .required('Phone number is required')
+    //   .matches(/^[0-9]{10}$/, 'Please enter a valid 10-digit phone number'),
     din: Yup.string()
       .required('DIN is required')
       .matches(/^[0-9]+$/, 'DIN must contain only numbers')
@@ -74,20 +75,23 @@ export default function KYCAddSignatoriesForm({
       }),
   });
 
-  const defaultValues = useMemo(
-    () => ({
+  const defaultValues = useMemo(() => {
+    const roleValue = currentUser?.designation
+      ? ROLES.find((r) => r.value === currentUser.designation)?.value || ''
+      : '';
+
+    return {
       name: currentUser?.name_of_signatory || '',
       email: currentUser?.email_address || '',
       phoneNumber: currentUser?.phone_number || '',
       din: currentUser?.din || '',
-      role: currentUser?.designation || '',
+      role: roleValue,
       panCard: '',
       aadhaarCard: '',
       panNumber: currentUser?.pan_number || '',
       aadhaarNumber: currentUser?.aadhaar_number || '',
-    }),
-    [currentUser]
-  );
+    };
+  }, [currentUser]);
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -153,20 +157,20 @@ export default function KYCAddSignatoriesForm({
       if (isEditMode && currentUser?.signatory_id) {
         // Update existing signatory
         response = await axios.patch(
-          `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${currentUser.signatory_id}/signatories/update`,
+          `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/signatories/update/${currentUser.signatory_id}`,
           formData,
           { headers }
         );
       } else {
         // Create new signatory
         response = await axios.post(
-          `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${companyId}/signatories/`,
+          `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/signatories/`,
           formData,
           { headers }
         );
       }
 
-      if (response.data.status === 'success') {
+      if (response.data.success === true) {
         enqueueSnackbar(
           isEditMode ? 'Signatory updated successfully' : 'Signatory added successfully',
           { variant: 'success' }
@@ -252,9 +256,9 @@ export default function KYCAddSignatoriesForm({
               InputLabelProps={{ shrink: true }}
               disabled={isViewMode}
             >
-              {roles.map((role) => (
-                <MenuItem key={role} value={role}>
-                  {role}
+              {ROLES.map((role) => (
+                <MenuItem key={role.value} value={role.value}>
+                  {role.label}
                 </MenuItem>
               ))}
             </RHFSelect>

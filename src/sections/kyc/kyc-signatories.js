@@ -101,7 +101,7 @@ export default function KYCSignatories() {
       if (!token) throw new Error('No authentication token found');
 
       const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${signatoryId}/signatories/get`,
+        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/signatories/get/${signatoryId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -109,8 +109,9 @@ export default function KYCSignatories() {
         }
       );
 
-      if (response.data.status === 'success') {
-        setViewSignatory(response.data.data);
+      console.log('response', response);
+      if (response.data.success === true) {
+        setViewSignatory(response.data.data.data);
         setIsViewMode(true);
         setOpen(true);
       }
@@ -129,7 +130,7 @@ export default function KYCSignatories() {
       if (!token) throw new Error('No authentication token found');
 
       const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${COMPANY_ID}/signatories/list?page=${page}`,
+        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/signatories/list?page=${page}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -137,8 +138,8 @@ export default function KYCSignatories() {
         }
       );
 
-      if (response.data.status === 'success') {
-        setSignatories(response.data.data);
+      if (response.data.success === true) {
+        setSignatories(response?.data?.data?.data);
       }
       setError(null);
     } catch (err) {
@@ -177,7 +178,7 @@ export default function KYCSignatories() {
       if (!token) throw new Error('No authentication token found');
 
       await axios.delete(
-        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/${signatoryToDelete}/signatories/delete`,
+        `${process.env.REACT_APP_HOST_API}/api/kyc/issuer_kyc/company/signatories/delete/${signatoryToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
