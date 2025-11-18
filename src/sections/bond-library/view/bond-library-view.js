@@ -138,19 +138,19 @@ export default function BondLibraryView() {
     }
 
     if (sortBy === 'latest') {
-      params.append('sort_by', 'issue_date');
-      params.append('order', 'desc');  
+  
+      params.append('ordering', '-issue_date');
     }
 
     if (sortBy === 'oldest') {
-      params.append('sort_by', 'issue_date');
-      params.append('order', 'asc');    
+    
+      params.append('ordering', 'issue_date');
     }
 
     if (sortBy === 'popular') {
-      params.append('sort_by', 'ytm_percent');
-      params.append('order', 'desc');   
+      params.append('ordering', 'ytm_percent');
     }
+
 
     const filterQuery = generateQueryParams(filters);
 

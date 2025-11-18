@@ -66,23 +66,18 @@ export default function BondLibraryCardGrid({ item }) {
         borderRadius: 1,
         bgcolor: 'background.paper',
         overflow: 'hidden',
+        position: 'relative',
         boxShadow: `0 4px 16px ${alpha(theme.palette.grey[500], 0.24)}`,
         border: `1px solid ${alpha(theme.palette.grey[500], 0.16)}`,
         minHeight: 360,
         display: 'flex',
         flexDirection: 'column',
-
       }}
     >
       {/* Top Section */}
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, position: 'relative' }}>
         {/* Top Images Row */}
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ mb: 0.5 }}
-        >
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 0.5 }}>
           <Box
             component="img"
             src={item?.brandLogo || '/assets/icons/bond-library/company.png'}
@@ -92,238 +87,225 @@ export default function BondLibraryCardGrid({ item }) {
               height: 30,
               position: 'relative',
               top: -15,
-              right:15,
+              right: 15,
               mr: 1,
             }}
           />
-
           <Box
             sx={{
-              position: 'relative',
-              width: 70,
-              left: 20,
-              height: 20,
-              top: -24,
-              ml: 1,
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              zIndex: 20,
             }}
           >
-            {/* Trending Image */}
             <Box
-              component="img"
-              src="/assets/icons/bond-library/trending.svg"
-              alt="Trending"
               sx={{
-                width: '100%',
-                height: '100%',
-              }}
-            />
-
-            {/* Centered Text */}
-            <Typography
-              variant="caption"
-              sx={{
-                position: 'absolute',
-                top: '70%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                color: '#fff',
-
-                fontSize: '10px',
-                whiteSpace: 'nowrap',
+                width: 70,
+                height: 20,
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              {item?.status || 'Trending'}
-            </Typography>
-          </Box>
+              {/* Background image */}
+              <Box
+                component="img"
+                src="/assets/icons/bond-library/trending.svg"
+                alt="Trending"
+                sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
 
+              {/* Center text */}
+              <Typography
+                variant="caption"
+                sx={{
+                  position: 'relative',
+                  zIndex: 2,
+                  color: '#fff',
+                  fontSize: '10px',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {item?.status || 'Trending'}
+              </Typography>
+            </Box>
+          </Box>
         </Stack>
 
         {/* ASAPL */}
         <Tooltip title={item?.issuer_name || 'N.A.'} arrow>
-            <Typography
-              variant="subtitle2"
-              sx={{
-                mt: 0,
-                fontWeight: 700,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                maxWidth: '100%', 
-                cursor: 'default',
-              }}
-            >
-              {item?.issuer_name || 'N.A.'}
-            </Typography>
-          </Tooltip>
+          <Typography
+            variant="subtitle2"
+            sx={{
+              mt: 0,
+              fontWeight: 700,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxWidth: '100%',
+              cursor: 'default',
+            }}
+          >
+            {item?.issuer_name || 'N.A.'}
+          </Typography>
+        </Tooltip>
 
         {/* ISIN Number — compact spacing */}
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ mt: 0.5 }}
-        >
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 0.5 }}>
           <Typography variant="body2" sx={{ fontWeight: 700 }}>
             <Box component="span" sx={{ color: 'primary.main' }}>
               ISIN
             </Box>{' '}
             {item?.isin_code || 'N.A.'}
           </Typography>
-
-
         </Stack>
       </Box>
 
       {/* Bottom Section */}
-  <Box
-  sx={{
-    bgcolor: theme.palette.primary.main,
-    color: '#fff',
-    mt: 'auto',
-    p: 2.5,
-    borderRadius: 1,
-  }}
->
-  <Grid container spacing={2}>
+      <Box
+        sx={{
+          bgcolor: theme.palette.primary.main,
+          color: '#fff',
+          mt: 'auto',
+          p: 2.5,
+          borderRadius: 1,
+        }}
+      >
+        <Grid container spacing={2}>
+          {/* ROW 1 : PRICE - RATING */}
+          <Grid item xs={6}>
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Price
+              </Typography>
+              <Typography variant="caption">₹{item?.price || 'N.A.'}</Typography>
+            </Stack>
+          </Grid>
 
-    {/* ROW 1 : PRICE - RATING */}
-    <Grid item xs={6}>
-      <Stack spacing={0.5}>
-        <Typography variant="caption" sx={{ opacity: 0.72 }}>
-          Price
-        </Typography>
-        <Typography variant="caption">
-          ₹{item?.price || 'N.A.'}
-        </Typography>
-      </Stack>
-    </Grid>
+          <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Stack spacing={0.5} alignItems="center">
+              <Box
+                sx={{
+                  width: 45,
+                  height: 45,
+                  borderRadius: '50%',
+                  border: '2px solid #00A76F',
+                  bgcolor: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: '14px',
+                    color: '#00A76F',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    padding: '4px',
+                  }}
+                >
+                  {item?.ratings?.[0]?.rating || 'N.A.'}
+                </Typography>
+              </Box>
+            </Stack>
+          </Grid>
 
-    <Grid item xs={6} sx={{ display: "flex", justifyContent: "center" }}>
-      <Stack spacing={0.5} alignItems="center">
-        <Box
-          sx={{
-            width: 45,
-            height: 45,
-            borderRadius: "50%",
-            border: "2px solid #00A76F",
-            bgcolor: "#ffffff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
-          }}
-        >
-          <Typography
+          {/* ROW 2 : COUPON - YIELD */}
+          <Grid item xs={6}>
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Coupon
+              </Typography>
+              <Typography variant="caption">{item?.coupon_rate_percent || 'N.A.'}%</Typography>
+            </Stack>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Yield
+              </Typography>
+              <Typography variant="caption">{item?.ytm_percent || 'N.A.'}%</Typography>
+            </Stack>
+          </Grid>
+
+          {/* ROW 3 : IP FREQUENCY - MATURITY DATE */}
+          <Grid item xs={6}>
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                IP Frequency
+              </Typography>
+              <Typography variant="caption">
+                {item?.interest_payment_frequency || 'N.A.'}
+              </Typography>
+            </Stack>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Maturity Date
+              </Typography>
+              <Typography variant="caption">{item?.maturity_date || 'N.A.'}</Typography>
+            </Stack>
+          </Grid>
+
+          {/* ROW 4 : TYPE OF BOND */}
+          <Grid item xs={6}>
+            <Stack spacing={0.5}>
+              <Typography variant="caption" sx={{ opacity: 0.72 }}>
+                Type of Bond
+              </Typography>
+
+              <Typography
+                variant="caption"
+                noWrap
+                sx={{
+                  maxWidth: '90px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {item?.issuer_type || 'N.A.'}
+              </Typography>
+            </Stack>
+          </Grid>
+
+          <Grid item xs={6}></Grid>
+        </Grid>
+
+        {/* BUTTON */}
+        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+          <Button
+            size="small"
+            variant="contained"
+            onClick={handleKnowMore}
             sx={{
-              fontSize: "14px",
-              color: "#00A76F",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              padding: "4px",
+              bgcolor: '#fff',
+              color: theme.palette.primary.main,
+              borderRadius: 20,
+              py: 1,
+              px: 3,
+              fontWeight: 600,
+              '&:hover': {
+                bgcolor: alpha('#fff', 0.9),
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              },
             }}
           >
-            {item?.ratings?.[0]?.rating || "N.A."}
-          </Typography>
+            Know More
+          </Button>
         </Box>
-      </Stack>
-    </Grid>
-
-    {/* ROW 2 : COUPON - YIELD */}
-    <Grid item xs={6}>
-      <Stack spacing={0.5}>
-        <Typography variant="caption" sx={{ opacity: 0.72 }}>
-          Coupon
-        </Typography>
-        <Typography variant="caption">
-          {item?.coupon_rate_percent || "N.A."}%
-        </Typography>
-      </Stack>
-    </Grid>
-
-    <Grid item xs={6}>
-      <Stack spacing={0.5}>
-        <Typography variant="caption" sx={{ opacity: 0.72 }}>
-          Yield
-        </Typography>
-        <Typography variant="caption">
-          {item?.ytm_percent || "N.A."}%
-        </Typography>
-      </Stack>
-    </Grid>
-
-    {/* ROW 3 : IP FREQUENCY - MATURITY DATE */}
-    <Grid item xs={6}>
-      <Stack spacing={0.5}>
-        <Typography variant="caption" sx={{ opacity: 0.72 }}>
-          IP Frequency
-        </Typography>
-        <Typography variant="caption">
-          {item?.interest_payment_frequency || "N.A."}
-        </Typography>
-      </Stack>
-    </Grid>
-
-    <Grid item xs={6}>
-      <Stack spacing={0.5}>
-        <Typography variant="caption" sx={{ opacity: 0.72 }}>
-          Maturity Date
-        </Typography>
-        <Typography variant="caption">
-          {item?.maturity_date || "N.A."}
-        </Typography>
-      </Stack>
-    </Grid>
-
-    {/* ROW 4 : TYPE OF BOND */}
-    <Grid item xs={6}>
-      <Stack spacing={0.5}>
-        <Typography variant="caption" sx={{ opacity: 0.72 }}>
-          Type of Bond
-        </Typography>
-
-        <Typography
-          variant="caption"
-          noWrap
-          sx={{
-            maxWidth: "90px",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {item?.issuer_type || "N.A."}
-        </Typography>
-      </Stack>
-    </Grid>
-
-    <Grid item xs={6}></Grid>
-
-  </Grid>
-
-  {/* BUTTON */}
-  <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
-    <Button
-      size="small"
-      variant="contained"
-      onClick={handleKnowMore}
-      sx={{
-        bgcolor: "#fff",
-        color: theme.palette.primary.main,
-        borderRadius: 20,
-        py: 1,
-        px: 3,
-        fontWeight: 600,
-        "&:hover": {
-          bgcolor: alpha("#fff", 0.9),
-          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-        },
-      }}
-    >
-      Know More
-    </Button>
-  </Box>
-</Box>
-
-
+      </Box>
     </Box>
   );
 }

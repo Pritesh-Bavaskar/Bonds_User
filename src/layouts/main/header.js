@@ -90,7 +90,7 @@ export default function Header() {
 
           {mdUp && <NavDesktop offsetTop={offsetTop} data={navConfig} />}
 
-          <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
+          <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}  spacing={{ xs: 1.5, md: 2 }} >
             <Button
               variant="contained"
               target="_blank"
@@ -110,7 +110,7 @@ export default function Header() {
               Sign up
             </Button>
 
-            {mdUp && (
+           
               <LoginButton
                 sx={{
                   paddingX: '24px',
@@ -123,7 +123,7 @@ export default function Header() {
                   borderRadius: '4px',
                 }}
               />
-            )}
+        
 
             {/* <SettingsButton
               sx={{

@@ -55,7 +55,7 @@ export default function HomeWhatBonds() {
         <Typography
           align="center"
           variant="h5"
-          color="#18191B"
+          color="#637381"
           sx={{ mt: 4, mx: 'auto', fontWeight: 300 }}
         >
           Find government and corporate bonds with detailed coupon rates, yields, and maturity
@@ -114,7 +114,7 @@ export default function HomeWhatBonds() {
                     <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
                       {item.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ mt: 1.2 }}>
+                    <Typography variant="body2" sx={{ mt: 1.2, color:'#637381' }}>
                       {item.description}
                     </Typography>
                   </Box>

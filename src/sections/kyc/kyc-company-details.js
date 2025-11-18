@@ -1,4 +1,5 @@
 import { m } from 'framer-motion';
+import * as Yup from 'yup';
 // @mui
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
@@ -25,6 +26,8 @@ import KYCFooter from './kyc-footer';
 import { useForm, useWatch } from 'react-hook-form';
 import { useRouter } from 'src/routes/hook';
 import KYCStepper from './kyc-stepper';
+import { yupResolver } from '@hookform/resolvers/yup';
+import YupErrorMessage from 'src/components/error-field/yup-error-messages';
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +38,11 @@ export default function KYCCompanyDetails() {
   const [loadingDocs, setLoadingDocs] = useState(false);
   const base = process.env.REACT_APP_HOST_API || '';
   const companyId = sessionStorage.getItem('company_information_id');
+
+  const CompanyDetailSchema = Yup.object().shape({
+    certificateOfIncorporation: Yup.mixed().required('Certificate of Incorporation is required'),
+  });
+
   useEffect(() => {
     const run = async () => {
       setLoadingDocs(true);
@@ -71,7 +79,9 @@ export default function KYCCompanyDetails() {
     run();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [companyId, base]);
+
   const methods = useForm({
+    resolver: yupResolver(CompanyDetailSchema),
     defaultValues: {
       certificateOfIncorporation: null,
       moaAoa: null,

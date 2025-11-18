@@ -16,7 +16,8 @@ export default function AboutHero() {
     <Box
       sx={{
         py: { xs: 10, md: 15 },
-        bgcolor: '#e8f1fc', // light blue background similar to screenshot
+        // bgcolor: '#e8f1fc', // light blue background similar to screenshot
+        backgroundImage: 'url(/assets/images/about/hero_about.png)',
       }}
     >
       <Container component={MotionContainer}>

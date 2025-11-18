@@ -67,7 +67,7 @@ export default function KycAddressInfo() {
     registeredState: Yup.string().required('State is required'),
     registeredPincode: Yup.string()
       .required('Pincode is required')
-      .matches(/^[0-9]{6}$/, 'Must be a valid 6-digit pincode'),
+      .matches(/^[0-9]+$/, 'Must be a valid pincode'),
     registeredEmail: Yup.string().email('Invalid email').required('Email is required'),
     registeredPhone: Yup.string()
       .required('Phone number is required')
@@ -115,7 +115,7 @@ export default function KycAddressInfo() {
     defaultValues: {
       registeredAddressLine1: '',
       registeredAddressLine2: '',
-      registeredCountry: '',
+      registeredCountry: 'India',
       registeredCity: '',
       registeredState: '',
       registeredPincode: '',
@@ -125,7 +125,7 @@ export default function KycAddressInfo() {
       correspondenceAddressLine1: '',
       correspondenceAddressLine2: '',
       correspondenceCity: '',
-      correspondenceCountry: '',
+      correspondenceCountry: 'India',
       correspondenceState: '',
       correspondencePincode: '',
       correspondenceEmail: '',
@@ -174,7 +174,7 @@ export default function KycAddressInfo() {
     const fetchAddress = async () => {
       const base = process.env.REACT_APP_HOST_API || '';
       try {
-        const res = await fetch(`${base}/api/kyc/issuer_kyc/company/${companyId}/address/`, {
+        const res = await fetch(`${base}/api/kyc/issuer_kyc/company/address/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -207,7 +207,7 @@ export default function KycAddressInfo() {
         setValue('registeredAddressLine2', toStr(registered.registered_office_line2), {
           shouldValidate: true,
         });
-        setValue('registeredCountry', toStr(registered.Country), { shouldValidate: true });
+        // setValue('registeredCountry', toStr(registered.country), { shouldValidate: true });
         setValue('registeredCity', toStr(registered.city), { shouldValidate: true });
         setValue('registeredState', toStr(registered.state_ut), { shouldValidate: true });
         setValue('registeredPincode', toStr(registered.pin_code), { shouldValidate: true });
@@ -233,7 +233,7 @@ export default function KycAddressInfo() {
           { shouldValidate: true }
         );
         setValue(
-          'correspondenceCity',
+          'correspondenceCountry',
           toStr(correspondence.country ?? correspondence.correspondence_country),
           { shouldValidate: true }
         );
@@ -264,8 +264,8 @@ export default function KycAddressInfo() {
             toStr(correspondence.registered_office ?? correspondence.correspondence_address) &&
           toStr(registered.city) ===
             toStr(correspondence.city ?? correspondence.correspondence_city) &&
-            toStr(registered.country) ===
-            toStr(correspondence.city ?? correspondence.correspondence_country) &&
+            // toStr(registered.country) ===
+            // toStr(correspondence.city ?? correspondence.correspondence_country) &&
           toStr(registered.state_ut) ===
             toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut) &&
           toStr(registered.pin_code) ===
@@ -330,7 +330,7 @@ export default function KycAddressInfo() {
     try {
       setIsUploading(true);
       const method = addressExists ? 'PUT' : 'POST';
-      const res = await fetch(`${base}/api/kyc/issuer_kyc/company/${companyId}/address/`, {
+      const res = await fetch(`${base}/api/kyc/issuer_kyc/company/address/`, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -645,15 +645,32 @@ export default function KycAddressInfo() {
                         fullWidth
                       />
                       <Box sx={{ display: 'flex', gap: 2 }}>
-                        <RHFTextField name="registeredCountry" label="Country *" fullWidth />
+                        <RHFTextField name="registeredCountry" label="Country *" fullWidth disabled/>
                         <RHFTextField name="registeredCity" label="City *" fullWidth />
                         <RHFTextField name="registeredState" label="State *" fullWidth />
                       </Box>
                       <Box sx={{ display: 'flex', gap: 2 }}>
-                        <RHFTextField name="registeredEmail" label="Email *" fullWidth />
-                        <RHFTextField name="registeredPhone" label="Phone No. *" fullWidth />
+                        <RHFTextField name="registeredEmail" label="Email *" fullWidth disabled />
+                        <RHFTextField
+                          name="registeredPhone"
+                          label="Phone No. *"
+                          fullWidth
+                          disabled
+                        />
                       </Box>
-                      <RHFTextField name="registeredPincode" label="Pincode *" fullWidth />
+                      <RHFTextField
+                        name="registeredPincode"
+                        label="Pincode *"
+                        inputProps={{
+                          inputMode: 'numeric',
+                          pattern: '[0-9]*',
+                        }}
+                        onChange={(e) => {
+                          const onlyNums = e.target.value.replace(/\D/g, '');
+                          setValue('registeredPincode', onlyNums, { shouldValidate: true });
+                        }}
+                        fullWidth
+                      />
                     </Stack>
                   </Grid>
 
@@ -664,7 +681,7 @@ export default function KycAddressInfo() {
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        mb: 2,
+                        mb: 3,
                       }}
                     >
                       <Typography variant="h5" sx={{ fontWeight: 600, color: 'primary.main' }}>
@@ -705,7 +722,7 @@ export default function KycAddressInfo() {
                           name="correspondenceCountry"
                           label="Country *"
                           fullWidth
-                          disabled={sameAsRegistered}
+                          disabled
                         />
 
                         <RHFTextField
@@ -727,19 +744,27 @@ export default function KycAddressInfo() {
                           name="correspondenceEmail"
                           label="Email *"
                           fullWidth
-                          disabled={sameAsRegistered}
+                          disabled
                         />
                         <RHFTextField
                           name="correspondencePhone"
                           label="Phone No. *"
                           fullWidth
-                          disabled={sameAsRegistered}
+                          disabled
                         />
                       </Box>
                       <RHFTextField
                         name="correspondencePincode"
                         label="Pincode *"
                         fullWidth
+                        inputProps={{
+                          inputMode: 'numeric',
+                          pattern: '[0-9]*',
+                        }}
+                        onChange={(e) => {
+                          const onlyNums = e.target.value.replace(/\D/g, '');
+                          setValue('registeredPincode', onlyNums, { shouldValidate: true });
+                        }}
                         disabled={sameAsRegistered}
                       />
                     </Stack>

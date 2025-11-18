@@ -32,6 +32,7 @@ export default function FaqsComponent() {
             maxWidth: '893px',
             margin: '0 auto',
             pb: '50px',
+            color:'#637381'
           }}
         >
           Get answers to common questions about unlisted bond investments and private placements.
@@ -45,7 +46,7 @@ export default function FaqsComponent() {
             </AccordionSummary>
 
             <AccordionDetails>
-              <Typography>{accordion.detail}</Typography>
+              <Typography sx={{color:'#637381'}}>{accordion.detail}</Typography>
             </AccordionDetails>
           </Accordion>
         ))}
