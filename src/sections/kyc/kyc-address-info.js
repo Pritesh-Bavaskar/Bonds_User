@@ -67,7 +67,7 @@ export default function KycAddressInfo() {
     registeredState: Yup.string().required('State is required'),
     registeredPincode: Yup.string()
       .required('Pincode is required')
-      .matches(/^[0-9]{6}$/, 'Must be a valid 6-digit pincode'),
+      .matches(/^[0-9]+$/, 'Must be a valid pincode'),
     registeredEmail: Yup.string().email('Invalid email').required('Email is required'),
     registeredPhone: Yup.string()
       .required('Phone number is required')
@@ -604,10 +604,27 @@ export default function KycAddressInfo() {
                         <RHFTextField name="registeredState" label="State *" fullWidth />
                       </Box>
                       <Box sx={{ display: 'flex', gap: 2 }}>
-                        <RHFTextField name="registeredEmail" label="Email *" fullWidth />
-                        <RHFTextField name="registeredPhone" label="Phone No. *" fullWidth />
+                        <RHFTextField name="registeredEmail" label="Email *" fullWidth disabled />
+                        <RHFTextField
+                          name="registeredPhone"
+                          label="Phone No. *"
+                          fullWidth
+                          disabled
+                        />
                       </Box>
-                      <RHFTextField name="registeredPincode" label="Pincode *" fullWidth />
+                      <RHFTextField
+                        name="registeredPincode"
+                        label="Pincode *"
+                        inputProps={{
+                          inputMode: 'numeric',
+                          pattern: '[0-9]*',
+                        }}
+                        onChange={(e) => {
+                          const onlyNums = e.target.value.replace(/\D/g, '');
+                          setValue('registeredPincode', onlyNums, { shouldValidate: true });
+                        }}
+                        fullWidth
+                      />
                     </Stack>
                   </Grid>
 
@@ -618,7 +635,7 @@ export default function KycAddressInfo() {
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        mb: 2,
+                        mb: 3,
                       }}
                     >
                       <Typography variant="h5" sx={{ fontWeight: 600, color: 'primary.main' }}>
@@ -681,19 +698,27 @@ export default function KycAddressInfo() {
                           name="correspondenceEmail"
                           label="Email *"
                           fullWidth
-                          disabled={sameAsRegistered}
+                          disabled
                         />
                         <RHFTextField
                           name="correspondencePhone"
                           label="Phone No. *"
                           fullWidth
-                          disabled={sameAsRegistered}
+                          disabled
                         />
                       </Box>
                       <RHFTextField
                         name="correspondencePincode"
                         label="Pincode *"
                         fullWidth
+                        inputProps={{
+                          inputMode: 'numeric',
+                          pattern: '[0-9]*',
+                        }}
+                        onChange={(e) => {
+                          const onlyNums = e.target.value.replace(/\D/g, '');
+                          setValue('registeredPincode', onlyNums, { shouldValidate: true });
+                        }}
                         disabled={sameAsRegistered}
                       />
                     </Stack>

@@ -213,7 +213,7 @@ export default function KYCAddSignatoriesForm({
           <Box rowGap={3} display="grid" mt={2}>
             <RHFTextField
               name="name"
-              label="Name"
+              label="Name*"
               InputLabelProps={{ shrink: true }}
               disabled={isViewMode}
             />
@@ -221,7 +221,7 @@ export default function KYCAddSignatoriesForm({
 
             <RHFTextField
               name="email"
-              label="Email"
+              label="Email*"
               type="email"
               InputLabelProps={{ shrink: true }}
               disabled={isViewMode}
@@ -230,7 +230,7 @@ export default function KYCAddSignatoriesForm({
 
             <RHFTextField
               name="phoneNumber"
-              label="Phone Number"
+              label="Phone Number*"
               type="number"
               InputLabelProps={{ shrink: true }}
               disabled={isViewMode}
@@ -240,7 +240,7 @@ export default function KYCAddSignatoriesForm({
 
             <RHFTextField
               name="din"
-              label="DIN"
+              label="DIN*"
               InputLabelProps={{ shrink: true }}
               disabled={isViewMode}
             />
@@ -248,7 +248,7 @@ export default function KYCAddSignatoriesForm({
 
             <RHFSelect
               name="role"
-              label="Designation"
+              label="Designation*"
               InputLabelProps={{ shrink: true }}
               disabled={isViewMode}
             >
@@ -264,13 +264,13 @@ export default function KYCAddSignatoriesForm({
               <>
                 <RHFTextField
                   name="panNumber"
-                  label="PAN Number"
+                  label="PAN Number*"
                   InputLabelProps={{ shrink: true }}
                   disabled
                 />
                 <RHFTextField
                   name="aadhaarNumber"
-                  label="Aadhaar Number"
+                  label="Aadhaar Number*"
                   InputLabelProps={{ shrink: true }}
                   disabled
                 />
@@ -279,7 +279,7 @@ export default function KYCAddSignatoriesForm({
               <>
                 <RHFFileUploadBox
                   name="panCard"
-                  label="Upload PAN (Required)"
+                  label="Upload PAN*"
                   accept="application/pdf,image/*"
                   fileType="pan"
                   required={!isEditMode}
@@ -289,7 +289,7 @@ export default function KYCAddSignatoriesForm({
 
                 <RHFFileUploadBox
                   name="aadhaarCard"
-                  label="Upload Aadhaar (Required)"
+                  label="Upload Aadhaar*"
                   accept="application/pdf,image/*"
                   fileType="aadhaar"
                   required={!isEditMode}

@@ -278,7 +278,7 @@ export default function KYCBankDetails() {
         </Stack>
         <Stack direction="column" spacing={2} sx={{ my: 2, alignItems: 'start' }}>
           <Typography variant="h6" sx={{ fontWeight: 500 }}>
-            Select Document Type:
+            Select Document Type:*
           </Typography>
           <Box sx={{ width: 200 }}>
             <RHFSelect
@@ -410,7 +410,7 @@ export default function KYCBankDetails() {
           {watch('documentType') && (
             <RHFFileUploadBox
               name="addressProof"
-              label="Upload address proof"
+              label="Upload address proof*"
               icon="mdi:file-document-outline"
               color="#1e88e5"
               acceptedTypes="pdf,xls,docx,jpeg"
@@ -427,7 +427,7 @@ export default function KYCBankDetails() {
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {/* Bank Name */}
                 <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>Bank Name</Box>
+                  <Box sx={{ mb: 1, fontWeight: 600 }}>Bank Name*</Box>
                   <RHFSelect
                     name="bankName"
                     placeholder="Select Bank"
@@ -450,7 +450,7 @@ export default function KYCBankDetails() {
 
                 {/* Branch Name */}
                 <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>Branch Name</Box>
+                  <Box sx={{ mb: 1, fontWeight: 600 }}>Branch Name*</Box>
                   <RHFTextField name="branchName" placeholder="Enter Branch Name" />
                   <Typography
                     variant="caption"
@@ -462,7 +462,7 @@ export default function KYCBankDetails() {
 
                 {/* Account Number */}
                 <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>Account Number</Box>
+                  <Box sx={{ mb: 1, fontWeight: 600 }}>Account Number*</Box>
                   <RHFTextField name="accountNumber" placeholder="Enter Account Number" />
                   <Typography
                     variant="caption"
@@ -474,7 +474,7 @@ export default function KYCBankDetails() {
 
                 {/* IFSC Code + Verify */}
                 <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>IFSC Code</Box>
+                  <Box sx={{ mb: 1, fontWeight: 600 }}>IFSC Code*</Box>
                   <RHFTextField name="ifscCode" placeholder="Enter IFSC Code (E.G., SBIN001234)" />
                   <Typography
                     variant="caption"
@@ -496,7 +496,7 @@ export default function KYCBankDetails() {
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {/* Account Type */}
                 <Box>
-                  <Box sx={{ mb: 1, fontWeight: 600 }}>Account Type</Box>
+                  <Box sx={{ mb: 1, fontWeight: 600 }}>Account Type*</Box>
                   <RHFSelect name="accountType" placeholder="Select Account Type">
                     <MenuItem value="">Select Account Type</MenuItem>
                     <MenuItem value="SAVINGS">Savings</MenuItem>
@@ -548,7 +548,7 @@ export default function KYCBankDetails() {
                 <Grid container spacing={3}>
                   <Grid xs={12} md={6}>
                     <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>DP ID</Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>DP ID*</Box>
                       <RHFTextField name="dpId" placeholder="Enter DP ID (8 Digits)" />
                       <Typography
                         variant="caption"
@@ -560,7 +560,7 @@ export default function KYCBankDetails() {
                   </Grid>
                   <Grid xs={12} md={6}>
                     <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>DP Name</Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>DP Name*</Box>
                       <RHFTextField name="dpName" placeholder="zerodha broking ltd (fetch)" />
                       <Typography
                         variant="caption"
@@ -573,7 +573,7 @@ export default function KYCBankDetails() {
 
                   <Grid xs={12} md={6}>
                     <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>Client ID / BO ID</Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>Client ID / BO ID*</Box>
                       <RHFTextField name="beneficiaryClientId" placeholder="123456678" />
                       <Typography
                         variant="caption"
@@ -585,7 +585,7 @@ export default function KYCBankDetails() {
                   </Grid>
                   <Grid xs={12} md={6}>
                     <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>Demat ID</Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>Demat ID*</Box>
                       <RHFTextField
                         name="dematAccountNumber"
                         placeholder="Enter 16 digit Number "
@@ -601,7 +601,7 @@ export default function KYCBankDetails() {
 
                   <Grid xs={12} md={6}>
                     <Box>
-                      <Box sx={{ mb: 1, fontWeight: 600 }}>Depository</Box>
+                      <Box sx={{ mb: 1, fontWeight: 600 }}>Depository*</Box>
                       <RHFSelect
                         name="depository"
                         placeholder="Select Depository"

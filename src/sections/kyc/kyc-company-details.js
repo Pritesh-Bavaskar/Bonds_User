@@ -1,4 +1,5 @@
 import { m } from 'framer-motion';
+import * as Yup from 'yup';
 // @mui
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
@@ -23,6 +24,8 @@ import KYCFooter from './kyc-footer';
 import { useForm, useWatch } from 'react-hook-form';
 import { useRouter } from 'src/routes/hook';
 import KYCStepper from './kyc-stepper';
+import { yupResolver } from '@hookform/resolvers/yup';
+import YupErrorMessage from 'src/components/error-field/yup-error-messages';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +36,11 @@ export default function KYCCompanyDetails() {
   const [loadingDocs, setLoadingDocs] = useState(false);
   const base = process.env.REACT_APP_HOST_API || '';
   const companyId = sessionStorage.getItem('company_information_id');
+
+  const CompanyDetailSchema = Yup.object().shape({
+    certificateOfIncorporation: Yup.mixed().required('Certificate of Incorporation is required'),
+  });
+
   useEffect(() => {
     const run = async () => {
       setLoadingDocs(true);
@@ -69,7 +77,9 @@ export default function KYCCompanyDetails() {
     run();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [companyId, base]);
+
   const methods = useForm({
+    resolver: yupResolver(CompanyDetailSchema),
     defaultValues: {
       certificateOfIncorporation: null,
       moaAoa: null,
@@ -136,30 +146,33 @@ export default function KYCCompanyDetails() {
     const bulkFd = new FormData();
     // Map selects (text values)
     if (form.moaAoaType) bulkFd.append('moa_aoa_type', upper(form.moaAoaType));
-    if (form.msmeUdyamAvailability) bulkFd.append('msme_udyam_type', upper(form.msmeUdyamAvailability));
+    if (form.msmeUdyamAvailability)
+      bulkFd.append('msme_udyam_type', upper(form.msmeUdyamAvailability));
 
     // Certificate of Incorporation
     const exCert = findDoc('CERTIFICATE_INC');
-    if (!(tryQueuePut(form.certificateOfIncorporation, exCert))) {
-      if (form.certificateOfIncorporation) bulkFd.append('certificate_of_incorporation', form.certificateOfIncorporation);
+    if (!tryQueuePut(form.certificateOfIncorporation, exCert)) {
+      if (form.certificateOfIncorporation)
+        bulkFd.append('certificate_of_incorporation', form.certificateOfIncorporation);
     }
 
     // MoA/AoA combined upload field
     const exMoa = findDoc('MOA') || findDoc('AOA');
-    if (!(tryQueuePut(form.moaAoa, exMoa))) {
+    if (!tryQueuePut(form.moaAoa, exMoa)) {
       if (form.moaAoa) bulkFd.append('moa_aoa_file', form.moaAoa);
     }
 
     // MSME/Udyam combined field
     const exMsme = findDoc('MSME') || findDoc('UDYAM');
-    if (!(tryQueuePut(form.msmeUdyamCertificate, exMsme))) {
+    if (!tryQueuePut(form.msmeUdyamCertificate, exMsme)) {
       if (form.msmeUdyamCertificate) bulkFd.append('msme_udyam_file', form.msmeUdyamCertificate);
     }
 
     // IEC
     const exIec = findDoc('IEC');
-    if (!(tryQueuePut(form.importExportCertificate, exIec))) {
-      if (form.importExportCertificate) bulkFd.append('import_export_certificate', form.importExportCertificate);
+    if (!tryQueuePut(form.importExportCertificate, exIec)) {
+      if (form.importExportCertificate)
+        bulkFd.append('import_export_certificate', form.importExportCertificate);
     }
 
     try {
@@ -175,7 +188,14 @@ export default function KYCCompanyDetails() {
       }
 
       // If there are files to POST in bulk, do it
-      const hasBulkFiles = Array.from(bulkFd.keys()).some((k) => ['certificate_of_incorporation', 'moa_aoa_file', 'msme_udyam_file', 'import_export_certificate'].includes(k));
+      const hasBulkFiles = Array.from(bulkFd.keys()).some((k) =>
+        [
+          'certificate_of_incorporation',
+          'moa_aoa_file',
+          'msme_udyam_file',
+          'import_export_certificate',
+        ].includes(k)
+      );
       if (hasBulkFiles) {
         const res = await fetch(bulkUrl, {
           method: 'POST',
@@ -211,7 +231,8 @@ export default function KYCCompanyDetails() {
       <FormProvider methods={methods} onSubmit={onSubmit}>
         {(() => {
           const byName = (n) => (docs || []).find((d) => d.document_name === n);
-          const toExisting = (d) => (d ? { name: d.document_name_display || d.document_name } : null);
+          const toExisting = (d) =>
+            d ? { name: d.document_name_display || d.document_name } : null;
           var ex_CERT = toExisting(byName('CERTIFICATE_INC'));
           var ex_MOA = toExisting(byName('MOA'));
           var ex_MSME = toExisting(byName('MSME'));
@@ -221,13 +242,24 @@ export default function KYCCompanyDetails() {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, mt: 3 }}>
           <RHFFileUploadBox
             name="certificateOfIncorporation"
-            label="Certificate of Incorporation"
+            label="Certificate of Incorporation*"
             icon="mdi:certificate-outline"
             color="#1e88e5"
             acceptedTypes="pdf,xls,docx,jpeg"
             maxSizeMB={10}
-            existing={(docs || []).find((d) => d.document_name === 'CERTIFICATE_INC') ? { name: ((docs || []).find((d) => d.document_name === 'CERTIFICATE_INC').document_name_display || (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC').document_name), status: (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC').status } : null}
+            existing={
+              (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC')
+                ? {
+                    name:
+                      (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC')
+                        .document_name_display ||
+                      (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC').document_name,
+                    status: (docs || []).find((d) => d.document_name === 'CERTIFICATE_INC').status,
+                  }
+                : null
+            }
           />
+          <YupErrorMessage name="certificateOfIncorporation" />
 
           <RHFSelect
             name="moaAoaType"
@@ -240,7 +272,9 @@ export default function KYCCompanyDetails() {
             {/* <MenuItem value="both">Both (MoA + AoA Combined)</MenuItem> */}
           </RHFSelect>
           {(() => {
-            const moad = (docs || []).find((d) => d.document_name === 'MOA' || d.document_name === 'AOA');
+            const moad = (docs || []).find(
+              (d) => d.document_name === 'MOA' || d.document_name === 'AOA'
+            );
             return moad ? (
               <Typography variant="caption" color="text.secondary">
                 Selected: {moad.document_name_display || moad.document_name}
@@ -256,7 +290,16 @@ export default function KYCCompanyDetails() {
             acceptedTypes="pdf,xls,docx,jpeg"
             maxSizeMB={10}
             // multiple={moaAoaType === 'both'}
-            existing={(docs || []).find((d) => d.document_name === 'MOA') ? { name: ((docs || []).find((d) => d.document_name === 'MOA').document_name_display || (docs || []).find((d) => d.document_name === 'MOA').document_name), status: (docs || []).find((d) => d.document_name === 'MOA').status } : null}
+            existing={
+              (docs || []).find((d) => d.document_name === 'MOA')
+                ? {
+                    name:
+                      (docs || []).find((d) => d.document_name === 'MOA').document_name_display ||
+                      (docs || []).find((d) => d.document_name === 'MOA').document_name,
+                    status: (docs || []).find((d) => d.document_name === 'MOA').status,
+                  }
+                : null
+            }
           />
 
           <RHFSelect
@@ -270,7 +313,9 @@ export default function KYCCompanyDetails() {
             {/* <MenuItem value="both">Both (MSME + Udyam Certificate)</MenuItem> */}
           </RHFSelect>
           {(() => {
-            const md = (docs || []).find((d) => d.document_name === 'MSME' || d.document_name === 'UDYAM');
+            const md = (docs || []).find(
+              (d) => d.document_name === 'MSME' || d.document_name === 'UDYAM'
+            );
             return md ? (
               <Typography variant="caption" color="text.secondary">
                 Selected: {md.document_name_display || md.document_name}
@@ -286,7 +331,16 @@ export default function KYCCompanyDetails() {
             acceptedTypes="pdf,xls,docx,jpeg"
             maxSizeMB={10}
             // multiple={msmeUdyamAvailability === 'both'}
-            existing={(docs || []).find((d) => d.document_name === 'MSME') ? { name: ((docs || []).find((d) => d.document_name === 'MSME').document_name_display || (docs || []).find((d) => d.document_name === 'MSME').document_name), status: (docs || []).find((d) => d.document_name === 'MSME').status } : null}
+            existing={
+              (docs || []).find((d) => d.document_name === 'MSME')
+                ? {
+                    name:
+                      (docs || []).find((d) => d.document_name === 'MSME').document_name_display ||
+                      (docs || []).find((d) => d.document_name === 'MSME').document_name,
+                    status: (docs || []).find((d) => d.document_name === 'MSME').status,
+                  }
+                : null
+            }
           />
 
           <RHFFileUploadBox
@@ -296,7 +350,16 @@ export default function KYCCompanyDetails() {
             color="#1e88e5"
             acceptedTypes="pdf,xls,docx,jpeg"
             maxSizeMB={10}
-            existing={(docs || []).find((d) => d.document_name === 'IEC') ? { name: ((docs || []).find((d) => d.document_name === 'IEC').document_name_display || (docs || []).find((d) => d.document_name === 'IEC').document_name), status: (docs || []).find((d) => d.document_name === 'IEC').status } : null}
+            existing={
+              (docs || []).find((d) => d.document_name === 'IEC')
+                ? {
+                    name:
+                      (docs || []).find((d) => d.document_name === 'IEC').document_name_display ||
+                      (docs || []).find((d) => d.document_name === 'IEC').document_name,
+                    status: (docs || []).find((d) => d.document_name === 'IEC').status,
+                  }
+                : null
+            }
           />
         </Box>
 
@@ -304,11 +367,7 @@ export default function KYCCompanyDetails() {
           <Button component={RouterLink} href={paths.KYCAddressInfo} variant="outlined">
             Back
           </Button>
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            loading={isSubmitting}
-          >
+          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
             Next
           </LoadingButton>
         </Box>
