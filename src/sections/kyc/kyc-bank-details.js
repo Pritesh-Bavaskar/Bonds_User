@@ -126,7 +126,7 @@ export default function KYCBankDetails() {
       };
 
       const res = await axiosInstance.post(
-        `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/verify/`,
+        `/api/kyc/issuer_kyc/bank-details/verify/`,
         payload,
         {
           headers: { 'Content-Type': 'application/json' },
@@ -139,7 +139,7 @@ export default function KYCBankDetails() {
 
       // ✅ Open the Demat section on success
       const resSubmit = await axiosInstance.post(
-        `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/submit/`,
+        `/api/kyc/issuer_kyc/bank-details/submit/`,
         bankPayload,
         {
           headers: { 'Content-Type': 'application/json' },
@@ -191,7 +191,7 @@ export default function KYCBankDetails() {
       formData.append('file', file); // ✅ backend expects 'document'
 
       const res = await axiosInstance.post(
-        `/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/extract/`,
+        `/api/kyc/issuer_kyc/bank-details/extract/`,
         formData,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -246,7 +246,7 @@ export default function KYCBankDetails() {
         // axiosInstance.post(`/api/kyc/issuer_kyc/bank-details/${COMPANY_ID}/submit/`, bankPayload, {
         //   headers: { 'Content-Type': 'application/json' },
         // }),
-        axiosInstance.post(`/api/kyc/issuer_kyc/company/${COMPANY_ID}/demat/`, dematPayload, {
+        axiosInstance.post(`/api/kyc/issuer_kyc/company/demat/`, dematPayload, {
           headers: { 'Content-Type': 'application/json' },
         }),
       ]);
@@ -461,7 +461,7 @@ export default function KYCBankDetails() {
                   {/* Bank Name */}
                   <Box>
                     <Box sx={{ mb: 1, fontWeight: 600 }}>Bank Name</Box>
-                    <RHFSelect
+                    {/* <RHFSelect
                       name="bankName"
                       placeholder="Select Bank"
                       SelectProps={{
@@ -471,8 +471,9 @@ export default function KYCBankDetails() {
                       }}
                     >
                       <MenuItem value="">Select Bank</MenuItem>
-                      {/* Add banks list if available */}
-                    </RHFSelect>
+                    </RHFSelect> */}
+                    <RHFTextField name="bankName" placeholder="Enter Name"
+                    />
                     <Typography
                       variant="caption"
                       sx={{ color: 'text.secondary', display: 'block', mt: 0.75 }}
