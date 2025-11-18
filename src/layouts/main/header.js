@@ -26,6 +26,7 @@ import NavDesktop from './nav/desktop';
 //
 import { SettingsButton, HeaderShadow, LoginButton } from '../_common';
 import { lineHeight } from '@mui/system';
+import { RouterLink } from 'src/routes/components';
 
 // ----------------------------------------------------------------------
 
@@ -83,19 +84,22 @@ export default function Header() {
               </Link>
             }
           > */}
-            <Logo />
+          <Logo />
           {/* </Badge> */}
 
           {/* <Box sx={{ flexGrow: 1 }} /> */}
 
           {mdUp && <NavDesktop offsetTop={offsetTop} data={navConfig} />}
 
-          <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}  spacing={{ xs: 1.5, md: 2 }} >
+          <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }} spacing={{ xs: 1.5, md: 2 }} >
             <Button
               variant="contained"
-              target="_blank"
-              rel="noopener"
+              // target="_blank"
+              // rel="noopener"
               // href={paths.minimalUI}
+              component={RouterLink}
+              href={paths.comingSoon}
+
               sx={{
                 paddingX: '24px',
                 paddingY: '4px',
@@ -110,20 +114,21 @@ export default function Header() {
               Sign up
             </Button>
 
-           
-              <LoginButton
-                sx={{
-                  paddingX: '24px',
-                  paddingY: '3px',
-                  lineHeight: '24px',
-                  color: 'text.primary',
-                  borderColor: 'text.primary',
-                  fontWeight: 700,
-                  border: '1px solid',
-                  borderRadius: '4px',
-                }}
-              />
-        
+
+            <LoginButton
+      
+              sx={{
+                paddingX: '24px',
+                paddingY: '3px',
+                lineHeight: '24px',
+                color: 'text.primary',
+                borderColor: 'text.primary',
+                fontWeight: 700,
+                border: '1px solid',
+                borderRadius: '4px',
+              }}
+            />
+
 
             {/* <SettingsButton
               sx={{

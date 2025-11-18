@@ -3,11 +3,15 @@ import { m } from 'framer-motion';
 import { styled } from '@mui/material/styles';
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import MultiStepLoginDialog from '../user/issuer-login';
+import { useState } from 'react';
+import { RouterLink } from 'src/routes/components';
 // components
 
 // ----------------------------------------------------------------------
 
 export default function HomeGetStarted() {
+  const [openLogin, setOpenLogin] = useState(false);
   return (
     <Container maxWidth="lg" sx={{ pt: { xs: 6, md: 15 } }}>
       <Box
@@ -21,15 +25,16 @@ export default function HomeGetStarted() {
         <Typography variant="h3" sx={{ mb: 2, fontWeight: 500 }}>
           Ready to Get Started?
         </Typography>
-        
-        <Typography variant="h4" sx={{ mb: 4, fontWeight: 400}}>
+
+        <Typography variant="h4" sx={{ mb: 4, fontWeight: 400 }}>
           Complete your registration today and join 500+ issuers raising capital on our platform
         </Typography>
-        
+
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
           <Button
             variant="contained"
             size="large"
+            onClick={() => setOpenLogin(true)}
             sx={{
               bgcolor: 'black',
               color: 'white',
@@ -42,9 +47,15 @@ export default function HomeGetStarted() {
           >
             Start Registration
           </Button>
-          
+          <MultiStepLoginDialog
+            open={openLogin}
+            onClose={() => setOpenLogin(false)}
+          />
+
           <Button
             variant="outlined"
+            component={RouterLink}
+            href="/about-us"
             size="large"
             sx={{
               color: 'black',

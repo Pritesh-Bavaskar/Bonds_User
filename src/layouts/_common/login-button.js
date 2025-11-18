@@ -5,12 +5,14 @@ import Button from '@mui/material/Button';
 import { RouterLink } from 'src/routes/components';
 // config
 import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
 export default function LoginButton({ sx }) {
   return (
-    <Button  variant="outlined" sx={{ mr: 1, ...sx }}>
+    <Button component={RouterLink}
+      href={paths.comingSoon} variant="outlined" sx={{ mr: 1, ...sx }}>
       Login
     </Button>
   );

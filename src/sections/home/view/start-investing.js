@@ -1,4 +1,5 @@
 import { Box, Typography, Button, Stack } from '@mui/material';
+import { RouterLink } from 'src/routes/components';
 
 export default function StartInvesting() {
   return (
@@ -41,6 +42,8 @@ export default function StartInvesting() {
       {/* Button */}
       <Button
         variant="contained"
+         component={RouterLink}
+         href='/coming-soon'
         color="primary"
         sx={{
           px: 4,

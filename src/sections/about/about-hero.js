@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 // components
 import { MotionContainer, varFade } from 'src/components/animate';
+import { RouterLink } from 'src/routes/components';
 
 // ----------------------------------------------------------------------
 
@@ -75,11 +76,13 @@ export default function AboutHero() {
             </Typography>
 
             <Stack direction="row" spacing={2} flexWrap="wrap">
-              <Button variant="contained" size="large" sx={{ textTransform: 'none' }}>
+              {/* <Button variant="contained" size="large" sx={{ textTransform: 'none' }}>
                 Learn More About Our Platform
-              </Button>
+              </Button> */}
               <Button
                 variant="outlined"
+                component={RouterLink}
+                href='/contact-us'
                 size="large"
                 sx={{
                   textTransform: 'none',

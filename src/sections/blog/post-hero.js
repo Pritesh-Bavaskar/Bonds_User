@@ -20,10 +20,7 @@ import PostSearch from './post-search';
 
 export default function PostHero({
   featured,
-  query,
-  results,
-  onSearch,
-  loading,
+
   containerMaxWidth = 'lg',
 }) {
   return (
@@ -195,24 +192,8 @@ export default function PostHero({
               </Grid>
             </Grid>
 
-            {/* Search under the hero content */}
-            <Grid container justifyContent="flex-start" sx={{ mt: { xs: 2.5, md: 4 } }}>
-              {/* Left: under image column (md=6), center the search within this column */}
-              <Grid item xs={12} md={6}>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <PostSearch
-                    query={query}
-                    results={results}
-                    onSearch={onSearch}
-                    loading={loading}
-                    hrefItem={(title) => paths.post.details(title)}
-                    sx={{ width: 1, maxWidth: 480 }}
-                  />
-                </Box>
-              </Grid>
-              {/* Right: empty to keep alignment with the 6/6 layout above */}
-              <Grid item xs={false} md={6} />
-            </Grid>
+         
+         
           </Box>
         </Stack>
       </Container>
@@ -221,10 +202,6 @@ export default function PostHero({
 }
 
 PostHero.propTypes = {
-  featured: PropTypes.object,
-  loading: PropTypes.bool,
-  onSearch: PropTypes.func,
-  query: PropTypes.string,
-  results: PropTypes.array,
+
   containerMaxWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };

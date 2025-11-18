@@ -25,13 +25,13 @@ export const navConfig = [
     children: [
       {
         items: [
-          { title: 'Corporate Bond', path: paths.products.corporate_bonds},
+          { title: 'Corporate Bond', path: paths.products.corporate_bonds },
           { title: 'Government Bond', path: paths.products.government_bonds },
           { title: 'Listed Bond', path: paths.products.listed_bonds },
           { title: 'Unlisted Bond', path: paths.products.unlisted_bonds },
         ],
       },
-    ],    
+    ],
 
   },
   {
@@ -46,10 +46,15 @@ export const navConfig = [
           { title: 'News/Insight', path: paths.newsInsight },
           { title: 'Calculator', path: paths.calculator },
           { title: 'Refer and Earn', path: paths.maintenance },
-          { title: 'Issuers', path: paths.issuer },
+
         ],
       },
     ],
+  },
+    {
+    title: 'Become a Issuer',
+    icon: <Iconify icon="solar:atom-bold-duotone" />,
+    path: paths.issuer,
   },
   {
     title: 'About',
@@ -65,4 +70,5 @@ export const navConfig = [
       },
     ],
   },
+,
 ];

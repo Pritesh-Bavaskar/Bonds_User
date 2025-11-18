@@ -35,7 +35,7 @@ export default function ComingSoonView() {
 
       <ComingSoonIllustration sx={{ my: 10, height: 240 }} />
 
-      <Stack
+      {/* <Stack
         direction="row"
         justifyContent="center"
         divider={<Box sx={{ mx: { xs: 1, sm: 2.5 } }}>:</Box>}
@@ -76,9 +76,9 @@ export default function ComingSoonView() {
           },
         }}
         sx={{ my: 5 }}
-      />
+      /> */}
 
-      <Stack spacing={1} alignItems="center" justifyContent="center" direction="row">
+      {/* <Stack spacing={1} alignItems="center" justifyContent="center" direction="row">
         {_socials.map((social) => (
           <IconButton
             key={social.name}
@@ -92,7 +92,7 @@ export default function ComingSoonView() {
             <Iconify icon={social.icon} />
           </IconButton>
         ))}
-      </Stack>
+      </Stack> */}
     </>
   );
 }

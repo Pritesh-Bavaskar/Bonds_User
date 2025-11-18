@@ -26,6 +26,7 @@ import {
 import Iconify from 'src/components/iconify';
 import ComponentBlock from '../_examples/component-block';
 import Carousel, { CarouselDots, useCarousel } from 'src/components/carousel';
+import { RouterLink } from 'src/routes/components';
 
 // ----------------------------------------------------------------------
 const timelineSteps = [
@@ -266,6 +267,8 @@ export default function HomeGetStartedKYC({ numberShow }) {
             {/* Start button */}
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
               <Button
+              component={RouterLink}
+              href='/coming-soon'
                 variant="contained"
                 size="large"
                 color="primary"
