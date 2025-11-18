@@ -36,7 +36,7 @@ export default function KYCTitle({ title, subtitle }) {
               variant="h5"
               sx={{
                 fontWeight: 500,
-                color: '#000000',
+                color: '#505050ff',
                 textAlign: 'left',
               }}
             >

@@ -35,6 +35,7 @@ import { fDate } from 'src/utils/format-time';
 import RHFFileUploadBox from 'src/components/custom-file-upload/file-upload';
 import { Card } from '@mui/material';
 import YupErrorMessage from 'src/components/error-field/yup-error-messages';
+import { useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 
@@ -91,9 +92,11 @@ PANUploadArea.propTypes = {
 
 // ----------------------------------------------------------------------
 
-export default function KYCBasicInfo({ currentInfo }) {
+export default function KYCBasicInfo() {
   const { enqueueSnackbar } = useSnackbar();
-
+  const navigate = useNavigate();
+  const [hasExistingData, setHasExistingData] = useState(false);
+  const [panFileToken, setPanFileToken] = useState('');
   const NewUserSchema = Yup.object().shape({
     cin: Yup.string().required('CIN is required'),
     companyName: Yup.string().required('Company Name is required'),
@@ -104,7 +107,11 @@ export default function KYCBasicInfo({ currentInfo }) {
     state: Yup.string().required('State is required'),
     country: Yup.string().required('Country is required'),
     entityType: Yup.string().required('Entity Type is required'),
-    panFile: Yup.mixed().required('Pan File is required'),
+    panFile: Yup.mixed().when('hasExistingData', {
+      is: false,
+      then: (schema) => schema.required('Pan File is required'),
+      otherwise: (schema) => schema.nullable(),
+    }),
     panNumber: Yup.string().required('Pan Number is required'),
     dateOfBirth: Yup.date().required('Date Of Birth is required'),
     panHoldersName: Yup.string().required('Pan Holders Name is required'),
@@ -113,36 +120,37 @@ export default function KYCBasicInfo({ currentInfo }) {
 
   const defaultValues = useMemo(
     () => ({
-      cin: currentInfo?.cin || '',
-      companyName: currentInfo?.companyName || '',
-      gstin: currentInfo?.gstin || '',
-      dateOfIncorporation: currentInfo?.dateOfIncorporation || null,
-      msmeUdyamRegistrationNo: currentInfo?.msme_udyam_registration_no || '',
-      city: currentInfo?.city || '',
-      state: currentInfo?.state || '',
-      country: currentInfo?.country || '',
-      entityType: currentInfo?.entityType || '',
-      panFile: currentInfo?.panFile || null,
-      panNumber: currentInfo?.panNumber || '',
-      dateOfBirth: currentInfo?.dateOfBirth || null,
-      panHoldersName: currentInfo?.panHoldersName || '',
+      cin: '',
+      companyName: '',
+      gstin: '',
+      dateOfIncorporation: null,
+      msmeUdyamRegistrationNo: '',
+      city: '',
+      state: '',
+      country: 'India',
+      entityType: '',
+      panFile: null,
+      panNumber: '',
+      dateOfBirth: null,
+      panHoldersName: '',
+      sector: '',
     }),
-    [currentInfo]
+    []
   );
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      hasExistingData: hasExistingData,
+    },
   });
 
   // Fetch company information when component mounts
   useEffect(() => {
     const fetchCompanyInfo = async () => {
       try {
-        const companyId = sessionStorage.getItem('company_information_id');
-        if (!companyId) return;
-
-        const response = await axiosInstance.get(`/api/kyc/issuer_kyc/company-info/${companyId}/`);
+        const response = await axiosInstance.get(`/api/kyc/issuer_kyc/company-info/profile/`);
         const companyData = response.data?.data;
 
         if (companyData) {
@@ -151,21 +159,21 @@ export default function KYCBasicInfo({ currentInfo }) {
             companyName: companyData.company_name || '',
             gstin: companyData.gstin || '',
             dateOfIncorporation: companyData.date_of_incorporation
-              ? dayjs(companyData.date_of_incorporation).toDate()
+              ? dayjs(companyData.date_of_incorporation, 'YYYY-MM-DD').toDate()
               : null,
             msmeUdyamRegistrationNo: companyData.msme_udyam_registration_no || '',
-            city: companyData.place_of_incorporation || '',
+            city: companyData.city_of_incorporation || '',
             state: companyData.state_of_incorporation || '',
             country: companyData.country_of_incorporation || 'India',
             entityType: companyData.entity_type?.toLowerCase() || '', // Ensure lowercase to match form values
             sector: companyData.sector || '',
             panNumber: companyData.company_pan_number || '',
             dateOfBirth: companyData.date_of_birth
-              ? dayjs(companyData.date_of_birth).toDate()
+              ? dayjs(companyData.date_of_birth, 'YYYY-MM-DD').toDate()
               : null,
             panHoldersName: companyData.pan_holder_name || '',
           });
-
+          setHasExistingData(true);
           // If you need to handle the PAN file separately
           if (companyData.company_or_individual_pan_card_file) {
             // You might need to handle file download/display logic here
@@ -183,13 +191,14 @@ export default function KYCBasicInfo({ currentInfo }) {
 
     fetchCompanyInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [methods.reset]);
+  }, []);
 
   const {
     handleSubmit,
     control,
     reset,
     setValue,
+    getValues,
     formState: { isSubmitting },
   } = methods;
 
@@ -205,41 +214,44 @@ export default function KYCBasicInfo({ currentInfo }) {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      const data = response.data;
-      console.log('PAN extraction result:', data);
-
-      if (data) {
-        setValue('panNumber', data.data.pan_number || '');
-        setValue('panHoldersName', data.data.pan_holder_name || '');
-        setValue('dateOfBirth', data.data.date_of_birth ? new Date(data.data.date_of_birth) : null);
-        enqueueSnackbar('PAN details fetched successfully!', { variant: 'success' });
+      if (response.data.success) {
+        const { pan_number, pan_holder_name, date_of_birth, file_token } = response.data.data;
+        setValue('panNumber', pan_number || '');
+        setValue('panHoldersName', pan_holder_name || '');
+        if (date_of_birth) {
+          setValue('dateOfBirth', new Date(date_of_birth));
+        }
+        // Store the file token for later use in form submission
+        setPanFileToken(file_token || '');
+        enqueueSnackbar('PAN details extracted successfully', { variant: 'success' });
+      } else {
+        enqueueSnackbar(response.data.message || 'Failed to extract PAN details', {
+          variant: 'error',
+        });
       }
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar('Failed to extract PAN details', { variant: 'error' });
+      console.error('Error uploading PAN:', error);
+      enqueueSnackbar('Error uploading PAN. Please try again.', { variant: 'error' });
     }
   };
 
-  const [hasExistingData, setHasExistingData] = useState(false);
-
   // Check if we have existing data when component mounts
-  useEffect(() => {
-    const checkExistingData = async () => {
-      const companyId = sessionStorage.getItem('company_information_id');
-      if (companyId) {
-        try {
-          const response = await axiosInstance.get(
-            `/api/kyc/issuer_kyc/company-info/${companyId}/`
-          );
-          setHasExistingData(!!response.data?.data);
-        } catch (error) {
-          console.error('Error checking existing data:', error);
-          setHasExistingData(false);
-        }
-      }
-    };
-    checkExistingData();
-  }, []);
+  // useEffect(() => {
+  //   const checkExistingData = async () => {
+  //     const companyId = sessionStorage.getItem('company_information_id');
+  //     if (companyId) {
+  //       try {
+  //         const response = await axiosInstance.get(`/api/kyc/issuer_kyc/company-info/`);
+  //         setHasExistingData(true);
+  //       } catch (error) {
+  //         console.error('Error checking existing data:', error);
+  //         setHasExistingData(false);
+  //       }
+  //       console.log('setHasExistingData', setHasExistingData);
+  //     }
+  //   };
+  //   checkExistingData();
+  // }, []);
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
@@ -260,11 +272,11 @@ export default function KYCBasicInfo({ currentInfo }) {
       formDataToSend.append('company_name', formData.companyName || '');
       formDataToSend.append('gstin', formData.gstin || '');
 
-      // Format dates to YYYY-MM-DD
+      // Format dates to YYYY-MM-DD for the API
       if (formData.dateOfIncorporation) {
         formDataToSend.append(
           'date_of_incorporation',
-          dayjs(formData.dateOfIncorporation).format('DD-MM-YYYY')
+          dayjs(formData.dateOfIncorporation).format('YYYY-MM-DD')
         );
       } else {
         formDataToSend.append('date_of_incorporation', '');
@@ -273,28 +285,29 @@ export default function KYCBasicInfo({ currentInfo }) {
       formDataToSend.append('msme_udyam_registration_no', formData.msmeUdyamRegistrationNo || '');
 
       if (formData.dob) {
-        formDataToSend.append('dob', dayjs(formData.dob).format('DD-MM-YYYY'));
+        formDataToSend.append('date_of_birth', dayjs(formData.dob).format('YYYY-MM-DD'));
       } else {
-        formDataToSend.append('dob', '');
+        formDataToSend.append('date_of_birth', '');
       }
 
-      formDataToSend.append('country_of_incorporation', formData.country || '');
+      formDataToSend.append('country_of_incorporation', formData.country || 'India');
       formDataToSend.append('city_of_incorporation', formData.city || '');
       formDataToSend.append('state_of_incorporation', formData.state || '');
       formDataToSend.append('entity_type', formData.entityType || '');
       formDataToSend.append('company_pan_number', formData.panNumber || '');
       formDataToSend.append('pan_holder_name', formData.panHoldersName || '');
 
-      // Handle PAN card file - only append if it's a new file
-      if (formData.panFile) {
-        formDataToSend.append('company_or_individual_pan_card_file', formData.panFile);
-      } else if (!formData.panFile && !hasExistingData) {
-        // If no file and no existing data, add empty file to trigger validation
+      // Handle PAN card file - use token if available, otherwise use the file
+      if (panFileToken) {
+        // If we have a token from PAN extraction, send that instead of the file
+        formDataToSend.append('file_token', panFileToken);
+      } else if (!hasExistingData) {
+        // If no token, no file, and no existing data, add empty file to trigger validation
         formDataToSend.append('company_or_individual_pan_card_file', '');
       }
 
       if (formData.dateOfBirth) {
-        formDataToSend.append('date_of_birth', dayjs(formData.dateOfBirth).format('DD-MM-YYYY'));
+        formDataToSend.append('date_of_birth', dayjs(formData.dateOfBirth).format('YYYY-MM-DD'));
       } else {
         formDataToSend.append('date_of_birth', '');
       }
@@ -311,8 +324,7 @@ export default function KYCBasicInfo({ currentInfo }) {
         },
       };
 
-      const companyId = sessionStorage.getItem('company_information_id');
-
+      console.log('hasExistingData', hasExistingData);
       if (!hasExistingData) {
         // Create new company info
         const response = await axiosInstance.post(
@@ -324,17 +336,28 @@ export default function KYCBasicInfo({ currentInfo }) {
         if (response.data?.data?.company_id) {
           sessionStorage.setItem('company_information_id', response.data.data.company_id);
         }
+        if (response.data?.success) {
+          enqueueSnackbar(response.data.message, {
+            variant: 'success',
+          });
+          navigate('/kyc/address-info');
+        }
       } else {
         // Update existing company info
-        await axiosInstance.patch(
-          `/api/kyc/issuer_kyc/company-info/${companyId}/update/`,
+        const response = await axiosInstance.patch(
+          `/api/kyc/issuer_kyc/company-info/profile/`,
           formDataToSend,
           config
         );
+        if (response.data?.success) {
+          enqueueSnackbar(response.data.message, {
+            variant: 'success',
+          });
+          navigate('/kyc/address-info');
+        }
       }
 
       reset();
-      enqueueSnackbar(currentInfo ? 'Update success!' : 'Create success!');
     } catch (error) {
       console.error(error);
       enqueueSnackbar(
@@ -390,40 +413,53 @@ export default function KYCBasicInfo({ currentInfo }) {
                           ml: 1,
                           '&:hover': { bgcolor: '#00328A' },
                         }}
-                        // onClick={async () => {
-                        //   const cinValue = getValues('cin'); // <-- get value from form
-                        //   if (!cinValue) {
-                        //     enqueueSnackbar('Please enter a CIN before fetching.', {
-                        //       variant: 'warning',
-                        //     });
-                        //     return;
-                        //   }
+                        onClick={async () => {
+                          const cinValue = getValues('cin');
+                          if (!cinValue) {
+                            enqueueSnackbar('Please enter a CIN before fetching.', {
+                              variant: 'warning',
+                            });
+                            return;
+                          }
 
-                        //   try {
-                        //     enqueueSnackbar('Fetching CIN details...', { variant: 'info' });
+                          try {
+                            const response = await axiosInstance.get(
+                              `/api/kyc/issuer_kyc/company-info/cin/${cinValue}/`
+                            );
 
-                        //     // Example API call (replace with your real endpoint)
-                        //     const res = await axiosInstance.get(
-                        //       `/api/company/fetch?cin=${cinValue}`
-                        //     );
+                            const data = response.data.data;
+                            if (response.data.success && data) {
+                              // Set all the form fields from the response
+                              setValue('companyName', data.company_name || '');
+                              setValue('gstin', data.gstin || '');
+                              setValue(
+                                'dateOfIncorporation',
+                                data.date_of_incorporation
+                                  ? new Date(data.date_of_incorporation)
+                                  : null
+                              );
+                              setValue('city', data.city_of_incorporation || '');
+                              setValue('state', data.state_of_incorporation || '');
+                              setValue('country', data.country_of_incorporation || 'India');
+                              setValue('sector', data.sector || '');
+                              setValue('entityType', data.entity_type || '');
+                              setValue('panNumber', data.company_pan_number || '');
 
-                        //     // You can set other fields based on response
-                        //     setValue('companyName', res.data.company_name || '');
-                        //     setValue('gstin', res.data.gstin || '');
-
-                        //     enqueueSnackbar('CIN data fetched successfully ✅', {
-                        //       variant: 'success',
-                        //     });
-                        //   } catch (error) {
-                        //     console.error('❌ Error fetching CIN:', error);
-                        //     enqueueSnackbar(
-                        //       'Failed to fetch CIN data. Please check CIN or try again.',
-                        //       {
-                        //         variant: 'error',
-                        //       }
-                        //     );
-                        //   }
-                        // }}
+                              enqueueSnackbar('CIN data fetched successfully', {
+                                variant: 'success',
+                              });
+                            } else {
+                              throw new Error(response.data.message || 'Failed to fetch CIN data');
+                            }
+                          } catch (error) {
+                            console.error('Error fetching CIN:', error);
+                            enqueueSnackbar(
+                              error.response?.data?.message ||
+                                'Failed to fetch CIN data. Please check CIN or try again.',
+                              { variant: 'error' }
+                            );
+                          }
+                        }}
                       >
                         Fetch
                       </Button>
@@ -537,6 +573,7 @@ export default function KYCBasicInfo({ currentInfo }) {
                     name="country"
                     placeholder="Country"
                     sx={{ flex: 1 }}
+                    readOnly
                     options={countries.map((country) => country.label)}
                     getOptionLabel={(option) => option}
                     renderOption={(props, option) => {
@@ -587,23 +624,16 @@ export default function KYCBasicInfo({ currentInfo }) {
                     </Box>
                     <RHFSelect name="sector" placeholder="Select Sector">
                       <MenuItem value="">Select Sector</MenuItem>
-                      <MenuItem value="IT & ITES">IT & ITES</MenuItem>
-                      <MenuItem value="Banking & Financial Services">
-                        Banking & Financial Services
+                      <MenuItem value="BANKING">Banking</MenuItem>
+                      <MenuItem value="INFRASTRUCTURE">Infrastructure</MenuItem>
+                      <MenuItem value="POWER">Power</MenuItem>
+                      <MenuItem value="REAL ESTATE">Real Estate</MenuItem>
+                      <MenuItem value="MANUFACTURING">Manufacturing</MenuItem>
+                      <MenuItem value="IT">IT & Software</MenuItem>
+                      <MenuItem value="PUBLIC SECTOR UNDERTAKING">
+                        Public Sector Undertaking
                       </MenuItem>
-                      <MenuItem value="Infrastructure">Infrastructure</MenuItem>
-                      <MenuItem value="Pharmaceuticals">Pharmaceuticals</MenuItem>
-                      <MenuItem value="Automobile">Automobile</MenuItem>
-                      <MenuItem value="Chemicals">Chemicals</MenuItem>
-                      <MenuItem value="Consumer Durables">Consumer Durables</MenuItem>
-                      <MenuItem value="FMCG">FMCG</MenuItem>
-                      <MenuItem value="Metals & Mining">Metals & Mining</MenuItem>
-                      <MenuItem value="Oil & Gas">Oil & Gas</MenuItem>
-                      <MenuItem value="Power">Power</MenuItem>
-                      <MenuItem value="Real Estate">Real Estate</MenuItem>
-                      <MenuItem value="Telecom">Telecom</MenuItem>
-                      <MenuItem value="Textiles">Textiles</MenuItem>
-                      <MenuItem value="Other">Other</MenuItem>
+                      <MenuItem value="OTHERS">Others</MenuItem>
                     </RHFSelect>
                   </Box>
                 </Stack>
@@ -805,6 +835,7 @@ export default function KYCBasicInfo({ currentInfo }) {
                       name="country"
                       placeholder="Country"
                       sx={{ flex: 1 }}
+                      readOnly
                       options={countries.map((country) => country.label)}
                       getOptionLabel={(option) => option}
                       renderOption={(props, option) => {
@@ -1018,7 +1049,3 @@ export default function KYCBasicInfo({ currentInfo }) {
     </Container>
   );
 }
-
-KYCBasicInfo.propTypes = {
-  currentInfo: PropTypes.object,
-};
