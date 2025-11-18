@@ -264,8 +264,8 @@ export default function KycAddressInfo() {
             toStr(correspondence.registered_office ?? correspondence.correspondence_address) &&
           toStr(registered.city) ===
             toStr(correspondence.city ?? correspondence.correspondence_city) &&
-            // toStr(registered.country) ===
-            // toStr(correspondence.city ?? correspondence.correspondence_country) &&
+          // toStr(registered.country) ===
+          // toStr(correspondence.city ?? correspondence.correspondence_country) &&
           toStr(registered.state_ut) ===
             toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut) &&
           toStr(registered.pin_code) ===
@@ -285,6 +285,33 @@ export default function KycAddressInfo() {
     fetchAddress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [companyId]);
+
+  // Fetch user data to populate email and phone number
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('/api/auth/v1/me/', {
+          headers: {
+            ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const userData = response?.data?.data;
+        if (userData) {
+          // Set email and phone number in the form
+          setValue('registeredEmail', userData.email || '', { shouldValidate: true });
+          // Remove any non-digit characters from phone number
+          const phoneNumber = userData.mobile_number?.replace(/\D/g, '').slice(-10) || '';
+          setValue('registeredPhone', phoneNumber, { shouldValidate: true });
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const onSubmit = async (form) => {
     const base = process.env.REACT_APP_HOST_API || '';
@@ -352,8 +379,8 @@ export default function KycAddressInfo() {
   };
 
   const handleDrop = async (acceptedFiles) => {
-    console.log('📂 Dropped Files:', acceptedFiles);
-    const file = acceptedFiles[0];
+    console.log('📂 Droppeddd Files:', acceptedFiles);
+    const file = acceptedFiles;
     if (file) {
       setValue('addressProof', file, { shouldValidate: true });
       if (file.type.startsWith('image/')) {
@@ -395,10 +422,10 @@ export default function KycAddressInfo() {
           shouldDirty: true,
           shouldValidate: true,
         });
-        setValue('registeredCountry', toStr(extracted.country), {
-          shouldDirty: true,
-          shouldValidate: true,
-        });
+        // setValue('registeredCountry', toStr(extracted.country), {
+        //   shouldDirty: true,
+        //   shouldValidate: true,
+        // });
         setValue('registeredCity', toStr(extracted.city), {
           shouldDirty: true,
           shouldValidate: true,
@@ -645,7 +672,12 @@ export default function KycAddressInfo() {
                         fullWidth
                       />
                       <Box sx={{ display: 'flex', gap: 2 }}>
-                        <RHFTextField name="registeredCountry" label="Country *" fullWidth disabled/>
+                        <RHFTextField
+                          name="registeredCountry"
+                          label="Country *"
+                          fullWidth
+                          disabled
+                        />
                         <RHFTextField name="registeredCity" label="City *" fullWidth />
                         <RHFTextField name="registeredState" label="State *" fullWidth />
                       </Box>
@@ -661,6 +693,7 @@ export default function KycAddressInfo() {
                       <RHFTextField
                         name="registeredPincode"
                         label="Pincode *"
+                        type="number"
                         inputProps={{
                           inputMode: 'numeric',
                           pattern: '[0-9]*',
