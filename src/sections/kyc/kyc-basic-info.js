@@ -117,7 +117,7 @@ export default function KYCBasicInfo({ currentInfo }) {
       companyName: currentInfo?.companyName || '',
       gstin: currentInfo?.gstin || '',
       dateOfIncorporation: currentInfo?.dateOfIncorporation || null,
-      msmeUdyamRegistrationNo: currentInfo?.msmeUdyamRegistrationNo || '',
+      msmeUdyamRegistrationNo: currentInfo?.msme_udyam_registration_no || '',
       city: currentInfo?.city || '',
       state: currentInfo?.state || '',
       country: currentInfo?.country || '',
@@ -154,9 +154,9 @@ export default function KYCBasicInfo({ currentInfo }) {
               ? dayjs(companyData.date_of_incorporation).toDate()
               : null,
             msmeUdyamRegistrationNo: companyData.msme_udyam_registration_no || '',
-            city: companyData.city_of_incorporation || '',
+            city: companyData.place_of_incorporation || '',
             state: companyData.state_of_incorporation || '',
-            country: companyData.country_of_incorporation || '',
+            country: companyData.country_of_incorporation || 'India',
             entityType: companyData.entity_type?.toLowerCase() || '', // Ensure lowercase to match form values
             sector: companyData.sector || '',
             panNumber: companyData.company_pan_number || '',
@@ -264,7 +264,7 @@ export default function KYCBasicInfo({ currentInfo }) {
       if (formData.dateOfIncorporation) {
         formDataToSend.append(
           'date_of_incorporation',
-          dayjs(formData.dateOfIncorporation).format('YYYY-MM-DD')
+          dayjs(formData.dateOfIncorporation).format('DD-MM-YYYY')
         );
       } else {
         formDataToSend.append('date_of_incorporation', '');
@@ -273,7 +273,7 @@ export default function KYCBasicInfo({ currentInfo }) {
       formDataToSend.append('msme_udyam_registration_no', formData.msmeUdyamRegistrationNo || '');
 
       if (formData.dob) {
-        formDataToSend.append('dob', dayjs(formData.dob).format('YYYY-MM-DD'));
+        formDataToSend.append('dob', dayjs(formData.dob).format('DD-MM-YYYY'));
       } else {
         formDataToSend.append('dob', '');
       }
@@ -282,6 +282,8 @@ export default function KYCBasicInfo({ currentInfo }) {
       formDataToSend.append('city_of_incorporation', formData.city || '');
       formDataToSend.append('state_of_incorporation', formData.state || '');
       formDataToSend.append('entity_type', formData.entityType || '');
+      formDataToSend.append('company_pan_number', formData.panNumber || '');
+      formDataToSend.append('pan_holder_name', formData.panHoldersName || '');
 
       // Handle PAN card file - only append if it's a new file
       if (formData.panFile) {
@@ -292,12 +294,13 @@ export default function KYCBasicInfo({ currentInfo }) {
       }
 
       if (formData.dateOfBirth) {
-        formDataToSend.append('date_of_birth', dayjs(formData.dateOfBirth).format('YYYY-MM-DD'));
+        formDataToSend.append('date_of_birth', dayjs(formData.dateOfBirth).format('DD-MM-YYYY'));
       } else {
         formDataToSend.append('date_of_birth', '');
       }
 
       formDataToSend.append('pan_holder_name', formData.panHoldersName || '');
+      formDataToSend.append('sector', formData.sector || '');
 
       console.log('Sending FormData:', Object.fromEntries(formDataToSend.entries()));
 
@@ -486,7 +489,7 @@ export default function KYCBasicInfo({ currentInfo }) {
                     <DatePicker
                       value={field.value}
                       onChange={(newValue) => field.onChange(newValue)}
-                      format="yyyy-MM-dd"
+                      format="dd-MM-yyyy"
                       slotProps={{
                         textField: {
                           fullWidth: true,
@@ -660,7 +663,7 @@ export default function KYCBasicInfo({ currentInfo }) {
                   <DatePicker
                     value={field.value}
                     onChange={(newValue) => field.onChange(newValue)}
-                    format="yyyy-MM-dd"
+                    format="dd-MM-yyyy"
                     slotProps={{
                       textField: {
                         fullWidth: true,

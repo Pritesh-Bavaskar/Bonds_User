@@ -121,11 +121,11 @@ export default function KYCAuditedFinancial() {
       <Grid
         container
         sx={{
+          mt: 2,
+          p: { xs: 2, md: 4 },
+          borderRadius: 2,
           border: (theme) => `1px solid ${theme.palette.divider}`,
-          borderRadius: 1.5,
-          p: 3,
-          mt: 3,
-          mb: 2,
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
         }}
       >
         <Grid xs={12}>

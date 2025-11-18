@@ -125,18 +125,50 @@ export default function KycAddressInfo() {
       correspondenceAddressLine1: '',
       correspondenceAddressLine2: '',
       correspondenceCity: '',
+      correspondenceCountry: '',
       correspondenceState: '',
       correspondencePincode: '',
       correspondenceEmail: '',
       correspondencePhone: '',
       addressProof: null,
-      documentType: '',
+      documentType: 'electricityBill',
     },
   });
 
   const { handleSubmit, setValue, control, watch } = methods;
   const addressProof = useWatch({ control, name: 'addressProof' });
   const sameAsRegistered = useWatch({ control, name: 'sameAsRegistered' });
+
+  // Watch for changes in Registered Address fields and sync with Correspondence Address when sameAsRegistered is true
+  const registeredFields = useWatch({
+    control,
+    name: [
+      'registeredAddressLine1',
+      'registeredAddressLine2',
+      'registeredCountry',
+      'registeredCity',
+      'registeredState',
+      'registeredPincode',
+      'registeredEmail',
+      'registeredPhone',
+    ],
+  });
+
+  useEffect(() => {
+    if (sameAsRegistered) {
+      const [addressLine1, addressLine2, country, city, state, pincode, email, phone] =
+        registeredFields;
+
+      setValue('correspondenceAddressLine1', addressLine1, { shouldValidate: true });
+      setValue('correspondenceAddressLine2', addressLine2, { shouldValidate: true });
+      setValue('correspondenceCountry', country, { shouldValidate: true });
+      setValue('correspondenceCity', city, { shouldValidate: true });
+      setValue('correspondenceState', state, { shouldValidate: true });
+      setValue('correspondencePincode', pincode, { shouldValidate: true });
+      setValue('correspondenceEmail', email, { shouldValidate: true });
+      setValue('correspondencePhone', phone, { shouldValidate: true });
+    }
+  }, [registeredFields, sameAsRegistered, setValue]);
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -201,6 +233,11 @@ export default function KycAddressInfo() {
           { shouldValidate: true }
         );
         setValue(
+          'correspondenceCity',
+          toStr(correspondence.country ?? correspondence.correspondence_country),
+          { shouldValidate: true }
+        );
+        setValue(
           'correspondenceState',
           toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut),
           { shouldValidate: true }
@@ -227,6 +264,8 @@ export default function KycAddressInfo() {
             toStr(correspondence.registered_office ?? correspondence.correspondence_address) &&
           toStr(registered.city) ===
             toStr(correspondence.city ?? correspondence.correspondence_city) &&
+            toStr(registered.country) ===
+            toStr(correspondence.city ?? correspondence.correspondence_country) &&
           toStr(registered.state_ut) ===
             toStr(correspondence.state_ut ?? correspondence.correspondence_state_ut) &&
           toStr(registered.pin_code) ===
@@ -397,11 +436,12 @@ export default function KycAddressInfo() {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Paper
-          // sx={{
-          //   p: { xs: 2, md: 4 },
-          //   borderRadius: 2,
-          //   boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
-          // }}
+            sx={{
+              p: { xs: 2, md: 4 },
+              borderRadius: 2,
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.08)',
+            }}
           >
             {/* Address Proof Section */}
             <Stack spacing={4}>
@@ -559,7 +599,13 @@ export default function KycAddressInfo() {
               {watch('documentType') && (
                 <RHFFileUploadBox
                   name="addressProof"
-                  label="Upload address proof"
+                  label={`Upload ${
+                    watch('documentType')
+                      ? watch('documentType')
+                          .replace(/([A-Z])/g, ' $1')
+                          .replace(/^./, (str) => str.toUpperCase())
+                      : 'address proof'
+                  }`}
                   icon="mdi:file-document-outline"
                   color="#1e88e5"
                   acceptedTypes="pdf,xls,docx,jpeg"
@@ -583,7 +629,7 @@ export default function KycAddressInfo() {
                   <Grid xs={12} md={6}>
                     <Typography
                       variant="h5"
-                      sx={{ mb: 3, mt: 1, fontWeight: 600, color: 'primary.main' }}
+                      sx={{ mb: 3, mt: 0, fontWeight: 600, color: 'primary.main' }}
                     >
                       Registered Address
                     </Typography>
@@ -725,21 +771,23 @@ export default function KycAddressInfo() {
                   </Grid>
                 </Grid>
               </Box>
-
-              {/* Submit Button */}
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  disabled={isUploading}
-                  sx={{ minWidth: 120 }}
-                >
-                  Next
-                </Button>
-              </Box>
             </Stack>
           </Paper>
+          {/* Submit Button */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, mb: 2 }}>
+            <Button component={RouterLink} href={paths.KYCBasicInfo} variant="outlined">
+              Back
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              disabled={isUploading}
+              sx={{ minWidth: 120 }}
+            >
+              Next
+            </Button>
+          </Box>
         </form>
       </FormProvider>
 
