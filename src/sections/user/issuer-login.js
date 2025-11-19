@@ -31,7 +31,6 @@ export default function MultiStepLoginDialog({ open, onClose }) {
   const { enqueueSnackbar } = useSnackbar();
   const otpRefs = useRef([]);
   const router = useRouter();
-  const [token, setToken] = useState('');
 
   const handleVerifyEmailOtp = async () => {
     if (isVerifying) return;
@@ -43,7 +42,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       const base = process.env.REACT_APP_HOST_API || '';
       const res = await fetch(`${base}/api/auth/v1/verify-email-otp/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: '1', email, otp_code: code }),
       });
       if (!res.ok) {
@@ -62,22 +61,12 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       } catch (e) {
         data = {};
       }
-      const tokens = data?.data?.access_token || data?.access_token;
-      const companyInfoId = data?.data?.company_information_id || data?.company_information_id;
-      
-      if (tokens) {
-        setSession(tokens);
-      }
-      
-      if (companyInfoId) {
-        sessionStorage.setItem('company_information_id', companyInfoId);
-      }
-      
+
       if (data && data.message) {
         enqueueSnackbar(data.message, { variant: 'success' });
       }
       onClose?.();
-      router.push(paths.KYCViewPage);
+      router.push('/kyc/basic-info');
     } catch (err) {
       enqueueSnackbar(err.message, { variant: 'error' });
     } finally {
@@ -95,7 +84,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       const base = process.env.REACT_APP_HOST_API || '';
       const res = await fetch(`${base}/api/auth/v1/send-email-otp/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: '1', name: trimmedName, email }),
       });
       if (!res.ok) {
@@ -158,29 +147,17 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       if (data && data.message) {
         enqueueSnackbar(data.message, { variant: 'success' });
       }
-      const tokens = data?.data?.access_token || data?.access_token;
-      const companyInfoId = data?.data?.company_information_id || data?.company_information_id;
-      const emailVerified = data?.data?.email_verified || data?.email_verified;
-      
-      if (tokens) {
-        setSession(tokens);
-        setToken(tokens);
-        
-        if (companyInfoId) {
-          sessionStorage.setItem('company_information_id', companyInfoId);
-        }
-        
-        // If email is not verified, go to email verification step
-        if (!emailVerified) {
-          setStep('details');
-          return;
-        }
-        
-        // If email is verified or no email exists, proceed to KYC
-        onClose?.();
-        router.push(paths.KYCViewPage);
-        return;
+
+      // Store user details in localStorage after successful OTP verification
+      localStorage.setItem('userPhone', `+91${mobile}`);
+      if (data?.data?.email) {
+        localStorage.setItem('userEmail', data.data.email);
       }
+      if (data?.data?.name) {
+        localStorage.setItem('userFullName', data.data.name);
+      }
+
+      // Proceed to details step after storing user info
       setStep('details');
     } catch (err) {
       enqueueSnackbar(err.message, { variant: 'error' });
@@ -381,7 +358,11 @@ export default function MultiStepLoginDialog({ open, onClose }) {
                     <Button onClick={handleBack} sx={{ mr: 2 }}>
                       Back
                     </Button>
-                    <Button variant="contained" onClick={handleVerifyMobileOtp} disabled={isVerifying || otp.join('').length !== 4}>
+                    <Button
+                      variant="contained"
+                      onClick={handleVerifyMobileOtp}
+                      disabled={isVerifying || otp.join('').length !== 4}
+                    >
                       Verify
                     </Button>
                   </Box>
@@ -493,8 +474,8 @@ export default function MultiStepLoginDialog({ open, onClose }) {
             </AnimatePresence>
           </Box>
 
-              {/* Right Side - Illustration */}
-              <Box
+          {/* Right Side - Illustration */}
+          <Box
             sx={{
               display: { xs: 'none', md: 'flex' },
               width: '45%',
