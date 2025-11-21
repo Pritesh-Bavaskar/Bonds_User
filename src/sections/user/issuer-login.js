@@ -40,10 +40,10 @@ export default function MultiStepLoginDialog({ open, onClose }) {
     setIsVerifying(true);
     try {
       const base = process.env.REACT_APP_HOST_API || '';
-      const res = await fetch(`${base}/api/auth/v1/verify-email-otp/`, {
+      const res = await fetch(`${base}/api/auth/verify-email-otp/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: '1', email, otp_code: code }),
+        body: JSON.stringify({ email, otp: code }),
       });
       if (!res.ok) {
         let errMsg = 'Failed to verify Email OTP';
@@ -64,6 +64,8 @@ export default function MultiStepLoginDialog({ open, onClose }) {
 
       if (data && data.message) {
         enqueueSnackbar(data.message, { variant: 'success' });
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userFullName', name);
       }
       onClose?.();
       router.push('/kyc/basic-info');
@@ -82,10 +84,10 @@ export default function MultiStepLoginDialog({ open, onClose }) {
     setIsSendingEmail(true);
     try {
       const base = process.env.REACT_APP_HOST_API || '';
-      const res = await fetch(`${base}/api/auth/v1/send-email-otp/`, {
+      const res = await fetch(`${base}/api/auth/send-email-otp/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: '1', name: trimmedName, email }),
+        body: JSON.stringify({ name: trimmedName, email }),
       });
       if (!res.ok) {
         let errMsg = 'Failed to send Email OTP';
@@ -123,10 +125,10 @@ export default function MultiStepLoginDialog({ open, onClose }) {
     setIsVerifying(true);
     try {
       const base = process.env.REACT_APP_HOST_API || '';
-      const res = await fetch(`${base}/api/auth/v1/verify-mobile-otp/`, {
+      const res = await fetch(`${base}/api/auth/verify-mobile-otp/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile_number: `+91${mobile}`, otp_code: code }),
+        body: JSON.stringify({ mobile_number: mobile, otp: code }),
       });
       if (!res.ok) {
         let errMsg = 'Failed to verify OTP';
@@ -149,13 +151,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
       }
 
       // Store user details in localStorage after successful OTP verification
-      localStorage.setItem('userPhone', `+91${mobile}`);
-      if (data?.data?.email) {
-        localStorage.setItem('userEmail', data.data.email);
-      }
-      if (data?.data?.name) {
-        localStorage.setItem('userFullName', data.data.name);
-      }
+      localStorage.setItem('userPhone', mobile);
 
       // Proceed to details step after storing user info
       setStep('details');
@@ -201,7 +197,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
     setIsSending(true);
     try {
       const base = process.env.REACT_APP_HOST_API || '';
-      const res = await fetch(`${base}/api/auth/v1/send-mobile-otp/`, {
+      const res = await fetch(`${base}/api/auth/send-mobile-otp/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile_number: mobile }),

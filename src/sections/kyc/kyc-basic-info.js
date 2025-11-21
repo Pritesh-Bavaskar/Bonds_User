@@ -39,64 +39,37 @@ import { useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 
-function PANUploadArea({ value, onChange, error }) {
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      if (file) {
-        onChange(file);
-      }
-    },
-    accept: {
-      'image/*': ['.png', '.jpg', '.jpeg', '.pdf'],
-    },
-  });
-
-  return (
-    <Box
-      {...getRootProps()}
-      sx={{
-        p: 2,
-        borderRadius: 1,
-        cursor: 'pointer',
-        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-        border: (theme) => `1px dashed ${alpha(theme.palette.primary.main, 0.3)}`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 2,
-        ...(isDragActive && {
-          bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
-        }),
-        ...(error && {
-          borderColor: 'error.main',
-        }),
-      }}
-    >
-      <input {...getInputProps()} />
-      <Button variant="outlined" size="small">
-        Select file...
-      </Button>
-      <Typography variant="body2" sx={{ color: 'text.secondary', flex: 1 }}>
-        {value ? value.name : 'Drop files here to upload'}
-      </Typography>
-    </Box>
-  );
-}
-
-PANUploadArea.propTypes = {
-  value: PropTypes.object,
-  onChange: PropTypes.func,
-  error: PropTypes.bool,
-};
-
-// ----------------------------------------------------------------------
-
 export default function KYCBasicInfo() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const [hasExistingData, setHasExistingData] = useState(false);
   const [panFileToken, setPanFileToken] = useState('');
+  const [humanInteraction, setHumanInteraction] = useState({
+    companyName: false,
+    gstin: false,
+    dateOfIncorporation: false,
+    msmeUdyamRegistrationNo: false,
+    city: false,
+    state: false,
+    country: false,
+    entityType: false,
+    panNumber: false,
+    dateOfBirth: false,
+    panHoldersName: false,
+    sector: false,
+  });
+
+  const handleHumanInteraction = (fieldName) => {
+    if (!humanInteraction[fieldName]) {
+      console.log(`User interacted with field: ${fieldName}`);
+      const newInteractionState = {
+        ...humanInteraction,
+        [fieldName]: true,
+      };
+      console.log('Updated humanInteraction state:', newInteractionState);
+      setHumanInteraction(newInteractionState);
+    }
+  };
+
   const NewUserSchema = Yup.object().shape({
     cin: Yup.string().required('CIN is required'),
     companyName: Yup.string().required('Company Name is required'),
@@ -146,15 +119,15 @@ export default function KYCBasicInfo() {
       sector: '',
       password: '',
       confirmPassword: '',
+      humanInteraction: { ...humanInteraction },
     }),
-    []
+    [humanInteraction]
   );
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
     defaultValues: {
       ...defaultValues,
-      hasExistingData: hasExistingData,
     },
   });
 
@@ -170,21 +143,36 @@ export default function KYCBasicInfo() {
   // ----------------------------------------------------------------------
 
   const handlePanUpload = async (file) => {
-    console.log('handlePanUpload', file);
+    console.log('handlePanUpload - File selected:', file);
+    console.log('Current humanInteraction state before PAN upload:', humanInteraction);
     try {
       const formData = new FormData();
       formData.append('pan_card_file', file);
 
+      console.log('Sending PAN for extraction...');
       const response = await axiosInstance.post('/api/kyc/issuer_kyc/pan-extraction/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       if (response.data.success) {
         const { pan_number, pan_holder_name, date_of_birth, file_token } = response.data.data;
-        setValue('panNumber', pan_number || '');
-        setValue('panHoldersName', pan_holder_name || '');
+        console.log('PAN extraction successful, updating form fields', {
+          pan_number,
+          pan_holder_name,
+          date_of_birth,
+          file_token: file_token ? '***' : 'No token',
+        });
+        // Set values without triggering human interaction
+        setValue('panNumber', pan_number || '', { shouldValidate: true, shouldDirty: true });
+        setValue('panHoldersName', pan_holder_name || '', {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
         if (date_of_birth) {
-          setValue('dateOfBirth', new Date(date_of_birth));
+          setValue('dateOfBirth', new Date(date_of_birth), {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
         }
         // Store the file token for later use in form submission
         setPanFileToken(file_token || '');
@@ -201,20 +189,53 @@ export default function KYCBasicInfo() {
   };
 
   const onSubmit = handleSubmit(async (formData) => {
+    // Check if any field was manually edited by the user
+    const hasHumanInteraction = Object.values(humanInteraction).some(Boolean);
+
+    console.log('Form submission - Human interaction detected:', hasHumanInteraction);
+
+    // Add humanInteraction to the form data before submission
+    formData.humanInteraction = humanInteraction;
+    console.log('Form submitted with human interaction data:', {
+      formData: {
+        ...formData,
+        // Don't log sensitive data
+        password: formData.password ? '***' : undefined,
+        confirmPassword: formData.confirmPassword ? '***' : undefined,
+      },
+      humanInteraction,
+    });
     try {
       console.info('Form Data:', formData);
 
       // Get token from session storage
-      const token = sessionStorage.getItem('accessToken');
-      if (!token) {
-        enqueueSnackbar('Authentication token not found', { variant: 'error' });
-        return;
-      }
+      // const token = sessionStorage.getItem('accessToken');
+      // if (!token) {
+      //   enqueueSnackbar('Authentication token not found', { variant: 'error' });
+      //   return;
+      // }
+
+      // Get user details from local storage
+      const userFullName = localStorage.getItem('userFullName') || '';
+      const userPhone = localStorage.getItem('userPhone') || '';
+      const userEmail = localStorage.getItem('userEmail') || '';
+
+      console.log('Retrieved user details from local storage:', {
+        userFullName,
+        userPhone,
+        userEmail,
+      });
 
       // Create FormData for file upload
       const formDataToSend = new FormData();
 
       // Add all fields to FormData
+      formDataToSend.append('mobile_number', userPhone);
+      formDataToSend.append('email', userEmail);
+      formDataToSend.append('full_name', userFullName);
+      formDataToSend.append('password', formData.password || '');
+      formDataToSend.append('role', 'ISSUER');
+      formDataToSend.append('human_intervention', hasHumanInteraction);
       formDataToSend.append('corporate_identification_number', formData.cin || '');
       formDataToSend.append('company_name', formData.companyName || '');
       formDataToSend.append('gstin', formData.gstin || '');
@@ -248,9 +269,6 @@ export default function KYCBasicInfo() {
       if (panFileToken) {
         // If we have a token from PAN extraction, send that instead of the file
         formDataToSend.append('file_token', panFileToken);
-      } else if (!hasExistingData) {
-        // If no token, no file, and no existing data, add empty file to trigger validation
-        formDataToSend.append('company_or_individual_pan_card_file', '');
       }
 
       if (formData.dateOfBirth) {
@@ -262,46 +280,45 @@ export default function KYCBasicInfo() {
       formDataToSend.append('pan_holder_name', formData.panHoldersName || '');
       formDataToSend.append('sector', formData.sector || '');
 
-      console.log('Sending FormData:', Object.fromEntries(formDataToSend.entries()));
+      // Add file token if available
+      if (panFileToken) {
+        formDataToSend.append('file_token', panFileToken);
+      }
+
+      // Convert FormData to object for logging (won't show file data)
+      const formDataObj = {};
+      formDataToSend.forEach((value, key) => {
+        formDataObj[key] = value;
+      });
+      console.log('Sending FormData:', formDataObj);
 
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
       };
 
-      console.log('hasExistingData', hasExistingData);
-      if (!hasExistingData) {
-        // Create new company info
-        const response = await axiosInstance.post(
-          '/api/kyc/issuer_kyc/company-info/',
-          formDataToSend,
-          config
-        );
-        // Store the company ID in session storage for future updates
-        if (response.data?.data?.company_id) {
-          sessionStorage.setItem('company_information_id', response.data.data.company_id);
-        }
-        if (response.data?.success) {
-          enqueueSnackbar(response.data.message, {
-            variant: 'success',
-          });
-          navigate('/kyc/address-info');
+      // Create new company info
+      const response = await axiosInstance.post(
+        '/api/kyc/issuer_kyc/register-company/',
+        formDataToSend,
+        config
+      );
+
+      if (response.data && response.data.success) {
+        enqueueSnackbar(response.data.message || 'Registration submitted successfully', {
+          variant: 'success',
+        });
+
+        // Redirect based on verification status
+        if (response.data.data?.verification_status === 'PENDING') {
+          navigate('/kyc/pending');
+        } else {
+          navigate('/kyc/success');
         }
       } else {
-        // Update existing company info
-        const response = await axiosInstance.patch(
-          `/api/kyc/issuer_kyc/company-info/profile/`,
-          formDataToSend,
-          config
-        );
-        if (response.data?.success) {
-          enqueueSnackbar(response.data.message, {
-            variant: 'success',
-          });
-          navigate('/kyc/address-info');
-        }
+        throw new Error(response.data?.message || 'Registration failed');
       }
 
       reset();
@@ -355,7 +372,6 @@ export default function KYCBasicInfo() {
     return Math.round((validCount / requiredFields.length) * 100);
   };
 
-  const percent = calculatePercent();
   // ----------------------------------------------------------------------
 
   return (
@@ -453,21 +469,46 @@ export default function KYCBasicInfo() {
 
                             const data = response.data.data;
                             if (response.data.success && data) {
-                              // Set all the form fields from the response
-                              setValue('companyName', data.company_name || '');
-                              setValue('gstin', data.gstin || '');
+                              // Set all the form fields from the response without triggering human interaction
+                              setValue('companyName', data.company_name || '', {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                              });
+                              setValue('gstin', data.gstin || '', {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                              });
                               setValue(
                                 'dateOfIncorporation',
                                 data.date_of_incorporation
                                   ? new Date(data.date_of_incorporation)
-                                  : null
+                                  : null,
+                                { shouldValidate: true, shouldDirty: true }
                               );
-                              setValue('city', data.city_of_incorporation || '');
-                              setValue('state', data.state_of_incorporation || '');
-                              setValue('country', data.country_of_incorporation || 'India');
-                              setValue('sector', data.sector || '');
-                              setValue('entityType', data.entity_type || '');
-                              setValue('panNumber', data.company_pan_number || '');
+                              setValue('city', data.city_of_incorporation || '', {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                              });
+                              setValue('state', data.state_of_incorporation || '', {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                              });
+                              setValue('country', data.country_of_incorporation || 'India', {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                              });
+                              setValue('sector', data.sector || '', {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                              });
+                              setValue('entityType', data.entity_type || '', {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                              });
+                              setValue('panNumber', data.company_pan_number || '', {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                              });
 
                               enqueueSnackbar('CIN data fetched successfully', {
                                 variant: 'success',
@@ -498,7 +539,11 @@ export default function KYCBasicInfo() {
                     Company Name*
                   </Box>
                 </Box>
-                <RHFTextField name="companyName" placeholder="Enter your Company Name" />
+                <RHFTextField
+                  name="companyName"
+                  placeholder="Enter your Company Name"
+                  onFocus={() => handleHumanInteraction('companyName')}
+                />
               </Box>
               <Box sx={{ mb: 3 }}>
                 <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -507,7 +552,11 @@ export default function KYCBasicInfo() {
                     GSTIN*
                   </Box>
                 </Box>
-                <RHFTextField name="gstin" placeholder="Enter your GSTIN" />
+                <RHFTextField
+                  name="gstin"
+                  placeholder="Enter your GSTIN"
+                  onFocus={() => handleHumanInteraction('gstin')}
+                />
               </Box>
             </Grid>
             <Grid xs={12} md={6} order={{ xs: 1, md: 2 }}>
@@ -548,7 +597,11 @@ export default function KYCBasicInfo() {
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
                       value={field.value}
-                      onChange={(newValue) => field.onChange(newValue)}
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                        handleHumanInteraction('dateOfIncorporation');
+                      }}
+                      onOpen={() => handleHumanInteraction('dateOfIncorporation')}
                       format="dd-MM-yyyy"
                       slotProps={{
                         textField: {
@@ -572,6 +625,7 @@ export default function KYCBasicInfo() {
                 <RHFTextField
                   name="msmeUdyamRegistrationNo"
                   placeholder="Enter your MSME/Udyam Registration No."
+                  // onFocus={() => handleHumanInteraction('msmeUdyamRegistrationNo')}
                 />
               </Box>
             </Grid>
@@ -584,12 +638,19 @@ export default function KYCBasicInfo() {
                   </Box>
                 </Box>
                 <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
-                  <RHFTextField name="city" placeholder="City" sx={{ flex: 1 }} />
+                  <RHFTextField
+                    name="city"
+                    placeholder="City"
+                    sx={{ flex: 1 }}
+                    onFocus={() => handleHumanInteraction('city')}
+                  />
                   <RHFSelect
                     name="state"
                     sx={{ flex: 1 }}
+                    onFocus={() => handleHumanInteraction('state')}
                     SelectProps={{
                       displayEmpty: true,
+                      onOpen: () => handleHumanInteraction('state'),
                       renderValue: (selected) =>
                         selected ? selected : <Box sx={{ color: 'text.disabled' }}>State</Box>,
                     }}
@@ -601,6 +662,7 @@ export default function KYCBasicInfo() {
                     placeholder="Country"
                     sx={{ flex: 1 }}
                     readOnly
+                    onOpen={() => handleHumanInteraction('country')}
                     options={countries.map((country) => country.label)}
                     getOptionLabel={(option) => option}
                     renderOption={(props, option) => {
@@ -631,15 +693,22 @@ export default function KYCBasicInfo() {
                         Entity Type*
                       </Box>
                     </Box>
-                    <RHFSelect name="entityType" placeholder="Select Entity Type">
+                    <RHFSelect
+                      name="entityType"
+                      placeholder="Select Entity Type"
+                      // onFocus={() => handleHumanInteraction('entityType')}
+                      // SelectProps={{
+                      //   onOpen: () => handleHumanInteraction('entityType'),
+                      // }}
+                    >
                       <MenuItem value="">Select Entity Type</MenuItem>
-                      <MenuItem value="private">Private Limited</MenuItem>
-                      <MenuItem value="Public Limited">Public Limited</MenuItem>
+                      <MenuItem value="PRIVATE_LTD">Private Limited</MenuItem>
+                      <MenuItem value="PUBLIC_LTD">Public Limited</MenuItem>
                       <MenuItem value="LLP">LLP</MenuItem>
                       <MenuItem value="OPC">OPC</MenuItem>
-                      <MenuItem value="Partnership Firm">Partnership Firm</MenuItem>
-                      <MenuItem value="Proprietorship Firm">Proprietorship Firm</MenuItem>
-                      <MenuItem value="Trust/Society/NGO">Trust/Society/NGO</MenuItem>
+                      <MenuItem value="PARTNERSHIP_FIRM">Partnership Firm</MenuItem>
+                      <MenuItem value="PROPRIETORSHIP_FIRM">Proprietorship Firm</MenuItem>
+                      <MenuItem value="TRUST/SOCIETY/NGO">Trust/Society/NGO</MenuItem>
                     </RHFSelect>
                   </Box>
                   <Box sx={{ flex: 1 }}>
@@ -649,7 +718,14 @@ export default function KYCBasicInfo() {
                         Sector*
                       </Box>
                     </Box>
-                    <RHFSelect name="sector" placeholder="Select Sector">
+                    <RHFSelect
+                      name="sector"
+                      placeholder="Select Sector"
+                      // onFocus={() => handleHumanInteraction('sector')}
+                      // SelectProps={{
+                      //   onOpen: () => handleHumanInteraction('sector'),
+                      // }}
+                    >
                       <MenuItem value="">Select Sector</MenuItem>
                       <MenuItem value="BANKING">Banking</MenuItem>
                       <MenuItem value="INFRASTRUCTURE">Infrastructure</MenuItem>
@@ -702,7 +778,11 @@ export default function KYCBasicInfo() {
                   PAN Number*
                 </Box>
               </Box>
-              <RHFTextField name="panNumber" placeholder="Your PAN Number" />
+              <RHFTextField
+                name="panNumber"
+                placeholder="Your PAN Number"
+                onFocus={() => handleHumanInteraction('panNumber')}
+              />
             </Grid>
 
             {/* Date of Birth (Right) */}
@@ -719,7 +799,11 @@ export default function KYCBasicInfo() {
                 render={({ field, fieldState: { error } }) => (
                   <DatePicker
                     value={field.value}
-                    onChange={(newValue) => field.onChange(newValue)}
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                      handleHumanInteraction('dateOfBirth');
+                    }}
+                    onOpen={() => handleHumanInteraction('dateOfBirth')}
                     format="dd-MM-yyyy"
                     slotProps={{
                       textField: {
@@ -742,7 +826,11 @@ export default function KYCBasicInfo() {
                   PAN Holder's Name*
                 </Box>
               </Box>
-              <RHFTextField name="panHoldersName" placeholder="Enter Name as per PAN" />
+              <RHFTextField
+                name="panHoldersName"
+                placeholder="Enter Name as per PAN"
+                onFocus={() => handleHumanInteraction('panHoldersName')}
+              />
             </Grid>
           </Grid>
         </Card>

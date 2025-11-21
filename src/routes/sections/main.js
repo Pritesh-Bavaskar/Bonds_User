@@ -7,6 +7,7 @@ import CompactLayout from 'src/layouts/compact';
 // components
 import { SplashScreen } from 'src/components/loading-screen';
 import { element } from 'prop-types';
+import KYCRouteGuard from 'src/sections/kyc/kyc-route-guard';
 
 // ----------------------------------------------------------------------
 
@@ -120,16 +121,26 @@ export const mainRoutes = [
         children: [{ path: ':id', element: <BondDetailsPage /> }],
       },
       { path: 'issuer', element: <IssuerPage /> },
-      { path: 'kyc', element: <KYCViewPage /> },
-      { path: 'kyc/basic-info', element: <KYCBasicInfoPage /> },
-      { path: 'kyc/address-info', element: <KycAddressInfoPage /> },
-      { path: 'kyc/company-details', element: <KYCCompanyDetailsPage /> },
-      { path: 'kyc/bank-details', element: <KYCBankDetailsPage /> },
-      { path: 'kyc/audited-financial', element: <KYCAuditedFinancialPage /> },
-      { path: 'kyc/signatories', element: <KYCSignatoriesPage /> },
-      { path: 'kyc/review-and-submit', element: <KYCReviewAndSubmitPage /> },
-      { path: 'kyc/successful', element: <KYCSuccessfulPage /> },
-      { path: 'kyc/pending', element: <KYCPendingPage /> },
+      {
+        path: 'kyc',
+        element: (
+          <KYCRouteGuard>
+            <Outlet />
+          </KYCRouteGuard>
+        ),
+        children: [
+          { index: true, element: <KYCViewPage /> },
+          { path: 'basic-info', element: <KYCBasicInfoPage /> },
+          { path: 'address-info', element: <KycAddressInfoPage /> },
+          { path: 'company-details', element: <KYCCompanyDetailsPage /> },
+          { path: 'bank-details', element: <KYCBankDetailsPage /> },
+          { path: 'audited-financial', element: <KYCAuditedFinancialPage /> },
+          { path: 'signatories', element: <KYCSignatoriesPage /> },
+          { path: 'review-and-submit', element: <KYCReviewAndSubmitPage /> },
+          { path: 'successful', element: <KYCSuccessfulPage /> },
+          { path: 'pending', element: <KYCPendingPage /> },
+        ],
+      },
     ],
   },
   {
