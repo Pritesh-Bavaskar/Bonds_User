@@ -7,16 +7,13 @@ export default function KYCRouteGuard({ children }) {
 
   useEffect(() => {
     const checkUserData = () => {
-      const userEmail = localStorage.getItem('userEmail');
-      const userFullName = localStorage.getItem('userFullName');
-      const userPhone = localStorage.getItem('userPhone');
+      const sessionId = localStorage.getItem('sessionId');
+
 
       // If any of the required user details are missing and we're on a KYC route
       if (
-        (!userEmail || !userFullName || !userPhone) &&
-        (location.pathname.startsWith('/kyc/basic-info') ||
-          location.pathname.startsWith('/kyc/pending') ||
-          location.pathname.startsWith('/kyc/success'))
+        (!sessionId) &&
+        (location.pathname.startsWith('/kyc/basic-info'))
       ) {
         navigate('/issuer');
         return false;

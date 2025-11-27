@@ -17,6 +17,7 @@ import { RouterLink } from 'src/routes/components';
 import { useSnackbar } from 'src/components/snackbar';
 import { useRouter } from 'src/routes/hook';
 import { setSession } from 'src/auth/context/jwt/utils';
+import axiosInstance from 'src/utils/axios';
 
 export default function MultiStepLoginDialog({ open, onClose }) {
   const [step, setStep] = useState('phone');
@@ -32,135 +33,109 @@ export default function MultiStepLoginDialog({ open, onClose }) {
   const otpRefs = useRef([]);
   const router = useRouter();
 
-  const handleVerifyEmailOtp = async () => {
-    if (isVerifying) return;
-    const code = otp.join('');
-    const emailValid = /[^\s@]+@[^\s@]+\.[^\s@]+/.test(email);
-    if (!emailValid || code.length !== 4) return;
-    setIsVerifying(true);
-    try {
-      const base = process.env.REACT_APP_HOST_API || '';
-      const res = await fetch(`${base}/api/auth/verify-email-otp/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp: code }),
-      });
-      if (!res.ok) {
-        let errMsg = 'Failed to verify Email OTP';
-        try {
-          const errJson = await res.json();
-          if (errJson && errJson.message) errMsg = errJson.message;
-        } catch (e) {
-          // ignore parse error
-        }
-        throw new Error(errMsg);
-      }
-      let data = {};
-      try {
-        data = await res.json();
-      } catch (e) {
-        data = {};
-      }
+const handleVerifyEmailOtp = async () => {
+  if (isVerifying) return;
 
-      if (data && data.message) {
-        enqueueSnackbar(data.message, { variant: 'success' });
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userFullName', name);
-      }
-      onClose?.();
-      router.push('/kyc/basic-info');
-    } catch (err) {
-      enqueueSnackbar(err.message, { variant: 'error' });
-    } finally {
-      setIsVerifying(false);
-    }
-  };
+  const code = otp.join("");
+  if (code.length !== 4) return;
+
+  setIsVerifying(true);
+
+
+  const sessionId = localStorage.getItem("sessionId");
+
+  try {
+    const res = await axiosInstance.post(`/auth/verify-email-otp`, {
+      sessionId,
+      otp: code,
+    });
+
+    enqueueSnackbar(res.data?.message || "Email Verified!", {
+      variant: "success",
+    });
+
+    // Close dialog if available
+    onClose?.();
+
+    // Redirect to next onboarding step
+    router.push("/kyc/basic-info");
+  } catch (err) {
+    enqueueSnackbar(err?.response?.data?.message || err.message, {
+      variant: "error",
+    });
+  } finally {
+    setIsVerifying(false);
+  }
+};
+
+
 
   const handleSendEmailOtp = async () => {
     if (isSendingEmail) return;
-    const trimmedName = name.trim();
+
     const emailValid = /[^\s@]+@[^\s@]+\.[^\s@]+/.test(email);
-    if (!trimmedName || !emailValid) return;
+    if (!emailValid) return;
+
     setIsSendingEmail(true);
+
+
+    const sessionId = localStorage.getItem("sessionId");
+
     try {
-      const base = process.env.REACT_APP_HOST_API || '';
-      const res = await fetch(`${base}/api/auth/send-email-otp/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: trimmedName, email }),
+      const res = await axiosInstance.post(`/auth/send-email-otp`, {
+        sessionId,
+        email,
       });
-      if (!res.ok) {
-        let errMsg = 'Failed to send Email OTP';
-        try {
-          const errJson = await res.json();
-          if (errJson && errJson.message) errMsg = errJson.message;
-        } catch (e) {
-          // ignore parse error
-        }
-        throw new Error(errMsg);
-      }
-      let data = {};
-      try {
-        data = await res.json();
-      } catch (e) {
-        data = {};
-      }
-      if (data && data.message) {
-        enqueueSnackbar(data.message, { variant: 'success' });
-      }
-      setOtp(Array(4).fill(''));
+
+      enqueueSnackbar(res.data?.message || "Email OTP Sent!", { variant: "success" });
+
+      setOtp(Array(4).fill(""));
       setOtpStarted(false);
-      setStep('emailOtp');
+      setStep("emailOtp");
     } catch (err) {
-      enqueueSnackbar(err.message, { variant: 'error' });
+      enqueueSnackbar(err.error?.message || "Something went wrong!", {
+        variant: "error",
+      });
     } finally {
       setIsSendingEmail(false);
     }
   };
 
+
+
+
   const handleVerifyMobileOtp = async () => {
     if (isVerifying) return;
-    const code = otp.join('');
+
+    const code = otp.join("");
     if (mobile.length !== 10 || code.length !== 4) return;
+
     setIsVerifying(true);
+
+    // 🔹 Get saved sessionId
+    const sessionId = localStorage.getItem("sessionId");
+
     try {
-      const base = process.env.REACT_APP_HOST_API || '';
-      const res = await fetch(`${base}/api/auth/verify-mobile-otp/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile_number: mobile, otp: code }),
+      const res = await axiosInstance.post(`/auth/verify-phone-otp`, {
+        sessionId,
+        otp: code,
+
       });
-      if (!res.ok) {
-        let errMsg = 'Failed to verify OTP';
-        try {
-          const errJson = await res.json();
-          if (errJson && errJson.message) errMsg = errJson.message;
-        } catch (e) {
-          // ignore parse error
-        }
-        throw new Error(errMsg);
-      }
-      let data = {};
-      try {
-        data = await res.json();
-      } catch (e) {
-        data = {};
-      }
-      if (data && data.message) {
-        enqueueSnackbar(data.message, { variant: 'success' });
-      }
 
-      // Store user details in localStorage after successful OTP verification
-      localStorage.setItem('userPhone', mobile);
+      enqueueSnackbar(res.data?.message || "Mobile Verified!", { variant: "success" });
 
-      // Proceed to details step after storing user info
-      setStep('details');
+
+
+      // 🔹 Proceed to collect user details
+      setStep("details");
     } catch (err) {
-      enqueueSnackbar(err.message, { variant: 'error' });
+      console.log(err);
+      enqueueSnackbar(err.error?.message || "Something went wrong", { variant: "error" });
     } finally {
       setIsVerifying(false);
     }
   };
+
 
   const handleBack = () => {
     if (step === 'otp') setStep('phone');
@@ -194,36 +169,37 @@ export default function MultiStepLoginDialog({ open, onClose }) {
   const handleGetMobileOtp = async () => {
     if (isSending) return;
     if (mobile.length !== 10) return;
+
     setIsSending(true);
+
     try {
-      const base = process.env.REACT_APP_HOST_API || '';
-      const res = await fetch(`${base}/api/auth/send-mobile-otp/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile_number: mobile }),
+      const res = await axiosInstance.post(`/auth/send-phone-otp`, {
+        phone: mobile,
+        role: "company", // Hardcoded role
       });
-      if (!res.ok) {
-        throw new Error('Failed to send OTP');
+
+      // ✓ Show success
+      enqueueSnackbar(res.data?.message || "OTP Sent!", { variant: "success" });
+
+      // ✓ Store session ID from backend
+      if (res.data?.sessionId) {
+        localStorage.setItem("sessionId", res.data.sessionId);
       }
-      let data = {};
-      try {
-        data = await res.json();
-      } catch (e) {
-        data = {};
-      }
-      if (data && data.message) {
-        enqueueSnackbar(data.message, { variant: 'success' });
-      }
-      setOtp(Array(4).fill(''));
+      // ✓ Reset OTP state
+      setOtp(Array(4).fill(""));
       setOtpStarted(false);
-      setStep('otp');
+
+      // ✓ Move to OTP screen
+      setStep("otp");
     } catch (err) {
-      enqueueSnackbar(err.message, { variant: 'error' });
-      // noop: keep step as phone on failure
+      enqueueSnackbar(err.error?.message || "Something went wrong", {
+        variant: "error",
+      });
     } finally {
       setIsSending(false);
     }
   };
+
 
   return (
     <Dialog
@@ -381,13 +357,6 @@ export default function MultiStepLoginDialog({ open, onClose }) {
 
                   <TextField
                     fullWidth
-                    placeholder="Full Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    sx={{ mb: 2 }}
-                  />
-                  <TextField
-                    fullWidth
                     placeholder="Email Address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -402,7 +371,7 @@ export default function MultiStepLoginDialog({ open, onClose }) {
                       variant="contained"
                       onClick={handleSendEmailOtp}
                       disabled={
-                        isSendingEmail || !name.trim() || !/[^\s@]+@[^\s@]+\.[^\s@]+/.test(email)
+                        isSendingEmail || !/[^\s@]+@[^\s@]+\.[^\s@]+/.test(email)
                       }
                     >
                       Get OTP
