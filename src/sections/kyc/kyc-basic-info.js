@@ -121,8 +121,7 @@ export default function KYCBasicInfo() {
       panNumber: '',
       dateOfBirth: null,
       panHoldersName: '',
-      password: '',
-      confirmPassword: '',
+ 
       panCardDocumentId: '',
       humanInteraction: { ...humanInteraction },
     }),
