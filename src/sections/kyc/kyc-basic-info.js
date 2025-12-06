@@ -102,16 +102,6 @@ export default function KYCBasicInfo() {
     panNumber: Yup.string().required('PAN Number is required'),
     dateOfBirth: Yup.date().required('Date Of Birth is required'),
     panHoldersName: Yup.string().required("PAN Holder's Name is required"),
-    password: Yup.string()
-      .required('Password is required')
-      .min(8, 'Password must be at least 8 characters')
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
-      ),
-    confirmPassword: Yup.string()
-      .required('Please confirm your password')
-      .oneOf([Yup.ref('password'), null], 'Passwords must match'),
     companyEntityTypeId: Yup.string().required("Entity Type is required"),
     companySectorTypeId: Yup.string().required("Sector is required"),
 
@@ -131,8 +121,7 @@ export default function KYCBasicInfo() {
       panNumber: '',
       dateOfBirth: null,
       panHoldersName: '',
-      password: '',
-      confirmPassword: '',
+ 
       panCardDocumentId: '',
       humanInteraction: { ...humanInteraction },
     }),
@@ -243,39 +232,6 @@ export default function KYCBasicInfo() {
   };
 
   // ------------------------------------------
-  // Percent calculation (unchanged except names)
-  // ------------------------------------------
-  const requiredFields = [
-    'cin',
-    'companyName',
-    'gstin',
-    'dateOfIncorporation',
-    'msmeUdyamRegistrationNo',
-    'city',
-    'state',
-    'country',
-    'panFile',
-    'panNumber',
-    'dateOfBirth',
-    'panHoldersName',
-  ];
-
-  const calculatePercent = () => {
-    let validCount = 0;
-
-    requiredFields.forEach((field) => {
-      const value = allValues[field];
-      const hasError = !!errors[field];
-
-      if (value && !hasError) {
-        validCount++;
-      }
-    });
-
-    return Math.round((validCount / requiredFields.length) * 100);
-  };
-
-  // ------------------------------------------
   // Submit → /auth/company-registration
   // ------------------------------------------
   const onSubmit = handleSubmit(async (formData) => {
@@ -345,7 +301,6 @@ export default function KYCBasicInfo() {
 
       const payload = {
         sessionId,
-        password: formData.password || '',
         companyName: companyName,
         CIN: formData.cin || '',
         GSTIN: formData.gstin || '',
@@ -358,7 +313,6 @@ export default function KYCBasicInfo() {
         extractedPanDetails: extractedPanPayload,
         submittedPanDetails: submittedPanPayload,
         panCardDocumentId: formData.panCardDocumentId || '',
-
         companySectorTypeId: formData.companySectorTypeId,
         companyEntityTypeId: formData.companyEntityTypeId,
 
@@ -423,43 +377,6 @@ export default function KYCBasicInfo() {
           }}
         >
           <Grid container spacing={3} sx={{ py: 4 }}>
-            {/* Password Field */}
-            <Grid xs={12} md={6}>
-              <Box sx={{ mb: 3 }}>
-                <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Iconify icon="solar:lock-password-bold" width={24} />
-                  <Box component="span" sx={{ fontWeight: 600 }}>
-                    Set Your Password*
-                  </Box>
-                </Box>
-                <RHFTextField
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  placeholder="Enter your password"
-                  fullWidth
-                />
-              </Box>
-            </Grid>
-
-            {/* Confirm Password Field */}
-            <Grid xs={12} md={6}>
-              <Box sx={{ mb: 3 }}>
-                <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Iconify icon="solar:lock-password-bold" width={24} />
-                  <Box component="span" sx={{ fontWeight: 600 }}>
-                    Confirm Password*
-                  </Box>
-                </Box>
-                <RHFTextField
-                  name="confirmPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  placeholder="Confirm your password"
-                  fullWidth
-                />
-              </Box>
-            </Grid>
             <Grid xs={12} md={6} order={{ xs: 2, md: 1 }}>
               <Box sx={{ mb: 3 }}>
                 <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -495,14 +412,15 @@ export default function KYCBasicInfo() {
                           }
 
                           try {
-                            const response = await axiosInstance.get(
-                              `/api/kyc/issuer_kyc/company-info/cin/${cinValue}/`
-                            );
+                            const payload = { CIN: cinValue?.trim()?.toUpperCase() };
 
-                            const data = response.data.data;
+                            const response = await axiosInstance.post(`/extraction/company-info`, payload);
+
+                            const data = response?.data?.data;
+
                             if (response.data.success && data) {
                               // Set all the form fields from the response without triggering human interaction
-                              setValue('companyName', data.company_name || '', {
+                              setValue('companyName', data.companyName || '', {
                                 shouldValidate: true,
                                 shouldDirty: true,
                               });
@@ -512,32 +430,24 @@ export default function KYCBasicInfo() {
                               });
                               setValue(
                                 'dateOfIncorporation',
-                                data.date_of_incorporation
-                                  ? new Date(data.date_of_incorporation)
+                                data.dateOfIncorporation
+                                  ? new Date(data.dateOfIncorporation)
                                   : null,
                                 { shouldValidate: true, shouldDirty: true }
                               );
-                              setValue('city', data.city_of_incorporation || '', {
+                              setValue('city', data.cityOfIncorporation || '', {
                                 shouldValidate: true,
                                 shouldDirty: true,
                               });
-                              setValue('state', data.state_of_incorporation || '', {
+                              setValue('state', data.stateOfIncorporation || '', {
                                 shouldValidate: true,
                                 shouldDirty: true,
                               });
-                              setValue('country', data.country_of_incorporation || 'India', {
+                              setValue('country', data.countryOfIncorporation || 'India', {
                                 shouldValidate: true,
                                 shouldDirty: true,
                               });
-                              setValue('sector', data.sector || '', {
-                                shouldValidate: true,
-                                shouldDirty: true,
-                              });
-                              setValue('entityType', data.entity_type || '', {
-                                shouldValidate: true,
-                                shouldDirty: true,
-                              });
-                              setValue('panNumber', data.company_pan_number || '', {
+                              setValue('panNumber', data.companyPanNumber || '', {
                                 shouldValidate: true,
                                 shouldDirty: true,
                               });

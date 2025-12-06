@@ -115,7 +115,7 @@ export default function Footer() {
               }}
             >
               <Logo />
-              <Typography variant="body2">My name is bond</Typography>
+              
             </Box>
             <Typography
               variant="body2"
