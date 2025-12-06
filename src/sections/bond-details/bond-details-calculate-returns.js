@@ -50,9 +50,8 @@ export default function BondDetailsCalculateReturns({ bond }) {
     },
     {
       title: 'Remaining Tenure',
-      value: `${bond?.bond?.tenure?.years || 0} years ${bond?.bond?.tenure?.months || 0} months ${
-        bond?.bond?.tenure?.days || 0
-      } days`,
+      value: `${bond?.bond?.tenure?.years || 0} years ${bond?.bond?.tenure?.months || 0} months ${bond?.bond?.tenure?.days || 0
+        } days`,
       icon: '/icons/tenure.svg',
     },
     {
@@ -213,8 +212,8 @@ export default function BondDetailsCalculateReturns({ bond }) {
                       {bond?.bond?.secured === true
                         ? 'Secured'
                         : bond?.bond?.secured === false
-                        ? 'Not Secured'
-                        : 'NA'}
+                          ? 'Not Secured'
+                          : 'NA'}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={4}>
@@ -250,8 +249,8 @@ export default function BondDetailsCalculateReturns({ bond }) {
                       {bond?.bond?.secured === true
                         ? 'Secured'
                         : bond?.bond?.secured === false
-                        ? 'Not Secured'
-                        : 'NA'}
+                          ? 'Not Secured'
+                          : 'NA'}
                     </Typography>
                   </Grid>
                   <Grid item xs={6} md={3}>
@@ -282,12 +281,12 @@ export default function BondDetailsCalculateReturns({ bond }) {
                     <Typography variant="subtitle1">
                       {bond?.bond?.tenure
                         ? [
-                            bond.bond.tenure.years ? `${bond.bond.tenure.years} Year` : '',
-                            bond.bond.tenure.months ? `${bond.bond.tenure.months} Month` : '',
-                            bond.bond.tenure.days ? `${bond.bond.tenure.days} Day` : '',
-                          ]
-                            .filter(Boolean)
-                            .join(' ') || 'NA'
+                          bond.bond.tenure.years ? `${bond.bond.tenure.years} Year` : '',
+                          bond.bond.tenure.months ? `${bond.bond.tenure.months} Month` : '',
+                          bond.bond.tenure.days ? `${bond.bond.tenure.days} Day` : '',
+                        ]
+                          .filter(Boolean)
+                          .join(' ') || 'NA'
                         : 'NA'}
                     </Typography>
                   </Grid>
@@ -309,7 +308,12 @@ export default function BondDetailsCalculateReturns({ bond }) {
                         <InfoOutlinedIcon sx={{ fontSize: 12, color: 'action.active' }} />
                       </IconButton>
                     </Typography>
-                    <Typography variant="subtitle1">{bond?.bond?.issue_size_lakhs || 'NA'}L</Typography>
+                    <Typography variant="subtitle1">
+                      {bond?.bond?.issue_size_crores
+                        ? `${Math.ceil(bond.bond.issue_size_crores)} Cr`
+                        : 'NA'}
+                    </Typography>
+
                   </Grid>
                   <Grid item xs={6} md={3}>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
